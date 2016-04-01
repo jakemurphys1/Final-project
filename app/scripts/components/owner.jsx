@@ -5,21 +5,25 @@ var $ = require("jquery");
 var Input = require("react-bootstrap/lib/Input");
 var Parse = require("parse");
 
-var eventForm = require("../forms/event.jsx");
-var cardForm = require("../forms/cards.jsx");
-var specialForm = require("../forms/specials.jsx");
+var EventForm = require("../forms/event.jsx");
+var CardForm = require("../forms/cards.jsx");
+var SpecialForm = require("../forms/specials.jsx");
 
 var OwnerForm = React.createClass({
+  componentDidMount:function(){
+    Parse.initialize("GLID");
+    Parse.serverURL = 'http://gaminglocal.herokuapp.com'
+
+  },
   render:function(){
-    console.log("currentId:",this.props.currentId)
-    var currentForm = eventForm;
+
+    var currentForm = <EventForm />;
     if(this.props.currentId==":cards"){
-      currentForm = cardForm;
+      currentForm = <CardForm />;
     }
     if(this.props.currentId==":special"){
-      currentForm = specialForm;
+      currentForm = <SpecialForm />;
     }
-    console.log("here:", currentForm)
 
     return(
       <div className="row Total">

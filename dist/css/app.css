@@ -5836,7 +5836,8 @@ img {
 .ownerContainer {
   border: black solid 1px;
   border-radius: 5px;
-  text-align: center; }
+  text-align: center;
+  padding: 20px; }
   .ownerContainer h3 {
     font-size: 30px; }
   .ownerContainer #Description {
@@ -5849,5 +5850,17 @@ img {
       .ownerContainer .info .times input {
         width: 100px;
         margin-left: 20px; }
+
+.ownerCards #cardCondition {
+  margin-top: 6px; }
+.ownerCards #cardQty {
+  width: 50px; }
+
+.ownerSpecial .specialDescription {
+  width: 380px;
+  height: 250px; }
+.ownerSpecial .theDates {
+  width: 150px;
+  margin-left: 10px; }
 
 /*# sourceMappingURL=app.css.map */

@@ -43,6 +43,7 @@ img {
   border:black solid 1px;
   border-radius: 5px;
   text-align: center;
+  padding:20px;
   h3{
     font-size: 30px;
   }
@@ -63,6 +64,22 @@ margin-top: -30px;
   }
 }
 
-.Total{
+.ownerCards{
+  #cardCondition{
+margin-top: 6px;
+  }
+  #cardQty{
+    width:50px;
+  }
+}
 
+.ownerSpecial{
+  .specialDescription{
+width:380px;
+height: 250px;
+  }
+  .theDates{
+    width:150px;
+    margin-left: 10px;
+  }
 }

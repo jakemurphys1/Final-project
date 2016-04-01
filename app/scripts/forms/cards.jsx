@@ -1,29 +1,70 @@
 var React = require("react");
 var ReactDOM=require("react-dom");
 
-var Total=(
-  <div>
-  <h3>Cards</h3>
-  <form onSubmit={this.handleSignup} id="eventForm" action="" className="form-events">
-      <div className="col-md-6 info">
-        <div className="row"><label>Card Name</label></div>
-          <input id="eventName" type="text" name="eventName" placeholder="Event Name"/>
-          <div className="row"><label>Format</label></div>
-          <input id="eventFormat" type="text" name="eventFormat" placeholder="Standard, Modern, ect."/>
-                <div className="row"><label>Date</label></div>
-          <input id="eventDate" type="date" name="eventDate" placeholder="Event Date"/>
+var Total= React.createClass({
+  render:function(){
+    return(
+      <div className="ownerCards">
+      <h3>Cards for sale</h3>
+      <div className="col-md-6 col-xs-12">
 
-        <div className="row times">
-                <div className="row"><label>Time</label></div>
-          <input id="startTime" type="time" name="startTime" placeholder="Start Time"/>
-          <input id="endTime" type="time" name="endTime" placeholder="End Time"/>
+
+      <form onSubmit={this.handleAddCard} id="eventForm" action="" className="form-events">
+
+                <div className="row"><label>Card Name</label></div>
+                <input id="cardName" type="text" name="cardName" placeholder="Name"/>
+                <div id="setContainer">
+                  <div className="row"><label>Set</label></div>
+                  <input id="cardSet" type="text" name="cardSet" placeholder="Ravnica, Innistrad, ect."/>
+                </div>
+
+        <div className="infoContainer hidden">
+          <div className="row">
+            <div className="col-xs-6">
+              <div className="row"><label>Condition</label></div>
+                      <select id="cardCondition">
+                        <option value="Mint">Mint</option>
+                        <option value="Near-Mint">Near-Mint</option>
+                        <option value="Lightly-Played">Lightly-Played</option>
+                        <option value="Moderately-Played">Moderately-Played</option>
+                        <option value="Heavily-Played">Heavily-Played</option>
+                        <option value="Damaged">Damaged</option>
+                      </select>
+            </div>
+            <div className="col-xs-6">
+              <div className="row"><label>Qty</label></div>
+              <input id="cardQty" type="number" name="cardQty" placeholder="Qty"/>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-xs-6">
+              <div className="row"><label>Foil?</label></div>
+                <div className="checkbox">
+                  <label><input id="foil" type="checkbox" value="" />Yes</label>
+                </div>
+            </div>
+            <div className="col-xs-6">
+              <div className="row"><label>Promo?</label></div>
+                <div className="checkbox">
+                  <label><input id="promo" type="checkbox" value="" />Yes</label>
+                </div>
+            </div>
+          </div>
+            <div className="row"><button type="submit" className="btn btn-lg btn-block btn-primary signinbutton">Add</button></div>
+          </div>
+      </form>
         </div>
 
+          <div className="col-md-6 col-xs-12">
+            <h3>Multilate</h3>
+            <img src= "images/Magic_Back.jpg" />
+          </div>
+
       </div>
-      <div className="col-md-6"><textarea id="Description" placeholder="Details of the event"></textarea></div>
-  <button type="submit" className="btn btn-lg btn-block btn-primary signinbutton">Add</button>
-  </form>
-  </div>
-)
+    )
+  },
+
+})
 
 module.exports=Total;

@@ -7,21 +7,25 @@ var $ = require("jquery");
 var Input = require("react-bootstrap/lib/Input");
 var Parse = require("parse");
 
-var eventForm = require("../forms/event.jsx");
-var cardForm = require("../forms/cards.jsx");
-var specialForm = require("../forms/specials.jsx");
+var EventForm = require("../forms/event.jsx");
+var CardForm = require("../forms/cards.jsx");
+var SpecialForm = require("../forms/specials.jsx");
 
 var OwnerForm = React.createClass({displayName: "OwnerForm",
+  componentDidMount:function(){
+    Parse.initialize("GLID");
+    Parse.serverURL = 'http://gaminglocal.herokuapp.com'
+
+  },
   render:function(){
-    console.log("currentId:",this.props.currentId)
-    var currentForm = eventForm;
+
+    var currentForm = React.createElement(EventForm, null);
     if(this.props.currentId==":cards"){
-      currentForm = cardForm;
+      currentForm = React.createElement(CardForm, null);
     }
     if(this.props.currentId==":special"){
-      currentForm = specialForm;
+      currentForm = React.createElement(SpecialForm, null);
     }
-    console.log("here:", currentForm)
 
     return(
       React.createElement("div", {className: "row Total"}, 
@@ -140,30 +144,71 @@ module.exports=SignUp;
 var React = require("react");
 var ReactDOM=require("react-dom");
 
-var Total=(
-  React.createElement("div", null, 
-  React.createElement("h3", null, "Cards"), 
-  React.createElement("form", {onSubmit: this.handleSignup, id: "eventForm", action: "", className: "form-events"}, 
-      React.createElement("div", {className: "col-md-6 info"}, 
-        React.createElement("div", {className: "row"}, React.createElement("label", null, "Card Name")), 
-          React.createElement("input", {id: "eventName", type: "text", name: "eventName", placeholder: "Event Name"}), 
-          React.createElement("div", {className: "row"}, React.createElement("label", null, "Format")), 
-          React.createElement("input", {id: "eventFormat", type: "text", name: "eventFormat", placeholder: "Standard, Modern, ect."}), 
-                React.createElement("div", {className: "row"}, React.createElement("label", null, "Date")), 
-          React.createElement("input", {id: "eventDate", type: "date", name: "eventDate", placeholder: "Event Date"}), 
+var Total= React.createClass({displayName: "Total",
+  render:function(){
+    return(
+      React.createElement("div", {className: "ownerCards"}, 
+      React.createElement("h3", null, "Cards for sale"), 
+      React.createElement("div", {className: "col-md-6 col-xs-12"}, 
 
-        React.createElement("div", {className: "row times"}, 
-                React.createElement("div", {className: "row"}, React.createElement("label", null, "Time")), 
-          React.createElement("input", {id: "startTime", type: "time", name: "startTime", placeholder: "Start Time"}), 
-          React.createElement("input", {id: "endTime", type: "time", name: "endTime", placeholder: "End Time"})
-        )
 
-      ), 
-      React.createElement("div", {className: "col-md-6"}, React.createElement("textarea", {id: "Description", placeholder: "Details of the event"})), 
-  React.createElement("button", {type: "submit", className: "btn btn-lg btn-block btn-primary signinbutton"}, "Add")
-  )
-  )
-)
+      React.createElement("form", {onSubmit: this.handleAddCard, id: "eventForm", action: "", className: "form-events"}, 
+
+                React.createElement("div", {className: "row"}, React.createElement("label", null, "Card Name")), 
+                React.createElement("input", {id: "cardName", type: "text", name: "cardName", placeholder: "Name"}), 
+                React.createElement("div", {id: "setContainer"}, 
+                  React.createElement("div", {className: "row"}, React.createElement("label", null, "Set")), 
+                  React.createElement("input", {id: "cardSet", type: "text", name: "cardSet", placeholder: "Ravnica, Innistrad, ect."})
+                ), 
+
+        React.createElement("div", {className: "infoContainer hidden"}, 
+          React.createElement("div", {className: "row"}, 
+            React.createElement("div", {className: "col-xs-6"}, 
+              React.createElement("div", {className: "row"}, React.createElement("label", null, "Condition")), 
+                      React.createElement("select", {id: "cardCondition"}, 
+                        React.createElement("option", {value: "Mint"}, "Mint"), 
+                        React.createElement("option", {value: "Near-Mint"}, "Near-Mint"), 
+                        React.createElement("option", {value: "Lightly-Played"}, "Lightly-Played"), 
+                        React.createElement("option", {value: "Moderately-Played"}, "Moderately-Played"), 
+                        React.createElement("option", {value: "Heavily-Played"}, "Heavily-Played"), 
+                        React.createElement("option", {value: "Damaged"}, "Damaged")
+                      )
+            ), 
+            React.createElement("div", {className: "col-xs-6"}, 
+              React.createElement("div", {className: "row"}, React.createElement("label", null, "Qty")), 
+              React.createElement("input", {id: "cardQty", type: "number", name: "cardQty", placeholder: "Qty"})
+            )
+          ), 
+
+          React.createElement("div", {className: "row"}, 
+            React.createElement("div", {className: "col-xs-6"}, 
+              React.createElement("div", {className: "row"}, React.createElement("label", null, "Foil?")), 
+                React.createElement("div", {className: "checkbox"}, 
+                  React.createElement("label", null, React.createElement("input", {id: "foil", type: "checkbox", value: ""}), "Yes")
+                )
+            ), 
+            React.createElement("div", {className: "col-xs-6"}, 
+              React.createElement("div", {className: "row"}, React.createElement("label", null, "Promo?")), 
+                React.createElement("div", {className: "checkbox"}, 
+                  React.createElement("label", null, React.createElement("input", {id: "promo", type: "checkbox", value: ""}), "Yes")
+                )
+            )
+          ), 
+            React.createElement("div", {className: "row"}, React.createElement("button", {type: "submit", className: "btn btn-lg btn-block btn-primary signinbutton"}, "Add"))
+          )
+      )
+        ), 
+
+          React.createElement("div", {className: "col-md-6 col-xs-12"}, 
+            React.createElement("h3", null, "Multilate"), 
+            React.createElement("img", {src: "images/Magic_Back.jpg"})
+          )
+
+      )
+    )
+  },
+
+})
 
 module.exports=Total;
 
@@ -171,67 +216,187 @@ module.exports=Total;
 "use strict";
 var React = require("react");
 var ReactDOM=require("react-dom");
+var Backbone = require("backbone");
+var $ = require("jquery");
+var Input = require("react-bootstrap/lib/Input");
+var Parse = require("parse");
 
-var Total=(
-  React.createElement("div", null, 
-  React.createElement("h3", null, "Events"), 
-  React.createElement("form", {onSubmit: this.handleSignup, id: "eventForm", action: "", className: "form-events"}, 
-      React.createElement("div", {className: "col-md-6 info"}, 
-        React.createElement("div", {className: "row"}, React.createElement("label", null, "Event Name")), 
-          React.createElement("input", {id: "eventName", type: "text", name: "eventName", placeholder: "Event Name"}), 
-          React.createElement("div", {className: "row"}, React.createElement("label", null, "Format")), 
-          React.createElement("input", {id: "eventFormat", type: "text", name: "eventFormat", placeholder: "Standard, Modern, ect."}), 
-                React.createElement("div", {className: "row"}, React.createElement("label", null, "Date")), 
-          React.createElement("input", {id: "eventDate", type: "date", name: "eventDate", placeholder: "Event Date"}), 
+var Total= React.createClass({displayName: "Total",
+  render:function(){
+    return(React.createElement("div", {className: "ownerEvent"}, 
+      React.createElement("h3", null, "Events"), 
+      React.createElement("form", {onSubmit: this.handleAddEvent, id: "eventForm", action: "", className: "form-events"}, 
+          React.createElement("div", {className: "col-md-6 info"}, 
+            React.createElement("div", {className: "row"}, React.createElement("label", null, "Event Name")), 
+              React.createElement("input", {id: "eventName", type: "text", name: "eventName", placeholder: "Event Name"}), 
+              React.createElement("div", {className: "row"}, React.createElement("label", null, "Format")), 
+              React.createElement("input", {id: "eventFormat", type: "text", name: "eventFormat", placeholder: "Standard, Modern, ect."}), 
+                    React.createElement("div", {className: "row"}, React.createElement("label", null, "Date")), 
+              React.createElement("input", {id: "eventDate", type: "date", name: "eventDate", placeholder: "Event Date"}), 
 
-        React.createElement("div", {className: "row times"}, 
-                React.createElement("div", {className: "row"}, React.createElement("label", null, "Time")), 
-          React.createElement("input", {id: "startTime", type: "time", name: "startTime", placeholder: "Start Time"}), 
-          React.createElement("input", {id: "endTime", type: "time", name: "endTime", placeholder: "End Time"})
-        )
+            React.createElement("div", {className: "row times"}, 
+                    React.createElement("div", {className: "row"}, React.createElement("label", null, "Time")), 
+              React.createElement("input", {id: "startTime", type: "time", name: "startTime", placeholder: "Start Time"}), 
+              React.createElement("input", {id: "endTime", type: "time", name: "endTime", placeholder: "End Time"})
+            )
 
-      ), 
-      React.createElement("div", {className: "col-md-6"}, React.createElement("textarea", {id: "Description", placeholder: "Details of the event"})), 
-  React.createElement("button", {type: "submit", className: "btn btn-lg btn-block btn-primary signinbutton"}, "Add")
-  )
-  )
-)
+          ), 
+          React.createElement("div", {className: "col-md-6"}, React.createElement("textarea", {id: "Description", placeholder: "Details of the event"})), 
+      React.createElement("button", {type: "submit", className: "btn btn-lg btn-block btn-primary signinbutton"}, "Add")
+      )
+      )
+    )
+  },
+})
 
 module.exports=Total;
 
-},{"react":317,"react-dom":185}],5:[function(require,module,exports){
+},{"backbone":25,"jquery":129,"parse":130,"react":317,"react-bootstrap/lib/Input":179,"react-dom":185}],5:[function(require,module,exports){
 "use strict";
 var React = require("react");
 var ReactDOM=require("react-dom");
+var Backbone = require("backbone");
+var $ = require("jquery");
+var Input = require("react-bootstrap/lib/Input");
+var Parse = require("parse");
 
-var Total=(
-  React.createElement("div", null, 
-  React.createElement("h3", null, "Specials"), 
-  React.createElement("form", {onSubmit: this.handleSignup, id: "eventForm", action: "", className: "form-events"}, 
-      React.createElement("div", {className: "col-md-6 info"}, 
-        React.createElement("div", {className: "row"}, React.createElement("label", null, "Specials")), 
-          React.createElement("input", {id: "eventName", type: "text", name: "eventName", placeholder: "Event Name"}), 
-          React.createElement("div", {className: "row"}, React.createElement("label", null, "Format")), 
-          React.createElement("input", {id: "eventFormat", type: "text", name: "eventFormat", placeholder: "Standard, Modern, ect."}), 
-                React.createElement("div", {className: "row"}, React.createElement("label", null, "Date")), 
-          React.createElement("input", {id: "eventDate", type: "date", name: "eventDate", placeholder: "Event Date"}), 
+var Total=React.createClass({displayName: "Total",
+  getInitialState:function(){
+  return {
+    "Specials":   "",
+  }
+},
+  handleAddSpecial:function(e){
+    e.preventDefault();
+      var currentUser = Parse.User.current();
+    var specialList={
+      "specialName1": $("#specialName1").val(),
+      "specialDescription1":$("#specialDescription1").val(),
+      "specialStart1":$("#startDay1").val(),
+      "specialEnd1":$("#endDay1").val(),
+      "specialName2": $("#specialName2").val(),
+      "specialDescription2":$("#specialDescription2").val(),
+      "specialStart2":$("#startDay2").val(),
+      "specialEnd2":$("#endDay2").val(),
+      "specialName3": $("#specialName3").val(),
+      "specialDescription3":$("#specialDescription3").val(),
+      "specialStart3":$("#startDay3").val(),
+      "specialEnd3":$("#endDay3").val(),
+      "date":Date.now(),
+      "userName":currentUser.getUsername(),
+    }
 
-        React.createElement("div", {className: "row times"}, 
-                React.createElement("div", {className: "row"}, React.createElement("label", null, "Time")), 
-          React.createElement("input", {id: "startTime", type: "time", name: "startTime", placeholder: "Start Time"}), 
-          React.createElement("input", {id: "endTime", type: "time", name: "endTime", placeholder: "End Time"})
-        )
+    var query = new Parse.Query("Specials");
+ query.equalTo("userName", currentUser.getUsername());
+ query.first({
+     success: function (Contact) {
+         Contact.save(null, {
+             success: function (contact) {
+                 contact.set(specialList);
+                 contact.save();
+                 location.reload();
+             }
+         });
+     }
+ });
 
-      ), 
-      React.createElement("div", {className: "col-md-6"}, React.createElement("textarea", {id: "Description", placeholder: "Details of the event"})), 
-  React.createElement("button", {type: "submit", className: "btn btn-lg btn-block btn-primary signinbutton"}, "Add")
-  )
-  )
-)
+    // var Specials = Parse.Object.extend("Specials");
+    //   var specials = new Specials();
+    //       specials.save(specialList).then(function(object) {
+    //       })
+
+
+
+  },
+componentDidMount(){
+  Parse.initialize("GLID");
+  Parse.serverURL = 'http://gaminglocal.herokuapp.com'
+    var currentUser = Parse.User.current();
+
+  var Specials = Parse.Object.extend("Specials");
+    var specQuery = new Parse.Query(Specials);
+    var specArray=[];
+    specQuery.equalTo("userName", currentUser.getUsername());
+    specQuery.find({
+    success: function(results) {
+       specArray=results;
+       console.log("success", specArray)
+      },
+      error: function(error) {
+        console.log("Special Server not find")
+      }
+      }).done(function(){
+        this.setState({"Specials":specArray[0]});
+        for(var i =1;i<4;i++){
+          $("#specialName" + i).val(this.state.Specials.get("specialName"+i))
+          $("#specialDescription" + i).val(this.state.Specials.get("specialDescription"+i))
+          $("#startDay" + i).val(this.state.Specials.get("specialStart"+i))
+          $("#endDay" + i).val(this.state.Specials.get("specialEnd"+i))
+        }
+       }.bind(this));
+
+
+
+},
+  render:function(){
+    if(this.state.Specials != ""){
+      var specialName1 = this.state.Specials.get("specialName1")
+      var specialName2 = this.state.Specials.get("specialName2")
+      var specialName3 = this.state.Specials.get("specialName3")
+      var specialDescription1 = this.state.Specials.get("specialDescription1")
+      var specialDescription2 = this.state.Specials.get("specialDescription2")
+      var specialDescription3 = this.state.Specials.get("specialDescription3")
+      var startDay1 = this.state.Specials.get("specialStart1")
+      var startDay2 = this.state.Specials.get("specialStart2")
+      var startDay3 = this.state.Specials.get("specialStart3")
+      var endDay1 = this.state.Specials.get("specialEnd1")
+      var endDay2 = this.state.Specials.get("specialEnd2")
+      var endDay3 = this.state.Specials.get("specialEnd3")
+    }
+    return(
+      React.createElement("div", {className: "ownerSpecial"}, 
+      React.createElement("h3", null, "Specials"), 
+      React.createElement("p", null, "Limit three per store"), 
+      React.createElement("form", {onSubmit: this.handleAddSpecial, id: "eventForm", action: "", className: "form-events"}, 
+          React.createElement("div", {className: "col-md-4"}, 
+            React.createElement("div", {className: "row"}, React.createElement("label", null, "Special 1")), 
+
+              React.createElement("input", {id: "specialName1", type: "text", name: "specialName", placeholder: "Name"}), 
+              React.createElement("div", {className: "row"}, React.createElement("label", null, "Description")), 
+              React.createElement("textarea", {className: "specialDescription", id: "specialDescription1", placeholder: "Description of the Special"}), 
+                    React.createElement("div", {className: "row"}, React.createElement("label", null, "Dates of special")), 
+              React.createElement("div", {className: "col-md-6"}, React.createElement("input", {id: "startDay1", className: "theDates", type: "date", name: "startDay", placeholder: "Start Day"})), 
+              React.createElement("div", {className: "col-md-6"}, React.createElement("input", {id: "endDay1", className: "theDates", type: "date", name: "endDay", placeholder: "End Day"}))
+          ), 
+          React.createElement("div", {className: "col-md-4"}, 
+            React.createElement("div", {className: "row"}, React.createElement("label", null, "Special 2")), 
+              React.createElement("input", {id: "specialName2", type: "text", name: "specialName", placeholder: "Name"}), 
+              React.createElement("div", {className: "row"}, React.createElement("label", null, "Description")), 
+              React.createElement("textarea", {className: "specialDescription", id: "specialDescription2", placeholder: "Description of the Special"}), 
+                    React.createElement("div", {className: "row"}, React.createElement("label", null, "Dates of special")), 
+              React.createElement("div", {className: "col-md-6"}, React.createElement("input", {id: "startDay2", className: "theDates", type: "date", name: "startDay", placeholder: "Start Day"})), 
+              React.createElement("div", {className: "col-md-6"}, React.createElement("input", {id: "endDay2", className: "theDates", type: "date", name: "endDay", placeholder: "End Day"}))
+          ), 
+          React.createElement("div", {className: "col-md-4"}, 
+            React.createElement("div", {className: "row"}, React.createElement("label", null, "Special 3")), 
+              React.createElement("input", {id: "specialName3", type: "text", name: "specialName", placeholder: "Name"}), 
+              React.createElement("div", {className: "row"}, React.createElement("label", null, "Description")), 
+              React.createElement("textarea", {className: "specialDescription", id: "specialDescription3", placeholder: "Description of the Special"}), 
+                    React.createElement("div", {className: "row"}, React.createElement("label", null, "Dates of special")), 
+              React.createElement("div", {className: "col-md-6"}, React.createElement("input", {id: "startDay3", className: "theDates", type: "date", name: "startDay", placeholder: "Start Day"})), 
+              React.createElement("div", {className: "col-md-6"}, React.createElement("input", {id: "endDay3", className: "theDates", type: "date", name: "endDay", placeholder: "End Day"}))
+          ), 
+      React.createElement("button", {type: "submit", className: "btn btn-lg btn-block btn-primary signinbutton"}, "Update")
+      )
+      )
+    )
+
+  }
+})
 
 module.exports=Total;
 
-},{"react":317,"react-dom":185}],6:[function(require,module,exports){
+},{"backbone":25,"jquery":129,"parse":130,"react":317,"react-bootstrap/lib/Input":179,"react-dom":185}],6:[function(require,module,exports){
 "use strict";
 var Backbone=require("backbone");
 var $ = require("jquery");
