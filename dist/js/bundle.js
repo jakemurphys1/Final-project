@@ -143,8 +143,76 @@ module.exports=SignUp;
 "use strict";
 var React = require("react");
 var ReactDOM=require("react-dom");
+var Backbone = require("backbone");
+var $ = require("jquery");
+var Input = require("react-bootstrap/lib/Input");
+var Parse = require("parse");
 
 var Total= React.createClass({displayName: "Total",
+  componentDidMount(){
+    Parse.initialize("GLID");
+    Parse.serverURL = 'http://gaminglocal.herokuapp.com'
+  },
+  getInitialState:function(){
+  return {
+    "curName":   "Magic: The Gathering",
+    "curImage":"images/Magic_Back.jpg",
+    "selectInput":React.createElement("p", null),
+  }
+},
+handleSearch:function(e){
+  e.preventDefault();
+
+      var curName = $("#cardName").val();
+      var cardFound=false;
+
+      $.getJSON('https://api.deckbrew.com/mtg/cards?name=' + curName, function (data) {
+
+                for(var i =0;i<data.length;i++){
+                  if(data[i].name.toLowerCase()==curName.toLowerCase()){
+                    $(".Search").addClass("hidden")
+                    $("#setContainer").removeClass("hidden")
+                    $(".infoContainer").removeClass("hidden")
+                    cardFound=true;
+                      this.setState({"selectInput": React.createElement(SetSelect, {data: data[i].editions}),"curName":data[i].name,"curImage":data[i].editions[0].image_url})
+
+                    // for(var j =0;j<data[i].editions.length;j++){
+                    //   if(data[i].editions[j].set.toLowerCase() == curSet.toLowerCase()){
+                    //     this.setState({"curName":data[i].name,"curImage":data[i].editions[j].image_url})
+                    //   }
+                    // }
+
+                  }
+
+                }
+        }.bind(this))
+
+},
+handleAddCard:function(e){
+  e.preventDefault();
+    var currentUser = Parse.User.current();
+    var foil = document.getElementById('foil').checked;
+    var promo =document.getElementById('promo').checked;
+    var Cards = Parse.Object.extend("Cards");
+    var cards = new Cards();
+
+    var data = {
+      "Name":$("#cardName").val(),
+      "Set":$("#Sets").val(),
+      "Condition":$("#cardCondition").val(),
+      "Qty":$("#cardQty").val(),
+      "Foil":foil,
+      "Promo":promo,
+      "date":Date.now(),
+      "userName":currentUser.getUsername(),
+    }
+
+  cards.save(data).then(function(object) {
+      console.log(object)
+  })
+
+
+},
   render:function(){
     return(
       React.createElement("div", {className: "ownerCards"}, 
@@ -152,13 +220,14 @@ var Total= React.createClass({displayName: "Total",
       React.createElement("div", {className: "col-md-6 col-xs-12"}, 
 
 
-      React.createElement("form", {onSubmit: this.handleAddCard, id: "eventForm", action: "", className: "form-events"}, 
+      React.createElement("form", {id: "cardForm", action: "", className: "form-events"}, 
 
                 React.createElement("div", {className: "row"}, React.createElement("label", null, "Card Name")), 
-                React.createElement("input", {id: "cardName", type: "text", name: "cardName", placeholder: "Name"}), 
-                React.createElement("div", {id: "setContainer"}, 
-                  React.createElement("div", {className: "row"}, React.createElement("label", null, "Set")), 
-                  React.createElement("input", {id: "cardSet", type: "text", name: "cardSet", placeholder: "Ravnica, Innistrad, ect."})
+                React.createElement("input", {id: "cardName", type: "text", name: "cardName", placeholder: "Name of Card"}), 
+                React.createElement("p", null, React.createElement("button", {onClick: this.handleSearch, className: "btn btn-primary Search"}, "Search")), 
+                React.createElement("div", {id: "setContainer", className: "hidden"}, 
+                  React.createElement("div", {className: "row "}, React.createElement("label", null, "Set")), 
+                  this.state.selectInput
                 ), 
 
         React.createElement("div", {className: "infoContainer hidden"}, 
@@ -194,14 +263,14 @@ var Total= React.createClass({displayName: "Total",
                 )
             )
           ), 
-            React.createElement("div", {className: "row"}, React.createElement("button", {type: "submit", className: "btn btn-lg btn-block btn-primary signinbutton"}, "Add"))
+            React.createElement("div", {onClick: this.handleAddCard, className: "row"}, React.createElement("button", {type: "submit", className: "btn btn-lg btn-block btn-primary signinbutton"}, "Add"))
           )
       )
         ), 
 
           React.createElement("div", {className: "col-md-6 col-xs-12"}, 
-            React.createElement("h3", null, "Multilate"), 
-            React.createElement("img", {src: "images/Magic_Back.jpg"})
+            React.createElement("h3", null, this.state.curName), 
+            React.createElement("img", {src: this.state.curImage})
           )
 
       )
@@ -210,9 +279,22 @@ var Total= React.createClass({displayName: "Total",
 
 })
 
+var SetSelect= React.createClass({displayName: "SetSelect",
+  render:function(){
+    var allSets = this.props.data.map(function(item){
+        return(React.createElement("option", {key: item.set, value: item.set}, item.set))
+    })
+    return(
+      React.createElement("select", {id: "Sets"}, 
+                  allSets
+      )
+    )
+  },
+})
+
 module.exports=Total;
 
-},{"react":317,"react-dom":185}],4:[function(require,module,exports){
+},{"backbone":25,"jquery":129,"parse":130,"react":317,"react-bootstrap/lib/Input":179,"react-dom":185}],4:[function(require,module,exports){
 "use strict";
 var React = require("react");
 var ReactDOM=require("react-dom");
