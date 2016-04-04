@@ -15,38 +15,70 @@ var Total= React.createClass({
     "curName":   "Magic: The Gathering",
     "curImage":"images/Magic_Back.jpg",
     "selectInput":<p></p>,
+    "totalQty":0,
+    "setQty":[],
+    "sets":[],
   }
+},
+handleReset:function(){
+  $("#cardNameContainer").removeClass("hidden")
+  $("#setContainer").addClass("hidden")
+  $(".infoContainer").addClass("hidden")
+  this.setState(this.getInitialState());
 },
 handleSearch:function(e){
   e.preventDefault();
-
+      //find card info from deckbrew.com
       var curName = $("#cardName").val();
       var cardFound=false;
-
       $.getJSON('https://api.deckbrew.com/mtg/cards?name=' + curName, function (data) {
 
                 for(var i =0;i<data.length;i++){
                   if(data[i].name.toLowerCase()==curName.toLowerCase()){
-                    $(".Search").addClass("hidden")
+                    $("#cardNameContainer").addClass("hidden")
                     $("#setContainer").removeClass("hidden")
                     $(".infoContainer").removeClass("hidden")
                     cardFound=true;
+                    this.setState({"sets":data[i].editions})
                       this.setState({"selectInput": <SetSelect data={data[i].editions} />,"curName":data[i].name,"curImage":data[i].editions[0].image_url})
-
-                    // for(var j =0;j<data[i].editions.length;j++){
-                    //   if(data[i].editions[j].set.toLowerCase() == curSet.toLowerCase()){
-                    //     this.setState({"curName":data[i].name,"curImage":data[i].editions[j].image_url})
-                    //   }
-                    // }
-
                   }
-
                 }
-        }.bind(this))
+        }.bind(this));
+          $("#cardQty").val(1)
+
+            //find card info from parse
+            var currentUser = Parse.User.current();
+            var Card = Parse.Object.extend("Cards");
+            var cardQuery = new Parse.Query(Card);
+              cardQuery.equalTo("userName", currentUser.getUsername());
+              cardQuery.equalTo("Name", curName);
+              var totalQty=0;
+              var self = this;
+
+              cardQuery.find({
+                success: function(results) {
+                        var setInfo = [];
+                  for(var i =0;i<results.length;i++){
+                    totalQty+=parseInt(results[i].get("Qty"));
+                    setInfo.push({"Set":results[i].get("Set"),"Qty":results[i].get("Qty"),"Foil":results[i].get("Foil"),"Promo":results[i].get("Promo")})
+                  }
+                  self.setState({"setQty":setInfo})
+                  self.setState({"totalQty":totalQty})
+
+
+                },
+                error: function(error) {
+                  console.log("Step Server not find")
+                }
+            })
 
 },
 handleAddCard:function(e){
   e.preventDefault();
+  if( $("#cardQty").val()==""){
+    alert("Please insert a quantity")
+    return;
+  }
     var currentUser = Parse.User.current();
     var foil = document.getElementById('foil').checked;
     var promo =document.getElementById('promo').checked;
@@ -68,26 +100,67 @@ handleAddCard:function(e){
       console.log(object)
   })
 
+  $("#cardNameContainer").removeClass("hidden")
+  $("#setContainer").addClass("hidden")
+  $(".infoContainer").addClass("hidden")
+  this.setState(this.getInitialState());
 
 },
   render:function(){
+      var renderSets=this.state.sets.map(function(item){
+        var setQty = 0;
+        var foilQty = 0;
+        var promoQty=0
+        for(var j = 0;j<this.state.setQty.length;j++){
+          if(item.set==this.state.setQty[j].Set){
+            setQty+=parseInt(this.state.setQty[j].Qty);
+            if(this.state.setQty[j].Foil){
+              foilQty+=parseInt(this.state.setQty[j].Qty);
+            }
+            if(this.state.setQty[j].Promo){
+              promoQty+=parseInt(this.state.setQty[j].Qty);
+            }
+          }
+        }
+        if(setQty > 0){
+          return(<p>{setQty} from {item.set}   ({foilQty} Foil, {promoQty} Promo)</p>)
+        }
+
+      }.bind(this))
+
+
+
     return(
       <div className="ownerCards">
       <h3>Cards for sale</h3>
-      <div className="col-md-6 col-xs-12">
 
+
+      <div className="col-md-4 col-xs-12">
+          <h3>{this.state.curName}</h3>
+          <img src={this.state.curImage}  />
+          <p>Images and card information courtesy of <a href ="https://deckbrew.com/">deckbrew.com</a></p>
+      </div>
+
+      <div className="col-md-4 col-xs-12">
 
       <form id="cardForm" action="" className="form-events">
 
-                <div className="row"><label>Card Name</label></div>
-                <input id="cardName" type="text" name="cardName" placeholder="Name of Card"/>
-                <p><button onClick={this.handleSearch} className="btn btn-primary Search">Search</button></p>
-                <div id="setContainer" className="hidden">
-                  <div className="row "><label>Set</label></div>
-                  {this.state.selectInput}
-                </div>
+            <div id="cardNameContainer">
+              <div className="row"><label>Card Name</label></div>
+              <input id="cardName" type="text" name="cardName" placeholder="Name of Card"/>
+              <p><button onClick={this.handleSearch} className="btn btn-primary Search">Search</button></p>
+            </div>
+
+
 
         <div className="infoContainer hidden">
+          <div id="resetContainer">
+            <button onClick={this.handleReset} className="btn btn-secondary">Change Card</button>
+          </div>
+          <div id="setContainer">
+            <div className="row "><label>Set</label></div>
+            {this.state.selectInput}
+          </div>
           <div className="row">
             <div className="col-xs-6">
               <div className="row"><label>Condition</label></div>
@@ -125,10 +198,11 @@ handleAddCard:function(e){
       </form>
         </div>
 
-          <div className="col-md-6 col-xs-12">
-            <h3>{this.state.curName}</h3>
-            <img src={this.state.curImage}  />
-          </div>
+
+            <div className="col-md-4 col-xs-12">
+              <h3>You are currently selling {this.state.totalQty} copies of this card</h3>
+              {renderSets}
+            </div>
 
       </div>
     )

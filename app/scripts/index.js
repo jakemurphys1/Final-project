@@ -6,37 +6,38 @@ var Parse = require("parse")
 var Input = require("react-bootstrap/lib/Input");
 var ButtonInput= require("react-bootstrap/lib/ButtonInput")
 //local
-var SignupForm=require("./components/signup.jsx")
+var RegisterForm=require("./components/register.jsx")
 var OwnerForm=require("./components/owner.jsx")
+var LoginForm=require("./components/login.jsx")
+var HomeForm =require("./components/home.jsx")
 
-console.log(SignupForm)
-
-var appContainer= document.getElementById("container")
+var homeContainer= document.getElementById("container")
 
 var Router = Backbone.Router.extend({
   routes:{
-    "":"owner",
+    "":"home",
     "home":"home",
     "owner":"owner",
+    "register":"register",
     "signin":"signin",
     "owner/:events":"owner",
     "owner/:cards":"owner",
     "owner/:special":"owner",
   },
   home:function(){
-
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    ReactDOM.render(<HomeForm router={this}/>,homeContainer)
   },
   Login:function(){
 
   },
   owner:function(id){
-    console.log(id)
-    ReactDOM.unmountComponentAtNode(appContainer);
-    ReactDOM.render(<OwnerForm currentId={id} router={this}/>,appContainer)
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    ReactDOM.render(<OwnerForm currentId={id} router={this}/>,homeContainer)
   },
-  signin:function(){
-    ReactDOM.unmountComponentAtNode(appContainer);
-    ReactDOM.render(<SignupForm router={this}/>,appContainer)
+  register:function(){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    ReactDOM.render(<RegisterForm router={this}/>,homeContainer)
   },
 })
 

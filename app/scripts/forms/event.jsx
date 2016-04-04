@@ -6,6 +6,32 @@ var Input = require("react-bootstrap/lib/Input");
 var Parse = require("parse");
 
 var Total= React.createClass({
+  handleAddEvent:function(e){
+    e.preventDefault();
+    var currentUser = Parse.User.current();
+    var Events = Parse.Object.extend("Events");
+    var events = new Events();
+    var data = {
+      "Name":$("#eventName").val(),
+      "Format":$("#eventFormat").val(),
+      "Date":$("#eventDate").val(),
+      "startTime":$("#startTime").val(),
+      "endTime":$("#endTime").val(),
+      "Description":$("#Description").val(),
+      "userName":currentUser.getUsername(),
+    }
+    events.save(data).then(function(object) {
+        console.log(object)
+    })
+    $("#eventName").val("")
+    $("#eventFormat").val("")
+    $("#eventDate").val("")
+    $("#startTime").val("")
+    $("#endTime").val("")
+    $("#Description").val("")
+      this.setState(this.getInitialState());
+
+  },
   render:function(){
     return(<div className="ownerEvent">
       <h3>Events</h3>

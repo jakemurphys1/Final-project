@@ -10,13 +10,19 @@ var CardForm = require("../forms/cards.jsx");
 var SpecialForm = require("../forms/specials.jsx");
 
 var OwnerForm = React.createClass({
-  componentDidMount:function(){
+  getInitialState:function(){
     Parse.initialize("GLID");
     Parse.serverURL = 'http://gaminglocal.herokuapp.com'
-
+      var currentUser = Parse.User.current();
+  return {
+    "userName":   currentUser.getUsername(),
+  }
+},
+  componentDidMount:function(){
+  var currentUser = Parse.User.current();
+      console.log("CurrentUser",currentUser.getUsername())
   },
   render:function(){
-
     var currentForm = <EventForm />;
     if(this.props.currentId==":cards"){
       currentForm = <CardForm />;
@@ -28,10 +34,11 @@ var OwnerForm = React.createClass({
     return(
       <div className="row Total">
         <div className="row Header">
-          <h1>Store Owner</h1>
+          <h1>{this.state.userName}</h1>
         </div>
         <div className="row">
           <ul className="list-inline nav nav-tabs">
+            <li><a href="#home">Home</a></li>
             <li><a href="#owner/:events">Events</a></li>
             <li><a href="#owner/:cards">Cards</a></li>
             <li><a href="#owner/:special">Specials</a></li>

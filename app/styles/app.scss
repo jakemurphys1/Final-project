@@ -16,6 +16,32 @@ img {
   max-width: 100%;
 }
 
+#container{
+  .header{
+    background-color: blue;
+  }
+  h1{
+    text-align: center;
+  }
+  .logIn{
+    float:right;
+    span{
+      font-size: 20px;
+      margin-right: 20px;
+    }
+  }
+  .home{
+    margin:20px;
+    text-align: center;
+    border: black solid 1px;
+  }
+  .homeEvent{
+    input{
+      width:150px;
+    }
+  }
+}
+
 .form-login, .form-events{
   display: inline-block;
   margin: 0 auto;
@@ -65,6 +91,14 @@ margin-top: -30px;
 }
 
 .ownerCards{
+  h3{
+    margin-top: -15px;
+    margin-bottom: 30px;
+  }
+  img{
+    width:300px;
+    height: auto;
+  }
   #cardCondition{
 margin-top: 6px;
   }
@@ -82,4 +116,51 @@ height: 250px;
     width:150px;
     margin-left: 10px;
   }
+}
+
+.signFloat{
+          box-shadow: 5px 5px #111111;
+  border-radius: 5px;
+  position: absolute;
+  width:350px;
+  height: auto;
+margin-top: 20px;
+padding:5px;
+  z-index: 1;
+  border: solid black 1px;
+    background-color: rgb(205, 189, 168);
+    .TotalSignup{
+      margin-top: 20px;
+      .btn-primary{
+        width:300px;
+        margin-top: 5px;
+      }
+      .btn-secondary{
+        width:50;
+        float: right;
+        margin-right: 50px;
+          margin-top: 5px;
+      }
+    .form-login{
+      display: inline-block;
+      margin: 0 auto;
+      input{
+        background-color: rgb(222, 222, 222);
+        margin-top: 5px;
+        width:300px;
+      }
+    }
+    .heading{
+
+        border-radius: 5px;
+      background-color: rgb(69, 124, 178);
+      text-align: center;
+      width:349px;
+      margin-left: 10px;
+      margin-top: -25px;
+      font-size: 30px;
+      font-weight: bolder;
+      color:white;
+    }
+    }
 }

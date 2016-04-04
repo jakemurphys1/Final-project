@@ -37,11 +37,38 @@ var SignUp = React.createClass({
             currentUser.set('username', $('#signupUsername').val());
             currentUser.save();
             console.log("CurrentUser",currentUser.getUsername())
+
+            //store null values for the Specials
+            var specialList={
+              "specialName1": "",
+              "specialDescription1":"",
+              "specialStart1":"",
+              "specialEnd1":"",
+              "specialName2":"",
+              "specialDescription2":"",
+              "specialStart2":"",
+              "specialEnd2":"",
+              "specialName3": "",
+              "specialDescription3":"",
+              "specialStart3":"",
+              "specialEnd3":"",
+              "date":Date.now(),
+              "userName":currentUser.getUsername(),
+            }
+
+            var Specials = Parse.Object.extend("Specials");
+            var specials = new Specials();
+            specials.save(specialList).then(function(object) {
+                console.log(object)
+            })
+
           },
           "error": function(user,error){
             console.log("error",user,error);
           }
         });
+
+
 
 
         },

@@ -39,18 +39,11 @@ var Total=React.createClass({
              success: function (contact) {
                  contact.set(specialList);
                  contact.save();
-                 location.reload();
+                 //location.reload();
              }
          });
      }
  });
-
-    // var Specials = Parse.Object.extend("Specials");
-    //   var specials = new Specials();
-    //       specials.save(specialList).then(function(object) {
-    //       })
-
-
 
   },
 componentDidMount(){

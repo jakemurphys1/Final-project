@@ -5817,6 +5817,22 @@ button.close {
 img {
   max-width: 100%; }
 
+#container .header {
+  background-color: blue; }
+#container h1 {
+  text-align: center; }
+#container .logIn {
+  float: right; }
+  #container .logIn span {
+    font-size: 20px;
+    margin-right: 20px; }
+#container .home {
+  margin: 20px;
+  text-align: center;
+  border: black solid 1px; }
+#container .homeEvent input {
+  width: 150px; }
+
 .form-login, .form-events {
   display: inline-block;
   margin: 0 auto;
@@ -5851,6 +5867,12 @@ img {
         width: 100px;
         margin-left: 20px; }
 
+.ownerCards h3 {
+  margin-top: -15px;
+  margin-bottom: 30px; }
+.ownerCards img {
+  width: 300px;
+  height: auto; }
 .ownerCards #cardCondition {
   margin-top: 6px; }
 .ownerCards #cardQty {
@@ -5862,5 +5884,44 @@ img {
 .ownerSpecial .theDates {
   width: 150px;
   margin-left: 10px; }
+
+.signFloat {
+  box-shadow: 5px 5px #111111;
+  border-radius: 5px;
+  position: absolute;
+  width: 350px;
+  height: auto;
+  margin-top: 20px;
+  padding: 5px;
+  z-index: 1;
+  border: solid black 1px;
+  background-color: #cdbda8; }
+  .signFloat .TotalSignup {
+    margin-top: 20px; }
+    .signFloat .TotalSignup .btn-primary {
+      width: 300px;
+      margin-top: 5px; }
+    .signFloat .TotalSignup .btn-secondary {
+      width: 50;
+      float: right;
+      margin-right: 50px;
+      margin-top: 5px; }
+    .signFloat .TotalSignup .form-login {
+      display: inline-block;
+      margin: 0 auto; }
+      .signFloat .TotalSignup .form-login input {
+        background-color: #dedede;
+        margin-top: 5px;
+        width: 300px; }
+    .signFloat .TotalSignup .heading {
+      border-radius: 5px;
+      background-color: #457cb2;
+      text-align: center;
+      width: 349px;
+      margin-left: 10px;
+      margin-top: -25px;
+      font-size: 30px;
+      font-weight: bolder;
+      color: white; }
 
 /*# sourceMappingURL=app.css.map */
