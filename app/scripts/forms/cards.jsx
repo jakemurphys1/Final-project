@@ -44,7 +44,7 @@ handleSearch:function(e){
                   }
                 }
         }.bind(this));
-          $("#cardQty").val(1)
+      $("#cardQty").val(1)
 
             //find card info from parse
             var currentUser = Parse.User.current();
@@ -94,6 +94,7 @@ handleAddCard:function(e){
       "Promo":promo,
       "date":Date.now(),
       "userName":currentUser.getUsername(),
+      "storeName":this.props.storeName,
     }
 
   cards.save(data).then(function(object) {

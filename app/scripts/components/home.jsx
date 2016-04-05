@@ -11,8 +11,18 @@ var Home = React.createClass({
     ReactDOM.render(<LoginForm />,document.getElementById("signFloat"))
   },
   handleLogin:function(){
-    console.log("hi")
-  $(".signFloat").removeClass("hidden")
+    $(".signFloat").removeClass("hidden")
+    },
+  handleEvent:function(e){
+    e.preventDefault();
+    var startDate = $("#startDate").val();
+    var endDate=$("#endDate").val();
+    Backbone.history.navigate("searchEvent/" + startDate + "_" + endDate,{trigger:true})
+  },
+  handleCard:function(e){
+    e.preventDefault();
+    var cardName = $("#cardName").val();
+    Backbone.history.navigate("searchCard/" + cardName,{trigger:true})
   },
   render:function(){
 
@@ -32,7 +42,7 @@ var Home = React.createClass({
       <div className="col-md-5 homeEvent home">
         <div className="row"><h2>Events</h2></div>
           <p>Search by Date</p>
-          <form id="eventDate" action="" className="form-events">
+          <form id="eventDate" onSubmit={this.handleEvent} action="" className="form-events">
               <div className="col-xs-6">
                 <label>StartDate</label>
                   <p><input id="startDate" type="date" name="startDate" placeholder="Start Date"/></p>
@@ -41,8 +51,6 @@ var Home = React.createClass({
                 <label>EndDate</label>
                   <p><input id="endDate" type="date" name="endDate" placeholder="End Date"/></p>
               </div>
-
-
                   <p><button className="btn btn-primary Search">Search</button></p>
           </form>
       </div>
@@ -58,7 +66,7 @@ var Home = React.createClass({
       <div className="col-md-5 homeCards home">
         <div className="row"><h2>Cards for Sale</h2></div>
           <p>Search by Name</p>
-          <form id="cardSearch" action="" className="form-events">
+          <form onSubmit={this.handleCard} id="cardSearch" action="" className="form-events">
                   <input id="cardName" type="text" name="cardName" placeholder="Name of Card"/>
                   <p><button className="btn btn-primary Search">Search</button></p>
           </form>

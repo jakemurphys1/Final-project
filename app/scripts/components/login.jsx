@@ -32,7 +32,6 @@ var SignUp = React.createClass({
 
   },
   render:function(){
-console.log("here")
     return(
       <div className="TotalSignup row">
         <div className="row heading">Login</div>

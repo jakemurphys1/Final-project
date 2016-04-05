@@ -14,11 +14,12 @@ var Total= React.createClass({
     var data = {
       "Name":$("#eventName").val(),
       "Format":$("#eventFormat").val(),
-      "Date":$("#eventDate").val(),
+      "Date":new Date($("#eventDate").val()),
       "startTime":$("#startTime").val(),
       "endTime":$("#endTime").val(),
       "Description":$("#Description").val(),
       "userName":currentUser.getUsername(),
+      "storeName":this.props.storeName,
     }
     events.save(data).then(function(object) {
         console.log(object)
@@ -29,7 +30,6 @@ var Total= React.createClass({
     $("#startTime").val("")
     $("#endTime").val("")
     $("#Description").val("")
-      this.setState(this.getInitialState());
 
   },
   render:function(){

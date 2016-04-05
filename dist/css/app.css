@@ -5924,4 +5924,11 @@ img {
       font-weight: bolder;
       color: white; }
 
+.removeCard {
+  text-align: left;
+  margin-top: 20px;
+  font-size: 20px; }
+  .removeCard .buttonContainer {
+    float: right; }
+
 /*# sourceMappingURL=app.css.map */
