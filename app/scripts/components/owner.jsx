@@ -12,8 +12,6 @@ var RemoveForm = require("../forms/remove.jsx");
 
 var OwnerForm = React.createClass({
   getInitialState:function(){
-    Parse.initialize("GLID");
-    Parse.serverURL = 'http://gaminglocal.herokuapp.com'
       var currentUser = Parse.User.current();
       var self=this;
       Parse.User.current().fetch().then(function (user) {
@@ -46,13 +44,16 @@ var OwnerForm = React.createClass({
           <h1>{this.state.storeName}</h1>
         </div>
         <div className="row">
-          <ul className="list-inline nav nav-tabs">
+          <div className="col-xs-12 col-xs-offset-1">
+          <ul className="list-inline nav nav-tabs tabs">
             <li><a href="#home">Home</a></li>
             <li><a href="#owner/:events">Events</a></li>
               <li><a href="#owner/:special">Specials</a></li>
             <li><a href="#owner/:cards">Add Cards to sale</a></li>
             <li><a href="#owner/:remove">Remove Cards</a></li>
+              <li><a href="#owner/:account">Manage Account</a></li>
           </ul>
+        </div>
         </div>
         <div id="ownerContainer" className="row ownerContainer">
             {currentForm}

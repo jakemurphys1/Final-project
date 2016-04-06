@@ -7,8 +7,7 @@ var Parse = require("parse");
 
 var Total= React.createClass({
   componentDidMount(){
-    Parse.initialize("GLID");
-    Parse.serverURL = 'http://gaminglocal.herokuapp.com'
+
   },
   getInitialState:function(){
   return {
@@ -23,7 +22,7 @@ var Total= React.createClass({
 handleReset:function(){
   $("#cardNameContainer").removeClass("hidden")
   $("#setContainer").addClass("hidden")
-  $(".infoContainer").addClass("hidden")
+  $(".thisinfoContainer").addClass("hidden")
   this.setState(this.getInitialState());
 },
 handleSearch:function(e){
@@ -37,7 +36,7 @@ handleSearch:function(e){
                   if(data[i].name.toLowerCase()==curName.toLowerCase()){
                     $("#cardNameContainer").addClass("hidden")
                     $("#setContainer").removeClass("hidden")
-                    $(".infoContainer").removeClass("hidden")
+                    $(".thisinfoContainer").removeClass("hidden")
                     cardFound=true;
                     this.setState({"sets":data[i].editions})
                       this.setState({"selectInput": <SetSelect data={data[i].editions} />,"curName":data[i].name,"curImage":data[i].editions[0].image_url})
@@ -103,7 +102,7 @@ handleAddCard:function(e){
 
   $("#cardNameContainer").removeClass("hidden")
   $("#setContainer").addClass("hidden")
-  $(".infoContainer").addClass("hidden")
+  $(".thisinfoContainer").addClass("hidden")
   this.setState(this.getInitialState());
 
 },
@@ -132,13 +131,13 @@ handleAddCard:function(e){
 
 
     return(
-      <div className="ownerCards">
+      <div className="ownerCards row infoContainer">
       <h3>Cards for sale</h3>
 
 
-      <div className="col-md-4 col-xs-12">
+      <div className="col-md-4 col-xs-12 imageContainer">
           <h3>{this.state.curName}</h3>
-          <img src={this.state.curImage}  />
+          <div><img src={this.state.curImage}  /></div>
           <p>Images and card information courtesy of <a href ="https://deckbrew.com/">deckbrew.com</a></p>
       </div>
 
@@ -154,7 +153,7 @@ handleAddCard:function(e){
 
 
 
-        <div className="infoContainer hidden">
+        <div className="thisinfoContainer hidden">
           <div id="resetContainer">
             <button onClick={this.handleReset} className="btn btn-secondary">Change Card</button>
           </div>

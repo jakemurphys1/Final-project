@@ -33,7 +33,7 @@ var Total= React.createClass({
 
   },
   render:function(){
-    return(<div className="ownerEvent">
+    return(<div className="ownerEvent infoContainer">
       <h3>Events</h3>
       <form onSubmit={this.handleAddEvent} id="eventForm" action="" className="form-events">
           <div className="col-md-6 info">

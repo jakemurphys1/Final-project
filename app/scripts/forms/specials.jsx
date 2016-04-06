@@ -17,18 +17,16 @@ var Total=React.createClass({
     var specialList={
       "specialName1": $("#specialName1").val(),
       "specialDescription1":$("#specialDescription1").val(),
-      "specialStart1":$("#startDay1").val(),
-      "specialEnd1":$("#endDay1").val(),
+      "tags1":$("#Tags1").val(),
       "specialName2": $("#specialName2").val(),
       "specialDescription2":$("#specialDescription2").val(),
-      "specialStart2":$("#startDay2").val(),
-      "specialEnd2":$("#endDay2").val(),
+      "tags2":$("#Tags2").val(),
       "specialName3": $("#specialName3").val(),
       "specialDescription3":$("#specialDescription3").val(),
-      "specialStart3":$("#startDay3").val(),
-      "specialEnd3":$("#endDay3").val(),
+        "tags3":$("#Tags3").val(),
       "date":Date.now(),
       "userName":currentUser.getUsername(),
+      "storeName":this.props.storeName,
     }
 
     var query = new Parse.Query("Specials");
@@ -47,8 +45,6 @@ var Total=React.createClass({
 
   },
 componentDidMount(){
-  Parse.initialize("GLID");
-  Parse.serverURL = 'http://gaminglocal.herokuapp.com'
     var currentUser = Parse.User.current();
 
   var Specials = Parse.Object.extend("Specials");
@@ -68,8 +64,7 @@ componentDidMount(){
         for(var i =1;i<4;i++){
           $("#specialName" + i).val(this.state.Specials.get("specialName"+i))
           $("#specialDescription" + i).val(this.state.Specials.get("specialDescription"+i))
-          $("#startDay" + i).val(this.state.Specials.get("specialStart"+i))
-          $("#endDay" + i).val(this.state.Specials.get("specialEnd"+i))
+          $("#Tags" + i).val(this.state.Specials.get("tags"+i))
         }
        }.bind(this));
 
@@ -84,15 +79,12 @@ componentDidMount(){
       var specialDescription1 = this.state.Specials.get("specialDescription1")
       var specialDescription2 = this.state.Specials.get("specialDescription2")
       var specialDescription3 = this.state.Specials.get("specialDescription3")
-      var startDay1 = this.state.Specials.get("specialStart1")
-      var startDay2 = this.state.Specials.get("specialStart2")
-      var startDay3 = this.state.Specials.get("specialStart3")
-      var endDay1 = this.state.Specials.get("specialEnd1")
-      var endDay2 = this.state.Specials.get("specialEnd2")
-      var endDay3 = this.state.Specials.get("specialEnd3")
+      var tags1 =this.state.Specials.get("Tags1");
+      var tags2 =this.state.Specials.get("Tags1");
+      var tags3 =this.state.Specials.get("Tags1");
     }
     return(
-      <div className="ownerSpecial">
+      <div className="ownerSpecial infoContainer">
       <h3>Specials</h3>
       <p>Limit three per store</p>
       <form onSubmit={this.handleAddSpecial} id="eventForm" action="" className="form-events">
@@ -102,27 +94,25 @@ componentDidMount(){
               <input id="specialName1" type="text" name="specialName" placeholder="Name"/>
               <div className="row"><label>Description</label></div>
               <textarea className="specialDescription" id="specialDescription1" placeholder="Description of the Special"></textarea>
-                    <div className="row"><label>Dates of special</label></div>
-              <div className="col-md-6"><input id="startDay1" className="theDates" type="date" name="startDay" placeholder="Start Day"/></div>
-              <div className="col-md-6"><input id="endDay1" className="theDates" type="date" name="endDay" placeholder="End Day"/></div>
+                    <div className="row"><label>Tags</label></div>
+              <div className="col-md-6"><input id="Tags1" className="Tags" type="text" name="Tags" placeholder="tags for users to search"/></div>
+
           </div>
           <div className="col-md-4">
             <div className="row"><label>Special 2</label></div>
               <input id="specialName2" type="text" name="specialName" placeholder="Name"/>
               <div className="row"><label>Description</label></div>
               <textarea className="specialDescription" id="specialDescription2" placeholder="Description of the Special"></textarea>
-                    <div className="row"><label>Dates of special</label></div>
-              <div className="col-md-6"><input id="startDay2" className="theDates" type="date" name="startDay" placeholder="Start Day"/></div>
-              <div className="col-md-6"><input id="endDay2" className="theDates" type="date" name="endDay" placeholder="End Day"/></div>
+                <div className="row"><label>Tags</label></div>
+          <div className="col-md-6"><input id="Tags2" className="Tags" type="text" name="Tags" placeholder="tags for users to search"/></div>
           </div>
           <div className="col-md-4">
             <div className="row"><label>Special 3</label></div>
               <input id="specialName3" type="text" name="specialName" placeholder="Name"/>
               <div className="row"><label>Description</label></div>
               <textarea className="specialDescription" id="specialDescription3" placeholder="Description of the Special"></textarea>
-                    <div className="row"><label>Dates of special</label></div>
-              <div className="col-md-6"><input id="startDay3" className="theDates" type="date" name="startDay" placeholder="Start Day"/></div>
-              <div className="col-md-6"><input id="endDay3" className="theDates" type="date" name="endDay" placeholder="End Day"/></div>
+                <div className="row"><label>Tags</label></div>
+                <div className="col-md-6"><input id="Tags3" className="Tags" type="text" name="Tags" placeholder="tags for users to search"/></div>
           </div>
       <button type="submit" className="btn btn-lg btn-block btn-primary signinbutton">Update</button>
       </form>

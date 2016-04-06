@@ -9,20 +9,22 @@ var Parse = require("parse")
 
 var SignUp = React.createClass({
   componentDidMount:function(){
-    Parse.initialize("GLID");
-    Parse.serverURL = 'http://gaminglocal.herokuapp.com'
   },
   handleExit:function(){
     $(".signFloat").addClass("hidden");
   },
   login:function(e){
     e.preventDefault();
+    var self = this;
     Parse.User.logIn($("#loginEmail").val(), $("#loginPassword").val(), {
       success: function(user) {
+
+        self.props.parent.handleLogin();
         console.log("You logged in as ", $("#loginEmail").val())
         var currentUser = Parse.User.current();
         currentUser.set('username', $("#loginEmail").val());
         currentUser.save();
+
       },
       error: function(user, error) {
         console.log("You failed to log in as ",user,error)

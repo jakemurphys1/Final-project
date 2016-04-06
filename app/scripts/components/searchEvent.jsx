@@ -15,8 +15,6 @@ var searchEvent = React.createClass({
 },
   componentDidMount:function(){
   var currentUser = Parse.User.current();
-  Parse.initialize("GLID");
-  Parse.serverURL = 'http://gaminglocal.herokuapp.com'
   //find card info from parse
   var currentUser = Parse.User.current();
   var self=this;
@@ -81,7 +79,7 @@ var FoundEvent = React.createClass({
     var year = date.getFullYear();
     var redate = monthNames[monthIndex] + " " + day + " " + year
 
-    return(<div className="col-md-3 col-sm-6 col-sx-12">
+    return(<div className="col-md-2 col-sm-4 col-sx-12 infoContainer">
       <h3>{this.props.item.get("Name")}</h3>
       <p>Store:  {this.props.item.get("storeName")}</p>
       <p>Format: {this.props.item.get("Format")}</p>
@@ -98,7 +96,7 @@ var Description = React.createClass({
     this.props.grandparent.setState({"description":""})
   },
   render:function(){
-    return(<div>
+    return(<div className="infoContainer">
         <h1>{this.props.item.get("Name")}</h1>
         <p>{this.props.item.get("Description")}</p>
         <button onClick={this.handleBack} className="btn btn-secondary">Back</button>

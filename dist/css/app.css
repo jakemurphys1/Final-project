@@ -5817,21 +5817,52 @@ button.close {
 img {
   max-width: 100%; }
 
-#container .header {
-  background-color: blue; }
-#container h1 {
+body {
+  background-color: #795639; }
+
+#container {
+  background-color: #795639; }
+  #container .header {
+    background-image: url("../images/MagicPic.JPG");
+    background-size: cover;
+    background-position: 0px -600px; }
+  #container h1 {
+    font-size: 60px;
+    text-align: center;
+    text-shadow: 2px 2px #111111; }
+  #container .logIn {
+    margin-left: 30px; }
+    #container .logIn span {
+      color: white;
+      font-weight: bolder;
+      font-size: 20px;
+      margin-left: 20px;
+      text-shadow: 1px 1px #111111; }
+    #container .logIn span:hover {
+      cursor: pointer;
+      color: red; }
+    #container .logIn a {
+      text-decoration: none;
+      color: white;
+      text-shadow: 1px 1px #111111; }
+    #container .logIn a:hover {
+      color: red; }
+  #container .infoContainer {
+    border: #2c2115 solid 1px;
+    border-radius: 10px;
+    background-color: #be9d7f;
+    margin: 40px;
+    box-shadow: 2px 2px #111111; }
+    #container .infoContainer h3 {
+      margin-top: 20px; }
+  #container .home {
+    text-align: center;
+    height: 230px; }
+  #container .homeEvent input {
+    width: 150px; }
+
+.specialDescription {
   text-align: center; }
-#container .logIn {
-  float: right; }
-  #container .logIn span {
-    font-size: 20px;
-    margin-right: 20px; }
-#container .home {
-  margin: 20px;
-  text-align: center;
-  border: black solid 1px; }
-#container .homeEvent input {
-  width: 150px; }
 
 .form-login, .form-events {
   display: inline-block;
@@ -5884,6 +5915,11 @@ img {
 .ownerSpecial .theDates {
   width: 150px;
   margin-left: 10px; }
+.ownerSpecial .Tags {
+  width: 370px; }
+.ownerSpecial .btn {
+  float: right;
+  margin-right: 20px; }
 
 .signFloat {
   box-shadow: 5px 5px #111111;
@@ -5930,5 +5966,22 @@ img {
   font-size: 20px; }
   .removeCard .buttonContainer {
     float: right; }
+
+.Total .nav-tabs {
+  border-bottom: black solid 0px;
+  font-size: 25px; }
+  .Total .nav-tabs a {
+    color: black; }
+.Total .Header {
+  background-image: url("../images/MagicPic.JPG");
+  background-size: cover;
+  background-position: 0px -500px; }
+
+.searchCard img {
+  margin-left: 20px;
+  width: 400px;
+  height: auto; }
+.searchCard h2 {
+  text-align: center; }
 
 /*# sourceMappingURL=app.css.map */

@@ -10,17 +10,28 @@ var searchCard = React.createClass({
   getInitialState:function(){
   return {
       "cardList":[],
+      "curImage":"images/Magic_Back.jpg",
   }
 },
   componentDidMount:function(){
-  var currentUser = Parse.User.current();
-  Parse.initialize("GLID");
-  Parse.serverURL = 'http://gaminglocal.herokuapp.com'
-  //find card info from parse
-  var currentUser = Parse.User.current();
-  var self=this;
-  var Cards = Parse.Object.extend("Cards");
-  var cardQuery = new Parse.Query(Cards);
+    //find card info from deckbrew.com
+    var curName = this.props.cardName;
+    var cardFound=false;
+    $.getJSON('https://api.deckbrew.com/mtg/cards?name=' + curName, function (data) {
+
+              for(var i =0;i<data.length;i++){
+                if(data[i].name.toLowerCase()==curName.toLowerCase()){
+                  cardFound=true;
+                    this.setState({"curImage":data[i].editions[0].image_url})
+                }
+              }
+      }.bind(this));
+
+      //find card info from parse
+      var currentUser = Parse.User.current();
+      var self=this;
+      var Cards = Parse.Object.extend("Cards");
+      var cardQuery = new Parse.Query(Cards);
     cardQuery.equalTo("Name", this.props.cardName);
     cardQuery.find({
       success: function(results) {
@@ -96,27 +107,31 @@ var searchCard = React.createClass({
       error: function(error) {
         console.log("Card Server not find")
       }
-  })
+    })
 
-  },
+    },
   render:function(){
-var allCards = this.state.cardList.map(function(item){
-  var cardsBySet = item.cardsBySet.map(function(set){
-    return(<p key={set.Set}>{set.quantity} from {set.Set} ({set.Foils} Foil, {set.Promos} Promo)</p>)
-  })
-  return(
-    <div className="col-md-3 col-sm-6 col-xs-12" key={item.storeName}>
-          <h2>From {item.storeName}:</h2>
-          <p>Quantity: {item.quantity}</p>
-          {cardsBySet}
-    </div>
+      var allCards = this.state.cardList.map(function(item){
+                var cardsBySet = item.cardsBySet.map(function(set){
+                  return(<p key={set.Set}>{set.quantity} from {set.Set} ({set.Foils} Foil, {set.Promos} Promo)</p>)
+                })
+              return(
+                <div className="col-md-3 col-sm-6 col-xs-12 infoContainer" key={item.storeName}>
+                  <h2>{item.storeName}:</h2>
+                  <p>Quantity: {item.quantity}</p>
+                  {cardsBySet}
+                </div>
 
-  )
-})
+              )
+        })
+        if(allCards.length==0){
+          allCards=<h2>No stores on file are currently selling this card</h2>
+        }
     return(
-      <div>
+      <div className="row searchCard">
       <h1>Copies of {this.props.cardName} for sale:</h1>
-      <div>{allCards}</div>
+      <div className="col-md-3 col-sm-12"><img src={this.state.curImage}  /></div>
+      <div className="col-md-9 col-sm-12">{allCards}</div>
       </div>
     )
   }

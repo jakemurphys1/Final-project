@@ -6,13 +6,29 @@ var Input = require("react-bootstrap/lib/Input")
 var Parse = require("parse")
 var LoginForm=require("./login.jsx")
 
+
+
 var Home = React.createClass({
   componentDidMount(){
-    ReactDOM.render(<LoginForm />,document.getElementById("signFloat"))
+    var self=this;
+    ReactDOM.render(<LoginForm parent={self} />,document.getElementById("signFloat"))
   },
-  handleLogin:function(){
+  getInitialState:function(){
+      return {
+        "currentUser":Parse.User.current(),
+      }
+},
+  handleShowLogin:function(){
     $(".signFloat").removeClass("hidden")
     },
+  handleLogin:function(){
+    console.log(Parse.User.current())
+     this.setState({"currentUser":Parse.User.current()})
+  },
+  handleLogOut:function(){
+    Parse.User.logOut();
+     this.setState({"currentUser":""})
+  },
   handleEvent:function(e){
     e.preventDefault();
     var startDate = $("#startDate").val();
@@ -25,21 +41,28 @@ var Home = React.createClass({
     Backbone.history.navigate("searchCard/" + cardName,{trigger:true})
   },
   render:function(){
-
+      var currentUser = this.state.currentUser
+      var storeSight = ""
+      var logContents = <span onClick={this.handleShowLogin} id="headerUser">Log In</span>
+      if(currentUser!=""){
+          logContents =<span onClick={this.handleLogOut} id="headerUser">Log Out</span>
+          storeSight = <span><a href="#owner">Manage Store</a></span>
+      }
     return(
   <div className="Total">
     <div id="signFloat" className="hidden signFloat col-xs-6 col-md-3 col-md-offset-4"></div>
     <div className="header row">
       <h1>Gaming Local</h1>
       <div className="logIn">
-        <span onClick={this.handleLogin} id="headerUser">Log In</span>
+        {logContents}
         <span>Sign Up</span>
         <span><a href="#register">Register Store</a></span>
-        <span><a href="#owner">Manage Store</a></span></div>
+        {storeSight}
+      </div>
     </div>
 
     <div className="row">
-      <div className="col-md-5 homeEvent home">
+      <div className="col-md-5 homeEvent home infoContainer">
         <div className="row"><h2>Events</h2></div>
           <p>Search by Date</p>
           <form id="eventDate" onSubmit={this.handleEvent} action="" className="form-events">
@@ -55,15 +78,15 @@ var Home = React.createClass({
           </form>
       </div>
 
-      <div className="col-md-5 homeSpecials home">
+      <div className="col-md-5 homeSpecials home infoContainer">
         <div className="row"><h2>Specials</h2></div>
           <p>Recently Added Specials</p>
-
+          <a href="#specials">See all specials</a>
       </div>
     </div>
 
     <div className="row">
-      <div className="col-md-5 homeCards home">
+      <div className="col-md-5 homeCards home infoContainer">
         <div className="row"><h2>Cards for Sale</h2></div>
           <p>Search by Name</p>
           <form onSubmit={this.handleCard} id="cardSearch" action="" className="form-events">
@@ -72,14 +95,13 @@ var Home = React.createClass({
           </form>
       </div>
 
-      <div className="col-md-5 homeStores home">
+      <div className="col-md-5 homeStores home infoContainer">
         <div className="row"><h2>Search for Stores near you!</h2></div>
         <form id="storeSearch" action="" className="form-events">
                 <input id="storeName" type="text" name="storeName" placeholder="Name of Store"/>
-                <input id="zipCode" type="text" name="zipCode" placeholder="Zip Code"/>
                 <p><button className="btn btn-primary Search">Search</button></p>
         </form>
-
+        <div><a href="#allStores">View all Stores</a></div>
       </div>
     </div>
   </div>

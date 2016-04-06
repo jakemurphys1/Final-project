@@ -9,11 +9,6 @@ var Parse = require("parse");
 
 
 var SignUp = React.createClass({
-  componentDidMount:function(){
-    Parse.initialize("GLID");
-    Parse.serverURL = 'http://gaminglocal.herokuapp.com'
-
-  },
   handleSignup:function(event){
 
       event.preventDefault();
@@ -42,16 +37,13 @@ var SignUp = React.createClass({
             var specialList={
               "specialName1": "",
               "specialDescription1":"",
-              "specialStart1":"",
-              "specialEnd1":"",
+              "tags1":"",
               "specialName2":"",
               "specialDescription2":"",
-              "specialStart2":"",
-              "specialEnd2":"",
+              "tags2":"",
               "specialName3": "",
               "specialDescription3":"",
-              "specialStart3":"",
-              "specialEnd3":"",
+              "tags3":"",
               "date":Date.now(),
               "userName":currentUser.getUsername(),
             }
@@ -61,7 +53,7 @@ var SignUp = React.createClass({
             specials.save(specialList).then(function(object) {
                 console.log(object)
             })
-
+            Backbone.history.navigate("home",{trigger:true})
           },
           "error": function(user,error){
             console.log("error",user,error);
@@ -75,10 +67,11 @@ var SignUp = React.createClass({
   render:function(){
       return(
 
-        <div className="row">
+        <div className="row infoContainer">
           <div className="row Header">
             <h1>Store Owner Signup</h1>
           </div>
+          <div className="col-xs-6 col-xs-offset-3">
           <form onSubmit={this.handleSignup} id="signin" action="" className="form-login">
                       <div className="row"><h2>Sign up</h2></div>
                       <div className="row">
@@ -105,7 +98,8 @@ var SignUp = React.createClass({
 
 
                       <button type="submit" className="btn btn-lg btn-block btn-primary signinbutton">Sign Up</button>
-          </form>
+            </form>
+          </div>
         </div>
       )
   },

@@ -15,31 +15,68 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 img {
   max-width: 100%;
 }
+body{
+    background-color: rgb(121, 86, 57);
+}
 
 #container{
+  background-color: rgb(121, 86, 57);
   .header{
-    background-color: blue;
+    background-image : url("../images/MagicPic.JPG");
+    background-size: cover;
+        background-position: 0px -600px;
   }
   h1{
+    font-size: 60px;
     text-align: center;
+          text-shadow: 2px 2px #111111;
   }
   .logIn{
-    float:right;
+margin-left:30px;
     span{
+      color:white;
+      font-weight: bolder;
       font-size: 20px;
-      margin-right: 20px;
+      margin-left: 20px;
+      text-shadow: 1px 1px #111111;
+
+    }
+    span:hover{
+        cursor: pointer;
+        color:red;
+    }
+a{
+  text-decoration: none;
+  color:white;
+    text-shadow: 1px 1px #111111;
+}
+a:hover{
+  color:red;
+}
+  }
+  .infoContainer{
+    border: rgb(44, 33, 21) solid 1px;
+    border-radius:10px;
+    background-color: rgb(190, 157, 127);
+    margin:40px;
+      box-shadow: 2px 2px #111111;
+    h3{
+      margin-top: 20px
     }
   }
   .home{
-    margin:20px;
     text-align: center;
-    border: black solid 1px;
+    height:230px;
   }
   .homeEvent{
     input{
       width:150px;
     }
   }
+}
+
+.specialDescription{
+    text-align: center;
 }
 
 .form-login, .form-events{
@@ -90,6 +127,8 @@ margin-top: -30px;
   }
 }
 
+
+
 .ownerCards{
   h3{
     margin-top: -15px;
@@ -109,12 +148,19 @@ margin-top: 6px;
 
 .ownerSpecial{
   .specialDescription{
-width:380px;
-height: 250px;
+  width:380px;
+  height: 250px;
   }
   .theDates{
     width:150px;
     margin-left: 10px;
+  }
+  .Tags{
+    width:370px;
+  }
+  .btn{
+    float: right;
+    margin-right: 20px;
   }
 }
 
@@ -124,8 +170,8 @@ height: 250px;
   position: absolute;
   width:350px;
   height: auto;
-margin-top: 20px;
-padding:5px;
+  margin-top: 20px;
+  padding:5px;
   z-index: 1;
   border: solid black 1px;
     background-color: rgb(205, 189, 168);
@@ -167,9 +213,36 @@ padding:5px;
 
 .removeCard{
   text-align: left;
-margin-top: 20px;
-font-size: 20px;
+  margin-top: 20px;
+  font-size: 20px;
   .buttonContainer{
-float:right;
+  float:right;
+  }
+}
+
+.Total{
+  .nav-tabs{
+    border-bottom: black solid 0px;
+    font-size: 25px;
+    a{
+        color:black;
+    }
+
+  }
+  .Header{
+    background-image : url("../images/MagicPic.JPG");
+    background-size: cover;
+        background-position: 0px -500px;
+  }
+}
+
+.searchCard{
+  img{
+    margin-left: 20px;
+    width:400px;
+    height: auto;
+  }
+  h2{
+    text-align: center;
   }
 }
