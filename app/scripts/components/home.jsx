@@ -38,7 +38,12 @@ var Home = React.createClass({
   handleCard:function(e){
     e.preventDefault();
     var cardName = $("#cardName").val();
+    console.log($("#cardName").val())
     Backbone.history.navigate("searchCard/" + cardName,{trigger:true})
+  },
+  handleStore:function(e){
+    e.preventDefault();
+        Backbone.history.navigate("store/" + $("#storeName").val(),{trigger:true})
   },
   render:function(){
       var currentUser = this.state.currentUser
@@ -80,7 +85,11 @@ var Home = React.createClass({
 
       <div className="col-md-5 homeSpecials home infoContainer">
         <div className="row"><h2>Specials</h2></div>
-          <p>Recently Added Specials</p>
+          <p>Search by Tags</p>
+          <form onSubmit={this.handleSpecial} id="cardSearch" action="" className="form-events">
+                  <input id="tagSearch" type="text" name="cardName" placeholder="Keyword to search"/>
+                  <p><button className="btn btn-primary Search">Search</button></p>
+          </form>
           <a href="#specials">See all specials</a>
       </div>
     </div>
@@ -97,7 +106,8 @@ var Home = React.createClass({
 
       <div className="col-md-5 homeStores home infoContainer">
         <div className="row"><h2>Search for Stores near you!</h2></div>
-        <form id="storeSearch" action="" className="form-events">
+          <p>Search by Name</p>
+        <form onSubmit={this.handleStore} id="storeSearch" action="" className="form-events">
                 <input id="storeName" type="text" name="storeName" placeholder="Name of Store"/>
                 <p><button className="btn btn-primary Search">Search</button></p>
         </form>

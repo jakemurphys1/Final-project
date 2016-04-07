@@ -14,7 +14,6 @@ var searchEvent = React.createClass({
   }
 },
   componentDidMount:function(){
-  var currentUser = Parse.User.current();
   //find card info from parse
   var currentUser = Parse.User.current();
   var self=this;

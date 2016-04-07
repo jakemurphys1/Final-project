@@ -15,31 +15,27 @@ var AllStores = React.createClass({
   //find card info from parse
   var currentUser = Parse.User.current();
   var self=this;
-  var Users = Parse.Object.extend("User");
+  var Users = Parse.Object.extend("Stores");
   var query = new Parse.Query(Users);
     query.find({
       success: function(results) {
-        console.log("got here")
-        console.log("results",results)
           self.setState({"Users":results})
       }
     })
   },
   render:function(){
-var allStores= this.state.Users.map(function(item){
-  console.log(item)
-    if(item.get("storeName")){
-      return(<div key={item.get("storeName")} className="col-md-3 col-sm-6 col-xs-12 infoContainer">
-              <h2>{item.get("storeName")}:</h2>
-              <p>Learn more about {item.get("storeName")}</p>
-                <p>See Events</p>
-                <p>See Specials</p>
-                <p>See Cards for Sale</p>
-            </div>
-      )
-    }
+    var storeName = this.props.storeName.toLowerCase();
+  var allStore="Loading"
+  console.log(this.state.Users.length)
+  if(this.state.Users.length>0){
+    var allStores= this.state.Users.map(function(item){
+      if(item.get("storeName") && (storeName=="" || storeName== item.get("storeName").toLowerCase())){
+        return(<PerStore item={item} key = {item.get("storeName")} />)
+      }
+    });
+  }
 
-})
+
     return(
       <div className="row">
       <h1>All Registered Stores:</h1>
@@ -47,6 +43,20 @@ var allStores= this.state.Users.map(function(item){
       </div>
     )
   }
+})
+
+var PerStore = React.createClass({
+  render:function(){
+    return(
+      <div key={this.props.item.get("storeName")} className="col-md-3 col-sm-6 col-xs-12 infoContainer">
+              <h2>{this.props.item.get("storeName")}:</h2>
+              <p><a href ={"#storeInfo/" + this.props.item.get("storeName")}>Learn more about {this.props.item.get("storeName")}</a></p>
+                <p><a href ={"#storeEvent/" + this.props.item.get("storeName")}>See Events</a></p>
+                <p><a href={"#storeSpecial/" + this.props.item.get("storeName")}>See Specials</a></p>
+                <p><a href ={"#storeCard/" + this.props.item.get("storeName")}>See Cards for Sale</a></p>
+            </div>
+    )
+  },
 })
 
 module.exports=AllStores;

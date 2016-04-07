@@ -80,8 +80,6 @@ a:hover{
 }
 
 .form-login, .form-events{
-  display: inline-block;
-  margin: 0 auto;
   text-align: center;
   .row{
     margin-top: 20px;
@@ -90,10 +88,13 @@ a:hover{
   label{
     font-size: 20px;
   }
-  input{
+  .input{
     background-color: rgb(222, 222, 222);
     margin-top: 5px;
     width:300px;
+  }
+  .Time{
+    width:70px;
   }
   button{
     width:200px;
@@ -245,4 +246,22 @@ margin-top: 6px;
   h2{
     text-align: center;
   }
+}
+
+.storeInfo{
+  p{
+    text-align: center;
+    font-size: 30px;
+  }
+}
+
+.TEMP{
+  background-color: red;
+}
+
+.hourOperation{
+  p{
+      font-size: 20px;
+  }
+
 }

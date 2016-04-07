@@ -5865,17 +5865,17 @@ body {
   text-align: center; }
 
 .form-login, .form-events {
-  display: inline-block;
-  margin: 0 auto;
   text-align: center; }
   .form-login .row, .form-events .row {
     margin-top: 20px; }
   .form-login label, .form-events label {
     font-size: 20px; }
-  .form-login input, .form-events input {
+  .form-login .input, .form-events .input {
     background-color: #dedede;
     margin-top: 5px;
     width: 300px; }
+  .form-login .Time, .form-events .Time {
+    width: 70px; }
   .form-login button, .form-events button {
     width: 200px;
     margin-top: 20px; }
@@ -5983,5 +5983,15 @@ body {
   height: auto; }
 .searchCard h2 {
   text-align: center; }
+
+.storeInfo p {
+  text-align: center;
+  font-size: 30px; }
+
+.TEMP {
+  background-color: red; }
+
+.hourOperation p {
+  font-size: 20px; }
 
 /*# sourceMappingURL=app.css.map */

@@ -14,6 +14,10 @@ var HomeForm =require("./components/home.jsx")
 var SpecialForm =require("./components/special.jsx")
 var SpecialDescriptionForm =require("./components/specialDescription.jsx")
 var StoreForm =require("./components/store.jsx")
+var StoreSpecialForm =require("./components/storeSpecial.jsx")
+var StoreEventForm =require("./components/storeEvent.jsx")
+var StoreCardForm =require("./components/storeCards.jsx")
+var StoreInfoForm =require("./components/storeInfo.jsx")
 
 var homeContainer= document.getElementById("container")
 Parse.initialize("GLID");
@@ -31,9 +35,13 @@ var Router = Backbone.Router.extend({
     "specials":"specials",
     "specialDescription/:id":"specialDescription",
     "allStores":"allStores",
-    "owner/:events":"owner",
-    "owner/:cards":"owner",
-    "owner/:special":"owner",
+    "store/:name":"store",
+    "storeSpecial/:name":"storeSpecial",
+    "storeEvent/:name":"storeEvent",
+    "storeCard/:name":"storeCard",
+    "storeInfo/:name":"storeInfo",
+    "owner/:id":"owner",
+
   },
   home:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
@@ -48,6 +56,7 @@ var Router = Backbone.Router.extend({
   },
   searchCard:function(id){
   var cardName = id;
+  console.log("what")
     ReactDOM.unmountComponentAtNode(homeContainer);
     ReactDOM.render(<SearchCardForm cardName={cardName} router={this}/>,homeContainer)
   },
@@ -56,7 +65,6 @@ var Router = Backbone.Router.extend({
     ReactDOM.render(<SpecialForm router={this}/>,homeContainer)
   },
   specialDescription:function(id){
-    console.log(id)
     var info = id.split("_");
     var curId = info[0];
     var specialNum =info[1];
@@ -65,7 +73,27 @@ var Router = Backbone.Router.extend({
   },
   allStores:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<StoreForm router={this}/>,homeContainer)
+    ReactDOM.render(<StoreForm storeName="" router={this}/>,homeContainer)
+  },
+  store:function(id){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    ReactDOM.render(<StoreForm storeName={id} router={this}/>,homeContainer)
+  },
+  storeSpecial:function(id){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    ReactDOM.render(<StoreSpecialForm storeName={id} router={this}/>,homeContainer)
+  },
+  storeEvent:function(id){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    ReactDOM.render(<StoreEventForm storeName={id} router={this}/>,homeContainer)
+  },
+  storeCard:function(id){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    ReactDOM.render(<StoreCardForm storeName={id} router={this}/>,homeContainer)
+  },
+  storeInfo:function(id){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    ReactDOM.render(<StoreInfoForm storeName={id} router={this}/>,homeContainer)
   },
   owner:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);

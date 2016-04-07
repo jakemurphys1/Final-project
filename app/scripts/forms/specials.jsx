@@ -30,9 +30,9 @@ var Total=React.createClass({
     }
 
     var query = new Parse.Query("Specials");
- query.equalTo("userName", currentUser.getUsername());
- query.first({
-     success: function (Contact) {
+      query.equalTo("userName", currentUser.getUsername());
+      query.first({
+        success: function (Contact) {
          Contact.save(null, {
              success: function (contact) {
                  contact.set(specialList);
@@ -41,7 +41,7 @@ var Total=React.createClass({
              }
          });
      }
- });
+   });
 
   },
 componentDidMount(){
@@ -72,19 +72,8 @@ componentDidMount(){
 
 },
   render:function(){
-    if(this.state.Specials != ""){
-      var specialName1 = this.state.Specials.get("specialName1")
-      var specialName2 = this.state.Specials.get("specialName2")
-      var specialName3 = this.state.Specials.get("specialName3")
-      var specialDescription1 = this.state.Specials.get("specialDescription1")
-      var specialDescription2 = this.state.Specials.get("specialDescription2")
-      var specialDescription3 = this.state.Specials.get("specialDescription3")
-      var tags1 =this.state.Specials.get("Tags1");
-      var tags2 =this.state.Specials.get("Tags1");
-      var tags3 =this.state.Specials.get("Tags1");
-    }
     return(
-      <div className="ownerSpecial infoContainer">
+      <div className="ownerSpecial row infoContainer">
       <h3>Specials</h3>
       <p>Limit three per store</p>
       <form onSubmit={this.handleAddSpecial} id="eventForm" action="" className="form-events">

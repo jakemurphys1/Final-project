@@ -9,14 +9,11 @@ var EventForm = require("../forms/event.jsx");
 var CardForm = require("../forms/cards.jsx");
 var SpecialForm = require("../forms/specials.jsx");
 var RemoveForm = require("../forms/remove.jsx");
+var InfoForm = require("../forms/info.jsx");
 
 var OwnerForm = React.createClass({
   getInitialState:function(){
       var currentUser = Parse.User.current();
-      var self=this;
-      Parse.User.current().fetch().then(function (user) {
-        self.setState({"storeName":user.get("storeName")})
-      });
       return {
         "userName":   currentUser.getUsername(),
         "storeName":""
@@ -24,7 +21,21 @@ var OwnerForm = React.createClass({
 },
   componentDidMount:function(){
   var currentUser = Parse.User.current();
-      console.log("CurrentUser",currentUser.getUsername())
+  var self = this;
+  var storeName = Parse.Object.extend("Stores");
+  var query = new Parse.Query(storeName);
+    query.equalTo("username", currentUser.getUsername());
+
+    query.find({
+      success: function(results) {
+          self.setState({"storeName":results[0].get("storeName")})
+
+      },
+      error: function(error) {
+        console.log("Step Server not find")
+      }
+  })
+
   },
   render:function(){
     var currentForm = <EventForm storeName={this.state.storeName} />;
@@ -36,6 +47,9 @@ var OwnerForm = React.createClass({
     }
     if(this.props.currentId==":remove"){
       currentForm = <RemoveForm storeName={this.state.storeName} />;
+    }
+    if(this.props.currentId==":account"){
+      currentForm = <InfoForm storeName={this.state.storeName} />;
     }
 
     return(

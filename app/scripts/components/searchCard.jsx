@@ -9,11 +9,12 @@ var LoginForm=require("./login.jsx")
 var searchCard = React.createClass({
   getInitialState:function(){
   return {
-      "cardList":[],
+      "cardList":"",
       "curImage":"images/Magic_Back.jpg",
   }
 },
   componentDidMount:function(){
+    console.log("got her eher")
     //find card info from deckbrew.com
     var curName = this.props.cardName;
     var cardFound=false;
@@ -100,7 +101,9 @@ var searchCard = React.createClass({
 
         }
 
-
+        if(cardList.length==0){
+          cardList = "FAIL";
+        }
           self.setState({"cardList":cardList})
           self.forceUpdate();
       },
@@ -111,22 +114,28 @@ var searchCard = React.createClass({
 
     },
   render:function(){
-      var allCards = this.state.cardList.map(function(item){
-                var cardsBySet = item.cardsBySet.map(function(set){
-                  return(<p key={set.Set}>{set.quantity} from {set.Set} ({set.Foils} Foil, {set.Promos} Promo)</p>)
-                })
-              return(
-                <div className="col-md-3 col-sm-6 col-xs-12 infoContainer" key={item.storeName}>
-                  <h2>{item.storeName}:</h2>
-                  <p>Quantity: {item.quantity}</p>
-                  {cardsBySet}
-                </div>
+      var allCards=<h2>Loading</h2>
+      if(this.state.cardList!="FAIL" && this.state.cardList!=""){
+        allCards = this.state.cardList.map(function(item){
+                 var cardsBySet = item.cardsBySet.map(function(set){
+                   return(<p key={set.Set}>{set.quantity} from {set.Set} ({set.Foils} Foil, {set.Promos} Promo)</p>)
+                 })
+               return(
+                 <div className="col-md-3 col-sm-6 col-xs-12 infoContainer" key={item.storeName}>
+                   <h2>{item.storeName}:</h2>
+                   <p>Quantity: {item.quantity}</p>
+                   {cardsBySet}
+                 </div>
 
-              )
-        })
-        if(allCards.length==0){
-          allCards=<h2>No stores on file are currently selling this card</h2>
+               )
+         })
+      } else{
+        if(this.state.cardList!="FAIL"){
+          allCards = <h2>No stores are selling this card</h2>
         }
+      }
+
+
     return(
       <div className="row searchCard">
       <h1>Copies of {this.props.cardName} for sale:</h1>

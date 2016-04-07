@@ -20,10 +20,11 @@ var SignUp = React.createClass({
       }
 
           var $form = $(this);
-          var data = {"username":$("#signupUsername").val(),"password":$("#signupPassword1").val(),"Fname":$("#signupFname").val(),
-                      "Lname":$("#signupLname").val(),"email":$("#signupEmail").val(),"storeName":$("#signupStoreName").val(),"address":$("#addressStreet").val(),
-                    "city":$("#addressCity").val(),"state":$("#addressState").val(),"zip":$("#addressZip").val(),"isStore":true};
-        user.set(data);
+          var userData={"username":$("#signupUsername").val(),"password":$("#signupPassword1").val(),"Fname":$("#signupFname").val(),
+                      "Lname":$("#signupLname").val(),"hasStore":true}
+
+
+        user.set(userData);
 
         user.signUp(null, {
           'success':function(results){
@@ -47,12 +48,51 @@ var SignUp = React.createClass({
               "date":Date.now(),
               "userName":currentUser.getUsername(),
             }
-
             var Specials = Parse.Object.extend("Specials");
             var specials = new Specials();
             specials.save(specialList).then(function(object) {
                 console.log(object)
             })
+
+            //set store info
+            var Monday = "Closed";
+            var Tuesday = "Closed";
+            var Wednesday = "Closed";
+            var Thursday = "Closed";
+            var Friday = "Closed";
+            var Saturday = "Closed";
+            var Sunday = "Closed";
+            if($("#mon1").val()!=""){
+                Monday = ($("#mon1").val() + " to " + $("#mon2").val())
+            }
+            if($("#tues1").val()!=""){
+                   Tuesday = ($("#tues1").val() + " to " + $("#tues2").val())
+            }
+            if($("#wed1").val()!=""){
+                Wednesday = ($("#wed1").val() + " to " + $("#wed2").val())
+            }
+            if($("#thur1").val()!=""){
+                Thursday = ($("#thur1").val() + " to " + $("#thur2").val())
+            }
+            if($("#fri1").val()!=""){
+                Friday = ($("#fri1").val() + " to " + $("#fri2").val())
+            }
+            if($("#sat1").val()!=""){
+                Saturday = ($("#sat1").val() + " to " + $("#sat2").val())
+            }
+            if($("#sun1").val()!=""){
+                Sunday = ($("#sun1").val() + " to " + $("#sun2").val())
+            }
+            var storeData = {"email":$("#signupEmail").val(),"storeName":$("#signupStoreName").val(),"address":$("#addressStreet").val(),
+                      "city":$("#addressCity").val(),"state":$("#addressState").val(),"zip":$("#addressZip").val(),"phone":$("#signupPhone").val(),"website":$("#signupWebsite").val(),
+                      "Mon":Monday,"Tues":Tuesday,"Wed":Wednesday,"Thur":Thursday,"Fri":Friday,"Sat":Saturday,"Sun":Sunday,"Approved":false,"username":$("#signupUsername").val()};
+            var Stores = Parse.Object.extend("Stores");
+            var stores = new Stores();
+            stores.save(storeData).then(function(object) {
+                console.log(object)
+            })
+
+            //go back to home
             Backbone.history.navigate("home",{trigger:true})
           },
           "error": function(user,error){
@@ -68,33 +108,58 @@ var SignUp = React.createClass({
       return(
 
         <div className="row infoContainer">
+
           <div className="row Header">
             <h1>Store Owner Signup</h1>
           </div>
-          <div className="col-xs-6 col-xs-offset-3">
-          <form onSubmit={this.handleSignup} id="signin" action="" className="form-login">
-                      <div className="row"><h2>Sign up</h2></div>
-                      <div className="row">
+
+          <div className="col-xs-8 col-xs-offset-2">
+                <form onSubmit={this.handleSignup} id="signin" action="" className="form-login">
+                <div className="row">
                         <div className="col-md-6">
-                          <label>Information</label>
-                            <div className="row"><input id="signupFname" type="text" name="Fname" placeholder="First Name"/></div>
-                            <div className="row"><input id="signupLname" type="text" name="Lname" placeholder="Last Name"/></div>
-                            <div className="row"><input id="signupUsername" type="text" name="Username" placeholder="Username"/></div>
-                            <div className="row"><input id="signupEmail" type="text" name="email" placeholder="Email"/></div>
-                            <div className="row"><input id="signupStoreName" type="text" name="storeName" placeholder="Name of Store"/></div>
+                          <label>User Information</label>
+                            <div className="row"><input id="signupFname" type="text" name="Fname" className="input" placeholder="First Name"/></div>
+                            <div className="row"><input id="signupLname" type="text" name="Lname" className="input" placeholder="Last Name"/></div>
+                            <div className="row"><input id="signupUsername" type="text" name="Username" className="input" placeholder="Username"/></div>
+                            <div className="row"><input id="signupPassword1" type="password" name="password1" className="input" placeholder="Password"/></div>
+                            <div className="row"><input id="signupPassword2" type="password" name="password2" className="input" placeholder="Confirm Password"/></div>
+
                         </div>
                         <div className="col-md-6">
-                          <label>Address</label>
-                            <div className="row"><input id="addressStreet" type="text" name="addressStreet" placeholder="Street Address"/></div>
-                            <div className="row"><input id="addressCity" type="text" name="addressCity" placeholder="City"/></div>
-                            <div className="row"><input id="addressState" type="text" name="addressState" placeholder="State"/></div>
-                            <div className="row"><input id="addressZip" type="text" name="addressZip" placeholder="Zip Code"/></div>
+                          <label>Address of Store</label>
+                            <div className="row"><input id="addressStreet" type="text" name="addressStreet" className="input" placeholder="Street Address"/></div>
+                            <div className="row"><input id="addressCity" type="text" name="addressCity" className="input" placeholder="City"/></div>
+                            <div className="row"><input id="addressState" type="text" name="addressState" className="input" placeholder="State"/></div>
+                            <div className="row"><input id="addressZip" type="text" name="addressZip" className="input" placeholder="Zip Code"/></div>
                         </div>
-                      <div className="col-md-6">
-                        <div className="row"><input id="signupPassword1" type="password" name="password1" placeholder="Password"/></div>
-                        <div className="row"><input id="signupPassword2" type="password" name="password2" placeholder="Confirm Password"/></div>
                       </div>
-                    </div>
+                        <div className="row">
+                          <div className="col-md-6">
+                              <label>Store Information</label>
+                              <div className="row"><input id="signupStoreName" type="text" name="storeName" className="input" placeholder="Name of Store"/></div>
+                              <div className="row"><input id="signupEmail" type="email" name="email" className="input" placeholder="Email for Store"/></div>
+                              <div className="row"><input id="signupPhone" type="text" name="phone" className="input" placeholder="Phone Number for Store"/></div>
+                              <div className="row"><input id="signupWebsite" type="text" name="website" className="input" placeholder="Website for Store"/></div>
+                          </div>
+                          <div className="col-md-6 ">
+                              <label>Hours of Operation</label>
+                              <p>(leave empty if closed)</p>
+                              <div className="row">
+                                <div className="col-md-6">
+                                  <span>Mon:  </span><p><input id="mon1" type="text" className="Time"/> to <input id="mon2" type="text" className="Time"/></p>
+                                  <span>Tues: </span><p><input id="tues1" type="text" className="Time"/> to <input id="tues2" type="text" className="Time"/></p>
+                                  <span>Wed:  </span><p><input id="wed1" type="text" className="Time"/> to <input id="wed2" type="text" className="Time"/></p>
+                                  <span>Thur: </span><p><input id="thur1" type="text" className="Time"/> to <input id="thur2" type="text" className="Time"/></p>
+                                </div>
+                                <div className="col-md-6">
+                                  <span>Fri:  </span><p><input id="fri1" type="text" className="Time"/> to <input id="fri2" type="text" className="Time"/></p>
+                                  <span>Sat:  </span><p><input id="sat1" type="text" className="Time"/> to <input id="sat2" type="text" className="Time"/></p>
+                                  <span>Sun:  </span><p><input id="sun1" type="text" className="Time"/> to <input id="sun2" type="text" className="Time"/></p>
+                                </div>
+                                </div>
+                          </div>
+                        </div>
+
 
 
                       <button type="submit" className="btn btn-lg btn-block btn-primary signinbutton">Sign Up</button>
