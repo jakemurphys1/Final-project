@@ -45,6 +45,10 @@ var Home = React.createClass({
     e.preventDefault();
         Backbone.history.navigate("store/" + $("#storeName").val(),{trigger:true})
   },
+  handleSpecial:function(e){
+    e.preventDefault();
+    Backbone.history.navigate("tagSearch/" + $("#tagSearch").val(),{trigger:true})
+  },
   render:function(){
       var currentUser = this.state.currentUser
       var storeSight = ""

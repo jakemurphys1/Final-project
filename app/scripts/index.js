@@ -12,6 +12,7 @@ var SearchEventForm=require("./components/searchEvent.jsx")
 var SearchCardForm=require("./components/searchCard.jsx")
 var HomeForm =require("./components/home.jsx")
 var SpecialForm =require("./components/special.jsx")
+var SearchTag =require("./components/tagSearch.jsx")
 var SpecialDescriptionForm =require("./components/specialDescription.jsx")
 var StoreForm =require("./components/store.jsx")
 var StoreSpecialForm =require("./components/storeSpecial.jsx")
@@ -33,6 +34,7 @@ var Router = Backbone.Router.extend({
     "searchEvent/:dates":"searchEvent",
     "searchCard/:name":"searchCard",
     "specials":"specials",
+    "tagSearch/:id":"tagSearch",
     "specialDescription/:id":"specialDescription",
     "allStores":"allStores",
     "store/:name":"store",
@@ -48,21 +50,24 @@ var Router = Backbone.Router.extend({
     ReactDOM.render(<HomeForm router={this}/>,homeContainer)
   },
   searchEvent:function(id){
-  var dates = id.split("_")
-  var startDate = new Date(dates[0])
-  var endDate = new Date(dates[1])
+    var dates = id.split("_")
+    var startDate = new Date(dates[0])
+    var endDate = new Date(dates[1])
     ReactDOM.unmountComponentAtNode(homeContainer);
     ReactDOM.render(<SearchEventForm startDate={startDate} endDate={endDate} router={this}/>,homeContainer)
   },
   searchCard:function(id){
-  var cardName = id;
-  console.log("what")
+    var cardName = id;
     ReactDOM.unmountComponentAtNode(homeContainer);
     ReactDOM.render(<SearchCardForm cardName={cardName} router={this}/>,homeContainer)
   },
   specials:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
     ReactDOM.render(<SpecialForm router={this}/>,homeContainer)
+  },
+  tagSearch:function(id){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    ReactDOM.render(<SearchTag searchTerm={id} router={this}/>,homeContainer)
   },
   specialDescription:function(id){
     var info = id.split("_");

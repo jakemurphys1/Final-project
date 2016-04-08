@@ -5994,4 +5994,9 @@ body {
 .hourOperation p {
   font-size: 20px; }
 
+.searchTag {
+  text-align: center; }
+  .searchTag .tagContainer {
+    margin-top: 50px; }
+
 /*# sourceMappingURL=app.css.map */
