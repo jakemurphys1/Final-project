@@ -8,13 +8,12 @@ var LoginForm=require("./login.jsx")
 
 var searchCard = React.createClass({
   getInitialState:function(){
-  return {
+    return {
       "cardList":"",
       "curImage":"images/Magic_Back.jpg",
-  }
-},
+    }
+  },
   componentDidMount:function(){
-    console.log("got her eher")
     //find card info from deckbrew.com
     var curName = this.props.cardName;
     var cardFound=false;
@@ -114,36 +113,72 @@ var searchCard = React.createClass({
 
     },
   render:function(){
-      var allCards=<h2>Loading</h2>
+      var allCards=<h2>No stores are selling this card</h2>
+      var self=this;
       if(this.state.cardList!="FAIL" && this.state.cardList!=""){
         allCards = this.state.cardList.map(function(item){
                  var cardsBySet = item.cardsBySet.map(function(set){
-                   return(<p key={set.Set}>{set.quantity} from {set.Set} ({set.Foils} Foil, {set.Promos} Promo)</p>)
+                    return(<CardSample cardName={self.props.cardName} collection={self.props.collection} key={set.Set} set={set} item={item}/>)
                  })
                return(
                  <div className="col-md-3 col-sm-6 col-xs-12 infoContainer" key={item.storeName}>
                    <h2>{item.storeName}:</h2>
-                   <p>Quantity: {item.quantity}</p>
+                   <p className="Top">Total Quantity: {item.quantity}</p>
                    {cardsBySet}
-                 </div>
-
-               )
+                 </div>)
          })
-      } else{
+       } else{
         if(this.state.cardList!="FAIL"){
-          allCards = <h2>No stores are selling this card</h2>
+          allCards = <h2>Loading</h2>
         }
       }
-
 
     return(
       <div className="row searchCard">
       <h1>Copies of {this.props.cardName} for sale:</h1>
-      <div className="col-md-3 col-sm-12"><img src={this.state.curImage}  /></div>
+      <h2>Add cards to your cart, then submit for store owners to reply with the prices</h2>
+      <div className="col-md-3 col-sm-12"><img src={this.state.curImage}  />
+        <p>Images and card information courtesy of <a href ="https://deckbrew.com/">deckbrew.com</a></p>
+      </div>
       <div className="col-md-9 col-sm-12">{allCards}</div>
       </div>
     )
   }
+})
+
+var CardSample = React.createClass({
+  handleAddFoil:function(){
+    var currentUser = Parse.User.current();
+    var cardInfo = {"CardName": this.props.cardName,"Set": this.props.set.Set,"Store": this.props.item.storeName,
+      "Foil":true,"Promo":false,"userName":currentUser.getUsername()}
+    this.props.collection.add(cardInfo)
+  },
+  handleAdd:function(){
+      var currentUser = Parse.User.current();
+      var cardInfo = {"CardName": this.props.cardName,"Set": this.props.set.Set,"Store": this.props.item.storeName,
+        "Foil":false,"Promo":false,"userName":currentUser.getUsername()}
+      this.props.collection.add(cardInfo)
+  },
+  handleAddPromo(){
+    var currentUser = Parse.User.current();
+    var cardInfo = {"CardName": this.props.cardName,"Set": this.props.set.Set,"Store": this.props.item.storeName,
+      "Foil":false,"Promo":true,"userName":currentUser.getUsername()}
+    this.props.collection.add(cardInfo)
+  },
+  render: function(){
+    var foilButton = "";
+    var promoButton="";
+    if(this.props.set.Foils>0){
+      foilButton=<button onClick={this.handleAddFoil} className="btn btn-primary">Add Foil</button>
+    }
+    if(this.props.set.Promo>0){
+      foilButton=<button onClick={this.handleAddPromo} className="btn btn-primary">Add Promo</button>
+    }
+
+   return(<div>{this.props.set.quantity} from <b>{this.props.set.Set}</b> <p>({this.props.set.Foils} Foil, {this.props.set.Promos} Promo)</p>
+ <button onClick={this.handleAdd} className="btn btn-primary">Add 1</button>{foilButton}{promoButton}
+ </div>)
+  },
 })
 
 module.exports=searchCard;

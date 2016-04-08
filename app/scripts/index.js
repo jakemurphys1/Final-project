@@ -7,6 +7,7 @@ var Input = require("react-bootstrap/lib/Input");
 var ButtonInput= require("react-bootstrap/lib/ButtonInput")
 //local
 var RegisterForm=require("./components/register.jsx")
+var SignUpForm = require("./components/signUp.jsx")
 var OwnerForm=require("./components/owner.jsx")
 var SearchEventForm=require("./components/searchEvent.jsx")
 var SearchCardForm=require("./components/searchCard.jsx")
@@ -19,6 +20,11 @@ var StoreSpecialForm =require("./components/storeSpecial.jsx")
 var StoreEventForm =require("./components/storeEvent.jsx")
 var StoreCardForm =require("./components/storeCards.jsx")
 var StoreInfoForm =require("./components/storeInfo.jsx")
+var CheckoutForm =require("./components/checkout.jsx")
+//Models
+var model = require("./models/models.js");
+var OrderModel = new model.Model();
+var OrderCollection = new model.ModelCollection()
 
 var homeContainer= document.getElementById("container")
 Parse.initialize("GLID");
@@ -31,6 +37,7 @@ var Router = Backbone.Router.extend({
     "owner":"owner",
     "register":"register",
     "signin":"signin",
+    "signUp":"signUp",
     "searchEvent/:dates":"searchEvent",
     "searchCard/:name":"searchCard",
     "specials":"specials",
@@ -43,11 +50,15 @@ var Router = Backbone.Router.extend({
     "storeCard/:name":"storeCard",
     "storeInfo/:name":"storeInfo",
     "owner/:id":"owner",
-
+    "checkout":"checkout"
   },
   home:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
     ReactDOM.render(<HomeForm router={this}/>,homeContainer)
+  },
+  signUp:function(){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    ReactDOM.render(<SignUpForm router={this}/>,homeContainer)
   },
   searchEvent:function(id){
     var dates = id.split("_")
@@ -59,7 +70,7 @@ var Router = Backbone.Router.extend({
   searchCard:function(id){
     var cardName = id;
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<SearchCardForm cardName={cardName} router={this}/>,homeContainer)
+    ReactDOM.render(<SearchCardForm cardName={cardName} collection={OrderCollection} router={this}/>,homeContainer)
   },
   specials:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
@@ -94,7 +105,7 @@ var Router = Backbone.Router.extend({
   },
   storeCard:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<StoreCardForm storeName={id} router={this}/>,homeContainer)
+    ReactDOM.render(<StoreCardForm storeName={id}  collection={OrderCollection} router={this}/>,homeContainer)
   },
   storeInfo:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);
@@ -107,6 +118,10 @@ var Router = Backbone.Router.extend({
   register:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
     ReactDOM.render(<RegisterForm router={this}/>,homeContainer)
+  },
+  checkout:function(){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    ReactDOM.render(<CheckoutForm collection={OrderCollection} router={this}/>,homeContainer)
   },
 })
 

@@ -22,7 +22,6 @@ var Home = React.createClass({
     $(".signFloat").removeClass("hidden")
     },
   handleLogin:function(){
-    console.log(Parse.User.current())
      this.setState({"currentUser":Parse.User.current()})
   },
   handleLogOut:function(){
@@ -38,7 +37,6 @@ var Home = React.createClass({
   handleCard:function(e){
     e.preventDefault();
     var cardName = $("#cardName").val();
-    console.log($("#cardName").val())
     Backbone.history.navigate("searchCard/" + cardName,{trigger:true})
   },
   handleStore:function(e){
@@ -53,9 +51,12 @@ var Home = React.createClass({
       var currentUser = this.state.currentUser
       var storeSight = ""
       var logContents = <span onClick={this.handleShowLogin} id="headerUser">Log In</span>
-      if(currentUser!=""){
+
+      if(currentUser){
+          if(currentUser.get("hasStore")){
+              storeSight = <span><a href="#owner">Manage Store</a></span>
+          }
           logContents =<span onClick={this.handleLogOut} id="headerUser">Log Out</span>
-          storeSight = <span><a href="#owner">Manage Store</a></span>
       }
     return(
   <div className="Total">
@@ -64,9 +65,10 @@ var Home = React.createClass({
       <h1>Gaming Local</h1>
       <div className="logIn">
         {logContents}
-        <span>Sign Up</span>
+        <span><a href="#signUp">Sign Up</a></span>
         <span><a href="#register">Register Store</a></span>
         {storeSight}
+        <span><a href="#checkout">CheckOut</a></span>
       </div>
     </div>
 

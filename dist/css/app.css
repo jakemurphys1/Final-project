@@ -5977,6 +5977,14 @@ body {
   background-size: cover;
   background-position: 0px -500px; }
 
+.searchCard p {
+  font-size: 15px; }
+.searchCard .Top {
+  font-size: 20px;
+  text-align: center; }
+.searchCard button {
+  margin: 0 auto;
+  font-size: 10px; }
 .searchCard img {
   margin-left: 20px;
   width: 400px;
@@ -5998,5 +6006,13 @@ body {
   text-align: center; }
   .searchTag .tagContainer {
     margin-top: 50px; }
+
+.checkout p {
+  text-align: center; }
+.checkout h2 {
+  text-align: center; }
+.checkout button {
+  float: right;
+  margin-right: 30px; }
 
 /*# sourceMappingURL=app.css.map */

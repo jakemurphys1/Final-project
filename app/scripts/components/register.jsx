@@ -83,7 +83,7 @@ var SignUp = React.createClass({
             if($("#sun1").val()!=""){
                 Sunday = ($("#sun1").val() + " to " + $("#sun2").val())
             }
-            var storeData = {"email":$("#signupEmail").val(),"storeName":$("#signupStoreName").val(),"address":$("#addressStreet").val(),
+            var storeData = {"email":$("#signupEmail").val(),"storeName":$("#signupStoreName").val(),"address":$("#addressStreet").val(),"PersonalEmail":$("#signupEmail").val(),
                       "city":$("#addressCity").val(),"state":$("#addressState").val(),"zip":$("#addressZip").val(),"phone":$("#signupPhone").val(),"website":$("#signupWebsite").val(),
                       "Mon":Monday,"Tues":Tuesday,"Wed":Wednesday,"Thur":Thursday,"Fri":Friday,"Sat":Saturday,"Sun":Sunday,"Approved":false,"username":$("#signupUsername").val()};
             var Stores = Parse.Object.extend("Stores");
@@ -121,6 +121,7 @@ var SignUp = React.createClass({
                             <div className="row"><input id="signupFname" type="text" name="Fname" className="input" placeholder="First Name"/></div>
                             <div className="row"><input id="signupLname" type="text" name="Lname" className="input" placeholder="Last Name"/></div>
                             <div className="row"><input id="signupUsername" type="text" name="Username" className="input" placeholder="Username"/></div>
+                            <div className="row"><input id="signupEmail" type="text" name="signupEmail" className="input" placeholder="Personal Email"/></div>
                             <div className="row"><input id="signupPassword1" type="password" name="password1" className="input" placeholder="Password"/></div>
                             <div className="row"><input id="signupPassword2" type="password" name="password2" className="input" placeholder="Confirm Password"/></div>
 

@@ -64,7 +64,8 @@ var OwnerForm = React.createClass({
             <li><a href="#owner/:events">Events</a></li>
               <li><a href="#owner/:special">Specials</a></li>
             <li><a href="#owner/:cards">Add Cards to sale</a></li>
-            <li><a href="#owner/:remove">Remove Cards</a></li>
+            <li><a href="#owner/:remove">View Cards</a></li>
+            <li><a href="#owner/:remove">View Orders</a></li>
               <li><a href="#owner/:account">Manage Account</a></li>
           </ul>
         </div>

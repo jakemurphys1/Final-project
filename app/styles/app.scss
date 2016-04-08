@@ -15,6 +15,7 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 img {
   max-width: 100%;
 }
+
 body{
     background-color: rgb(121, 86, 57);
 }
@@ -238,6 +239,17 @@ margin-top: 6px;
 }
 
 .searchCard{
+p{
+  font-size: 15px;
+}
+.Top{
+  font-size: 20px;
+  text-align: center;
+}
+button{
+  margin: 0 auto;
+  font-size: 10px;
+}
   img{
     margin-left: 20px;
     width:400px;
@@ -271,4 +283,17 @@ margin-top: 6px;
       margin-top:50px;
   }
   text-align: center;
+}
+
+.checkout{
+  p{
+    text-align: center;
+  }
+  h2{
+    text-align: center;
+  }
+  button{
+    float:right;
+    margin-right: 30px;
+  }
 }
