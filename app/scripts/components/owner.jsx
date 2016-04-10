@@ -10,6 +10,7 @@ var CardForm = require("../forms/cards.jsx");
 var SpecialForm = require("../forms/specials.jsx");
 var RemoveForm = require("../forms/remove.jsx");
 var InfoForm = require("../forms/info.jsx");
+var OrderForm = require("../forms/orders.jsx");
 
 var OwnerForm = React.createClass({
   getInitialState:function(){
@@ -51,6 +52,10 @@ var OwnerForm = React.createClass({
     if(this.props.currentId==":account"){
       currentForm = <InfoForm storeName={this.state.storeName} />;
     }
+    if(this.props.currentId==":orders"){
+      console.log("owner",this.state.storeName)
+      currentForm = <OrderForm storeName={this.state.storeName} />;
+    }
 
     return(
       <div className="row Total">
@@ -65,7 +70,7 @@ var OwnerForm = React.createClass({
               <li><a href="#owner/:special">Specials</a></li>
             <li><a href="#owner/:cards">Add Cards to sale</a></li>
             <li><a href="#owner/:remove">View Cards</a></li>
-            <li><a href="#owner/:remove">View Orders</a></li>
+            <li><a href="#owner/:orders">View Orders</a></li>
               <li><a href="#owner/:account">Manage Account</a></li>
           </ul>
         </div>

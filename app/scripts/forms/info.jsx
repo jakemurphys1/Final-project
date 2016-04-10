@@ -135,7 +135,6 @@ componentDidMount(){
                       </div>
                       <div className="col-md-6">
                           <label>Store Information</label>
-                          <div className="row"><input id="signupStoreName" type="text" name="storeName" className="input" placeholder="Name of Store"/></div>
                           <div className="row"><input id="signupEmail" type="email" name="email" className="input" placeholder="Email for Store"/></div>
                           <div className="row"><input id="signupPhone" type="text" name="phone" className="input" placeholder="Phone Number for Store"/></div>
                           <div className="row"><input id="signupWebsite" type="text" name="website" className="input" placeholder="Website for Store"/></div>

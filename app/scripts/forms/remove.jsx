@@ -6,8 +6,6 @@ var Input = require("react-bootstrap/lib/Input");
 var Parse = require("parse");
 
 var Total= React.createClass({
-  componentDidMount(){
-  },
   getInitialState:function(){
     return {
       "setInfo":[],

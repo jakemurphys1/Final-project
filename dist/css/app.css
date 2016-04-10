@@ -6014,5 +6014,12 @@ body {
 .checkout button {
   float: right;
   margin-right: 30px; }
+.checkout .remove {
+  font-size: 10px; }
+
+.storeSearchCard {
+  margin-top: 5px; }
+  .storeSearchCard span {
+    font-size: 20px; }
 
 /*# sourceMappingURL=app.css.map */

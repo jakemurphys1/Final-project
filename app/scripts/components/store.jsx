@@ -26,7 +26,6 @@ var AllStores = React.createClass({
   render:function(){
     var storeName = this.props.storeName.toLowerCase();
   var allStore="Loading"
-  console.log(this.state.Users.length)
   if(this.state.Users.length>0){
     var allStores= this.state.Users.map(function(item){
       if(item.get("storeName") && (storeName=="" || storeName== item.get("storeName").toLowerCase())){

@@ -20,9 +20,9 @@ var StoreCards= React.createClass({
       query.equalTo("storeName", this.props.storeName);
       query.find({
         success: function(results) {
-          console.log("results", results)
             self.setState({"CurStore":results})
             self.forceUpdate();
+            console.log("success:",results)
         },
         error: function(error) {
           console.log("Server not find")
@@ -31,34 +31,65 @@ var StoreCards= React.createClass({
   },
   render:function(){
     var store = <p>Loading</p>;
+      var self=this;
     if(this.state.CurStore.length>0){
         store=this.state.CurStore.map(function(item){
-          var plural = "copies";
-          var foil = "";
-          var promo="";
-          if(item.get("Qty")==1){
-            plural="copy"
-          }
-          if(item.get("Foil")){
-            foil="(Foil)"
-          }
-          if(item.get("Promo")){
-            promo="(Promo)"
-          }
-
-          return(<div key={item.id}>
-                <p>{item.get("Qty")} {plural} of <b>{item.get("Name")}</b> from {item.get("Set")}{foil}{promo}</p>
-          </div>)
+            return(<CardSample collection={self.props.collection} key = {item.id} item={item} />)
         })
     }
-      return(<div>
+      return(<div className=" col-md-8 col-md-offset-2">
           <h1>Cards for sale at {this.props.storeName}</h1>
-          <div className="col-md-6 col-md-offset-3 infoContainer">
+            <h3>Add cards to your cart, then submit for store owners to reply with the prices</h3>
+          <div className="infoContainer">
               {store}
           </div>
 
       </div>)
   }
+})
+
+var CardSample = React.createClass({
+  handleAddFoil:function(){
+    var currentUser = Parse.User.current();
+    var cardInfo = {"CardName": this.props.item.get("Name"),"Set": this.props.item.get("Set"),"Store": this.props.item.get("storeName"),
+      "Foil":true,"Promo":false,"userName":currentUser.getUsername()}
+    this.props.collection.add(cardInfo)
+  },
+  handleAdd:function(){
+      var currentUser = Parse.User.current();
+      var cardInfo = {"CardName": this.props.item.get("Name"),"Set": this.props.item.get("Set"),"Store": this.props.item.get("storeName"),
+        "Foil":false,"Promo":false,"userName":currentUser.getUsername()}
+      this.props.collection.add(cardInfo)
+  },
+  handleAddPromo(){
+    var currentUser = Parse.User.current();
+    var cardInfo = {"CardName": this.props.item.get("Name"),"Set": this.props.item.get("Set"),"Store": this.props.item.get("storeName"),
+      "Foil":false,"Promo":true,"userName":currentUser.getUsername()}
+    this.props.collection.add(cardInfo)
+  },
+  render: function(){
+    var plural = "copies";
+    var foil = "";
+    var promo="";
+    var foilButton = "";
+    var promoButton="";
+    if(this.props.item.get("Qty")==1){
+      plural="copy"
+    }
+    if(this.props.item.get("Foil")){
+      foil="(Foil)"
+      foilButton=<button onClick={this.handleAddFoil} className="btn btn-primary">Add Foil</button>
+    }
+    if(this.props.item.get("Promo")){
+      promo="(Promo)"
+      foilButton=<button onClick={this.handleAddPromo} className="btn btn-primary">Add Promo</button>
+    }
+
+    return(<div className="storeSearchCard">
+          <span>{this.props.item.get("Qty")} {plural} of <b>{this.props.item.get("Name")}</b> from {this.props.item.get("Set")}{foil}{promo}</span>
+           <span><button onClick={this.handleAdd} className="btn btn-primary">Add 1</button>{foilButton}{promoButton}</span>
+    </div>)
+  },
 })
 
 module.exports=StoreCards;
