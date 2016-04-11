@@ -20,38 +20,42 @@ var CheckOut = React.createClass({
       //checkif order for store already created
       var storeWasUsed=false;
       for(var i =0;i<storesThatWereUsed.length;i++){
-        if(storesThatWereUsed[i]==item.get("Store")){
+        if(storesThatWereUsed[i]==item.get("Seller")){
           storeWasUsed=true
         }
       }
 
       if(storeWasUsed==false){
         //add order
-        storesThatWereUsed.push(item.get("Store"))
+        storesThatWereUsed.push(item.get("Seller"))
         var Orders = Parse.Object.extend("Orders");
         var orders = new Orders();
 
         var data = {
           "buyer":currentUser.getUsername(),
-          "seller":item.get("Store"),
+          "seller":item.get("Seller"),
+          "store":item.get("Store"),
+          "Price":"",
+          "Agreed":false
         }
 
       orders.save(data).then(function(object) {
         //add cards
         self.props.collection.forEach(function(card){
-          if(card.get("Store")==object.get("seller")){
+          if(card.get("Store")==object.get("store")){
             var Cards = Parse.Object.extend("OrderedCards");
             var cards = new Cards();
-            console.log("card",card.get("CardName"))
             var cardData = {
               "orderId":object.id,
               "buyer":currentUser.getUsername(),
-              "seller":object.get("seller"),
+              "seller":card.get("Store"),
               "Name":card.get("CardName"),
+              "Set":card.get("Set"),
+              "foil":card.get("Foil"),
+              "promo":card.get("Promo")
             }
-            console.log(cardData)
+
             cards.save(cardData).then(function(cardobject){
-              console.log("Success",cardobject)
             })
 
           }

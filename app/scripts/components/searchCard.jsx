@@ -150,19 +150,19 @@ var CardSample = React.createClass({
   handleAddFoil:function(){
     var currentUser = Parse.User.current();
     var cardInfo = {"CardName": this.props.cardName,"Set": this.props.set.Set,"Store": this.props.item.storeName,
-      "Foil":true,"Promo":false,"userName":currentUser.getUsername()}
+      "Foil":true,"Promo":false,"buyer":currentUser.getUsername(),"Seller":this.props.item.get("userName")}
     this.props.collection.add(cardInfo)
   },
   handleAdd:function(){
       var currentUser = Parse.User.current();
       var cardInfo = {"CardName": this.props.cardName,"Set": this.props.set.Set,"Store": this.props.item.storeName,
-        "Foil":false,"Promo":false,"userName":currentUser.getUsername()}
+        "Foil":false,"Promo":false,"buyer":currentUser.getUsername(),"Seller":this.props.item.get("userName")}
       this.props.collection.add(cardInfo)
   },
   handleAddPromo(){
     var currentUser = Parse.User.current();
     var cardInfo = {"CardName": this.props.cardName,"Set": this.props.set.Set,"Store": this.props.item.storeName,
-      "Foil":false,"Promo":true,"userName":currentUser.getUsername()}
+      "Foil":false,"Promo":true,"buyer":currentUser.getUsername(),"Seller":this.props.item.get("userName")}
     this.props.collection.add(cardInfo)
   },
   render: function(){

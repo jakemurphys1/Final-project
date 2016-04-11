@@ -54,7 +54,6 @@ componentDidMount(){
     specQuery.find({
     success: function(results) {
        specArray=results;
-       console.log("success", specArray)
       },
       error: function(error) {
         console.log("Special Server not find")

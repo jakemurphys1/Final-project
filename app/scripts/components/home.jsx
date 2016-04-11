@@ -69,6 +69,7 @@ var Home = React.createClass({
         <span><a href="#register">Register Store</a></span>
         {storeSight}
         <span><a href="#checkout">CheckOut</a></span>
+        <span><a href="#orders">Your Orders</a></span>
       </div>
     </div>
 

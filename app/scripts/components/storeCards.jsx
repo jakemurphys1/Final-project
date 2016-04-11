@@ -22,7 +22,6 @@ var StoreCards= React.createClass({
         success: function(results) {
             self.setState({"CurStore":results})
             self.forceUpdate();
-            console.log("success:",results)
         },
         error: function(error) {
           console.log("Server not find")
@@ -52,19 +51,19 @@ var CardSample = React.createClass({
   handleAddFoil:function(){
     var currentUser = Parse.User.current();
     var cardInfo = {"CardName": this.props.item.get("Name"),"Set": this.props.item.get("Set"),"Store": this.props.item.get("storeName"),
-      "Foil":true,"Promo":false,"userName":currentUser.getUsername()}
+      "Foil":true,"Promo":false,"buyer":currentUser.getUsername(),"Seller":this.props.item.get("userName")}
     this.props.collection.add(cardInfo)
   },
   handleAdd:function(){
       var currentUser = Parse.User.current();
       var cardInfo = {"CardName": this.props.item.get("Name"),"Set": this.props.item.get("Set"),"Store": this.props.item.get("storeName"),
-        "Foil":false,"Promo":false,"userName":currentUser.getUsername()}
+        "Foil":false,"Promo":false,"buyer":currentUser.getUsername(),"Seller":this.props.item.get("userName")}
       this.props.collection.add(cardInfo)
   },
   handleAddPromo(){
     var currentUser = Parse.User.current();
     var cardInfo = {"CardName": this.props.item.get("Name"),"Set": this.props.item.get("Set"),"Store": this.props.item.get("storeName"),
-      "Foil":false,"Promo":true,"userName":currentUser.getUsername()}
+      "Foil":false,"Promo":true,"buyer":currentUser.getUsername(),"Seller":this.props.item.get("userName")}
     this.props.collection.add(cardInfo)
   },
   render: function(){

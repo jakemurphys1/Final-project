@@ -21,6 +21,7 @@ var StoreEventForm =require("./components/storeEvent.jsx")
 var StoreCardForm =require("./components/storeCards.jsx")
 var StoreInfoForm =require("./components/storeInfo.jsx")
 var CheckoutForm =require("./components/checkout.jsx")
+var OrderForm =require("./components/orders.jsx")
 //Models
 var model = require("./models/models.js");
 var OrderModel = new model.Model();
@@ -50,7 +51,8 @@ var Router = Backbone.Router.extend({
     "storeCard/:name":"storeCard",
     "storeInfo/:name":"storeInfo",
     "owner/:id":"owner",
-    "checkout":"checkout"
+    "checkout":"checkout",
+    "orders":"orders",
   },
   home:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
@@ -122,6 +124,10 @@ var Router = Backbone.Router.extend({
   checkout:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
     ReactDOM.render(<CheckoutForm collection={OrderCollection} router={this}/>,homeContainer)
+  },
+  orders:function(){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    ReactDOM.render(<OrderForm router={this}/>,homeContainer)
   },
 })
 

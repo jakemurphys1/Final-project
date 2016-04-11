@@ -5996,9 +5996,6 @@ body {
   text-align: center;
   font-size: 30px; }
 
-.TEMP {
-  background-color: red; }
-
 .hourOperation p {
   font-size: 20px; }
 
@@ -6021,5 +6018,26 @@ body {
   margin-top: 5px; }
   .storeSearchCard span {
     font-size: 20px; }
+
+.TEMP {
+  background-color: red; }
+
+.infoContainerRED {
+  border: #2c2115 solid 1px;
+  border-radius: 10px;
+  background-color: #f2bb47;
+  margin: 40px;
+  box-shadow: 2px 2px #111111; }
+  .infoContainerRED h3 {
+    margin-top: 20px; }
+
+.infoContainerGREEN {
+  border: #2c2115 solid 1px;
+  border-radius: 10px;
+  background-color: green;
+  margin: 40px;
+  box-shadow: 2px 2px #111111; }
+  .infoContainerGREEN h3 {
+    margin-top: 20px; }
 
 /*# sourceMappingURL=app.css.map */

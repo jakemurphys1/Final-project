@@ -267,9 +267,7 @@ button{
   }
 }
 
-.TEMP{
-  background-color: red;
-}
+
 
 .hourOperation{
   p{
@@ -307,4 +305,29 @@ button{
     font-size: 20px;
   }
 
+}
+
+.TEMP{
+  background-color: red;
+}
+
+.infoContainerRED{
+  border: rgb(44, 33, 21) solid 1px;
+  border-radius:10px;
+  background-color: rgb(242, 187, 71);
+  margin:40px;
+    box-shadow: 2px 2px #111111;
+  h3{
+    margin-top: 20px
+  }
+}
+.infoContainerGREEN{
+  border: rgb(44, 33, 21) solid 1px;
+  border-radius:10px;
+  background-color: green;
+  margin:40px;
+    box-shadow: 2px 2px #111111;
+  h3{
+    margin-top: 20px
+  }
 }
