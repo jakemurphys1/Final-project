@@ -12,8 +12,19 @@ var ModelCollection = Backbone.Collection.extend({
   initialize: function(){},
 });
 
+var SellModel = Backbone.Model.extend({
+   idAttribute: "_id",
+});
+
+var SellModelCollection = Backbone.Collection.extend({
+  model:SellModel,
+  initialize: function(){},
+});
+
 
 module.exports = {
   "Model":Model,
   "ModelCollection":ModelCollection,
+  "SellModel":SellModel,
+  "SellModelCollection":SellModelCollection,
 }

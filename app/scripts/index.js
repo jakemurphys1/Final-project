@@ -11,6 +11,7 @@ var SignUpForm = require("./components/signUp.jsx")
 var OwnerForm=require("./components/owner.jsx")
 var SearchEventForm=require("./components/searchEvent.jsx")
 var SearchCardForm=require("./components/searchCard.jsx")
+var SellCardForm=require("./components/sellCard.jsx")
 var HomeForm =require("./components/home.jsx")
 var SpecialForm =require("./components/special.jsx")
 var SearchTag =require("./components/tagSearch.jsx")
@@ -26,6 +27,8 @@ var OrderForm =require("./components/orders.jsx")
 var model = require("./models/models.js");
 var OrderModel = new model.Model();
 var OrderCollection = new model.ModelCollection()
+var SellModel = new model.SellModel();
+var SellCollection = new model.SellModelCollection()
 
 var homeContainer= document.getElementById("container")
 Parse.initialize("GLID");
@@ -41,6 +44,7 @@ var Router = Backbone.Router.extend({
     "signUp":"signUp",
     "searchEvent/:dates":"searchEvent",
     "searchCard/:name":"searchCard",
+    "sellCard/:name":"sellCard",
     "specials":"specials",
     "tagSearch/:id":"tagSearch",
     "specialDescription/:id":"specialDescription",
@@ -73,6 +77,10 @@ var Router = Backbone.Router.extend({
     var cardName = id;
     ReactDOM.unmountComponentAtNode(homeContainer);
     ReactDOM.render(<SearchCardForm cardName={cardName} collection={OrderCollection} router={this}/>,homeContainer)
+  },
+  sellCard:function(){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    ReactDOM.render(<SellCardForm collection={SellCollection} router={this}/>,homeContainer)
   },
   specials:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
@@ -123,7 +131,7 @@ var Router = Backbone.Router.extend({
   },
   checkout:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<CheckoutForm collection={OrderCollection} router={this}/>,homeContainer)
+    ReactDOM.render(<CheckoutForm collection={OrderCollection} sellCollection={SellCollection} router={this}/>,homeContainer)
   },
   orders:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);

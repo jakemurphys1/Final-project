@@ -41,8 +41,9 @@ var StoreCards= React.createClass({
             <h3>Add cards to your cart, then submit for store owners to reply with the prices</h3>
           <div className="infoContainer">
               {store}
-          </div>
 
+          </div>
+          <a href="#checkout"><button style={{"float":"right"}} className="btn btn-primary">Go to Check Out</button></a>
       </div>)
   }
 })

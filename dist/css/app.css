@@ -6004,6 +6004,10 @@ body {
   .searchTag .tagContainer {
     margin-top: 50px; }
 
+.checkout .description {
+  width: 400px;
+  height: 100px;
+  margin-top: 5px; }
 .checkout p {
   text-align: center; }
 .checkout h2 {
@@ -6039,5 +6043,47 @@ body {
   box-shadow: 2px 2px #111111; }
   .infoContainerGREEN h3 {
     margin-top: 20px; }
+
+.buyerMessage {
+  border: black solid 1px;
+  text-align: left;
+  border-radius: 3px; }
+
+.ownerEvent .editButton {
+  border: black solid 1px;
+  padding: 3px;
+  background-color: gray;
+  margin-left: 5px;
+  float: right; }
+.ownerEvent .removeButton {
+  border: black solid 1px;
+  padding: 3px;
+  background-color: red;
+  margin-left: 5px;
+  float: right; }
+
+.removeOrder {
+  border: black solid 1px;
+  padding: 3px;
+  background-color: red;
+  margin-left: 5px;
+  font-weight: bold;
+  box-shadow: 1px 1px #111111; }
+
+.turnRed {
+  color: red; }
+
+.Order p {
+  text-align: center; }
+
+.ownerEvent button {
+  float: right; }
+
+.loadingContainer img {
+  width: 150px;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  display: block; }
 
 /*# sourceMappingURL=app.css.map */

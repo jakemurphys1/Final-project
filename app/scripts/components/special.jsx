@@ -43,6 +43,9 @@ var allSpecials = this.state.specialList.map(function(item){
     }
 
 })
+if(allSpecials.length==0){
+  allSpecials=<div className="loadingContainer"><img src="images/Loading.gif" /></div>
+}
     return(
       <div className="row">
       <h1>All current Specials:</h1>

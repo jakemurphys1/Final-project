@@ -17,7 +17,7 @@ var Home = React.createClass({
       return {
         "currentUser":Parse.User.current(),
       }
-},
+    },
   handleShowLogin:function(){
     $(".signFloat").removeClass("hidden")
     },
@@ -36,8 +36,13 @@ var Home = React.createClass({
   },
   handleCard:function(e){
     e.preventDefault();
-    var cardName = $("#cardName").val();
+    var cardName = $("#buyCardName").val();
     Backbone.history.navigate("searchCard/" + cardName,{trigger:true})
+  },
+  handleSellCard:function(e){
+    e.preventDefault();
+    var cardName = $("#sellCardName").val();
+    Backbone.history.navigate("sellCard/" + cardName,{trigger:true})
   },
   handleStore:function(e){
     e.preventDefault();
@@ -50,13 +55,19 @@ var Home = React.createClass({
   render:function(){
       var currentUser = this.state.currentUser
       var storeSight = ""
-      var logContents = <span onClick={this.handleShowLogin} id="headerUser">Log In</span>
+      var logContents = <span><span onClick={this.handleShowLogin} id="headerUser">Log In</span>
+        <span><a href="#signUp">Sign Up</a></span>
+        <span><a href="#register">Register Store</a></span>
+      </span>
 
       if(currentUser){
           if(currentUser.get("hasStore")){
               storeSight = <span><a href="#owner">Manage Store</a></span>
           }
-          logContents =<span onClick={this.handleLogOut} id="headerUser">Log Out</span>
+          logContents =<span><span onClick={this.handleLogOut} id="headerUser">Log Out</span>
+            <span><a href="#checkout">CheckOut</a></span>
+            <span><a href="#orders">Your Orders</a></span>
+          </span>
       }
     return(
   <div className="Total">
@@ -65,11 +76,8 @@ var Home = React.createClass({
       <h1>Gaming Local</h1>
       <div className="logIn">
         {logContents}
-        <span><a href="#signUp">Sign Up</a></span>
-        <span><a href="#register">Register Store</a></span>
-        {storeSight}
-        <span><a href="#checkout">CheckOut</a></span>
-        <span><a href="#orders">Your Orders</a></span>
+
+            {storeSight}
       </div>
     </div>
 
@@ -103,12 +111,17 @@ var Home = React.createClass({
 
     <div className="row">
       <div className="col-md-5 homeCards home infoContainer">
-        <div className="row"><h2>Cards for Sale</h2></div>
-          <p>Search by Name</p>
-          <form onSubmit={this.handleCard} id="cardSearch" action="" className="form-events">
-                  <input id="cardName" type="text" name="cardName" placeholder="Name of Card"/>
-                  <p><button className="btn btn-primary Search">Search</button></p>
-          </form>
+        <div className="col-xs-6">
+          <div className="row"><h2>Buy Cards</h2></div>
+            <p>Search by Name</p>
+            <form onSubmit={this.handleCard} id="cardSearch" action="" className="form-events">
+                    <input id="buyCardName" type="text" name="cardName" placeholder="Name of Card"/>
+                    <p><button className="btn btn-primary Search">Search</button></p>
+            </form>
+        </div>
+        <div className="col-xs-6"><h2>Sell Cards</h2></div>
+                  <p><button onClick={this.handleSellCard} className="btn btn-primary Search">SellCards</button></p>
+
       </div>
 
       <div className="col-md-5 homeStores home infoContainer">

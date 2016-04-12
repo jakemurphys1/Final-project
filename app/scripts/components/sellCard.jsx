@@ -11,6 +11,7 @@ var Total= React.createClass({
     "curName":   "Magic: The Gathering",
     "curImage":"images/Magic_Back.jpg",
     "selectInput":<p></p>,
+    "selectStore":<p></p>,
     "totalQty":0,
     "setQty":[],
     "sets":[],
@@ -40,33 +41,8 @@ handleSearch:function(e){
                   }
                 }
         }.bind(this));
+        this.setState({"selectStore":<StoreSelect />})
       $("#cardQty").val(1)
-
-            //find card info from parse
-            var currentUser = Parse.User.current();
-            var Card = Parse.Object.extend("Cards");
-            var cardQuery = new Parse.Query(Card);
-              cardQuery.equalTo("userName", currentUser.getUsername());
-              cardQuery.equalTo("Name", curName);
-              var totalQty=0;
-              var self = this;
-
-              cardQuery.find({
-                success: function(results) {
-                        var setInfo = [];
-                  for(var i =0;i<results.length;i++){
-                    totalQty+=parseInt(results[i].get("Qty"));
-                    setInfo.push({"Set":results[i].get("Set"),"Qty":results[i].get("Qty"),"Foil":results[i].get("Foil"),"Promo":results[i].get("Promo")})
-                  }
-                  self.setState({"setQty":setInfo})
-                  self.setState({"totalQty":totalQty})
-
-
-                },
-                error: function(error) {
-                  console.log("Step Server not find")
-                }
-            })
 
 },
 handleAddCard:function(e){
@@ -78,24 +54,23 @@ handleAddCard:function(e){
     var currentUser = Parse.User.current();
     var foil = document.getElementById('foil').checked;
     var promo =document.getElementById('promo').checked;
-    var Cards = Parse.Object.extend("Cards");
-    var cards = new Cards();
 
     var data = {
       "Name":$("#cardName").val(),
       "Set":$("#Sets").val(),
       "Condition":$("#cardCondition").val(),
       "Qty":$("#cardQty").val(),
+      "Store":$("#Stores").val(),
       "Foil":foil,
       "Promo":promo,
+      "Type":"Sell",
       "date":Date.now(),
       "userName":currentUser.getUsername(),
       "storeName":this.props.storeName,
     }
 
-  cards.save(data).then(function(object) {
-      console.log(object)
-  })
+    this.props.collection.add(data)
+    console.log(this.props.collection)
 
   $("#cardNameContainer").removeClass("hidden")
   $("#setContainer").addClass("hidden")
@@ -104,34 +79,22 @@ handleAddCard:function(e){
 
 },
   render:function(){
-      var renderSets=this.state.sets.map(function(item){
-        var setQty = 0;
-        var foilQty = 0;
-        var promoQty=0
-        for(var j = 0;j<this.state.setQty.length;j++){
-          if(item.set==this.state.setQty[j].Set){
-            setQty+=parseInt(this.state.setQty[j].Qty);
-            if(this.state.setQty[j].Foil){
-              foilQty+=parseInt(this.state.setQty[j].Qty);
-            }
-            if(this.state.setQty[j].Promo){
-              promoQty+=parseInt(this.state.setQty[j].Qty);
-            }
-          }
+      var curCollection=this.props.collection.map(function(item){
+        if(item.get("Foil")){
+          var foil = <span>(Foil)</span>
         }
-        if(setQty > 0){
-          return(<p>{setQty} from {item.set}   ({foilQty} Foil, {promoQty} Promo)</p>)
+        if(item.get("Promo")){
+          var promo = <span>(Promo)</span>
         }
+          return(<p>{item.get("Qty")} copies of {item.get("Name")} from {item.get("Set")}{foil}{promo}</p>)
+
 
       }.bind(this))
 
 
-
-
-
     return(
       <div className="ownerCards row infoContainer">
-      <h3>Cards for sale</h3>
+      <h1>Sell Your Cards</h1>
 
 
       <div className="col-md-4 col-xs-12 imageContainer">
@@ -159,6 +122,8 @@ handleAddCard:function(e){
           <div id="setContainer">
             <div className="row "><label>Set</label></div>
             {this.state.selectInput}
+            <div className="row "><label>Sell to Store:</label></div>
+            {this.state.selectStore}
           </div>
           <div className="row">
             <div className="col-xs-6">
@@ -195,16 +160,17 @@ handleAddCard:function(e){
             <div onClick={this.handleAddCard} className="row"><button type="submit" className="btn btn-lg btn-block btn-primary signinbutton">Add</button></div>
           </div>
       </form>
+      <a href="#checkout"><button style={{"float":"right"}} className="btn btn-primary">Go to Check Out</button></a>
         </div>
 
 
             <div className="col-md-4 col-xs-12">
-              <h3>You are currently selling {this.state.totalQty} copies of this card</h3>
-              {renderSets}
+              <h3>You are currently selling:</h3>
+              {curCollection}
             </div>
 
       </div>
-    )
+      )
   },
 
 })
@@ -217,6 +183,41 @@ var SetSelect= React.createClass({
     return(
       <select id="Sets">
                   {allSets}
+      </select>
+    )
+  },
+})
+
+var StoreSelect= React.createClass({
+  getInitialState:function(){
+    return {
+    "allStores":   "",
+    "storeList":[],
+    }
+  },
+  componentDidMount(){
+    var Store = Parse.Object.extend("Stores");
+    var query = new Parse.Query(Store);
+    var self=this;
+    query.find({
+      success: function(results) {
+        console.log("results",results)
+        self.setState({"storeList":results})
+      },
+      error: function(error) {
+        console.log("Store Server not find")
+      }
+    })
+
+    },
+  render:function(){
+    var allStores= this.state.storeList.map(function(item){
+      console.log(item.get("storeName"))
+        return(<option key={item.id} value={item.get("storeName")}>{item.get("storeName")}</option>)
+    })
+    return(
+      <select id="Stores">
+                  {allStores}
       </select>
     )
   },

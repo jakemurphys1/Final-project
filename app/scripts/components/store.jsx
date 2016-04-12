@@ -25,7 +25,7 @@ var AllStores = React.createClass({
   },
   render:function(){
     var storeName = this.props.storeName.toLowerCase();
-  var allStore="Loading"
+  var allStores=<div className="loadingContainer"><img src="images/Loading.gif" /></div>
   if(this.state.Users.length>0){
     var allStores= this.state.Users.map(function(item){
       if(item.get("storeName") && (storeName=="" || storeName== item.get("storeName").toLowerCase())){

@@ -37,7 +37,7 @@ var searchEvent = React.createClass({
   },
   render:function(){
       var self=this;
-      var allEvents = <h1>Loading</h1>;
+      var allEvents = <div className="loadingContainer"><img src="images/Loading.gif" /></div>;
       if(this.state.events.length>0){
         allEvents = this.state.events.map(function(item){
             return(<FoundEvent key = {item.id} parent={self} item={item}/>)
@@ -73,17 +73,21 @@ var FoundEvent = React.createClass({
       "November", "December"
     ];
     var date = this.props.item.get("Date");
-    var day = date.getDate();
+    var day = date.getUTCDate();
     var monthIndex = date.getMonth();
     var year = date.getFullYear();
     var redate = monthNames[monthIndex] + " " + day + " " + year
+
+    if(this.props.item.get("startTime")){
+      var time = <p>Time: {this.props.item.get("startTime") + " Through " + this.props.item.get("endTime")}</p>
+    }
 
     return(<div className="col-md-2 col-sm-4 col-sx-12 infoContainer">
       <h3>{this.props.item.get("Name")}</h3>
       <p>Store:  {this.props.item.get("storeName")}</p>
       <p>Format: {this.props.item.get("Format")}</p>
       <p>Date: {redate}</p>
-      <p>Time: {this.props.item.get("startTime") + " Through " + this.props.item.get("endTime")}</p>
+      {time}
       <a onClick={this.handleDetails}>Details</a>
   </div>)
 

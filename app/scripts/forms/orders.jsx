@@ -9,57 +9,55 @@ var Total= React.createClass({
   getInitialState:function(){
     return {
         "allOrders":[],
+        "sells":[]
     }
   },
   componentWillMount(){
     //find order info from parse
     var currentUser = Parse.User.current();
+      var self = this;
     var Order = Parse.Object.extend("Orders");
-    var query = new Parse.Query(Order);
-    query.equalTo("seller", currentUser.getUsername());
+    var OrderQuery = new Parse.Query(Order);
+    OrderQuery.equalTo("seller", currentUser.getUsername());
+
 
     var Card = Parse.Object.extend("OrderedCards");
     var cardQuery = new Parse.Query(Card);
+      cardQuery.equalTo("seller", currentUser.get("storeName"));
 
 
-
-      var self = this;
-
-      query.find({
-        success: function(results) {
-          for(var i =0;i<results.length;i++){
-
+      cardQuery.find({
+        success: function(theCards){
+            //set up orders
+          OrderQuery.find({
+            success: function(results) {
               //set order
-              var allOrders = self.state.allOrders;
-              allOrders.push({"buyer":results[i].get("buyer"),"curId":results[i].id,"Price":results[i].get("Price"),"Agreed":results[i].get("Agreed")})
+              var allOrders = [];
 
+              for(var j = 0;j<results.length;j++){
 
-              cardQuery.equalTo("orderId", results[i].id);
-              cardQuery.find({
-                success: function(theCards){
+                var cardCollection = [];
 
-                for(var j = 0;j<allOrders.length;j++){
-                  var cardCollection = [];
-                  for(var k =0;k<theCards.length;k++){
-                    if(allOrders[j].curId==theCards[k].get("orderId")){
+                for(var k =0;k<theCards.length;k++){
 
-                        cardCollection.push({"Name":theCards[k].get("Name"),"Set":theCards[k].get("Set"),"Foil":theCards[k].get("foil"),
-                          "Promo":theCards[k].get("promo"),"curId":theCards[k].id})
-                    }
+                  if(results[j].id==theCards[k].get("orderId")){
+
+                      cardCollection.push({"Name":theCards[k].get("Name"),"Set":theCards[k].get("Set"),"Foil":theCards[k].get("foil"),
+                        "Promo":theCards[k].get("promo"),"curId":theCards[k].id})
+
                   }
-                  allOrders[j].cards=cardCollection;
-                }
-                  self.setState({"allOrders":allOrders})
                 }
 
-              })
-          }
-
-
-
+                allOrders.push({"buyer":results[j].get("buyer"),"curId":results[j].id,"Price":results[j].get("Price"),"Agreed":results[j].get("Agreed"),"cards":cardCollection,"Message":results[j].get("message")})
+              }
+                self.setState({"allOrders":allOrders})
+            }
+            })
 
         }
-        })
+      })
+
+
   },
   handleRemove:function(e){
     //delete Order
@@ -87,9 +85,13 @@ var Total= React.createClass({
     var allOrders = this.state.allOrders.map(function(item){
       return(<Orders parent={self} key={item.curId} item={item} />)
     });
+    if(allOrders.length==0){
+      allOrders=<div className="loadingContainer"><img src="images/Loading.gif" /></div>
+    }
     return(
       <div className="ownerOrder row">
       <h2>Orders Pending</h2>
+      <p>Click the <span className="removeOrder">X</span>  to remove cards not available</p>
       {allOrders}
 
       </div>
@@ -143,10 +145,14 @@ var Orders = React.createClass({
 
 
     },
+  handleRemoveInv:function(){
+      console.log(this.props.item)
+  },
   render:function(){
+    var self=this;
     var message = <h4>Submit price for the customer</h4>
     var format = "infoContainerRED"
-    var priceButton=<div><input id={"price"+this.props.item.curId} type="text" name="price" placeholder="Total price of cards"/><button onClick={this.handleSend} className="btn btn-primary">Send</button></div>
+    var priceButton=<span><input id={"price"+this.props.item.curId} type="text" name="price" placeholder="Total price of cards"/><button onClick={this.handleSend} className="btn btn-primary">Send</button></span>
     if(this.props.item.Price!="" || this.state.PriceShown==true){
       message=<h4>Awaiting acceptance from customer</h4>
       format = "infoContainer"
@@ -155,19 +161,24 @@ var Orders = React.createClass({
     if(this.props.item.Agreed){
       message=<h4>Customer has agreed to the Price of {this.props.item.Price}!</h4>
       format = "infoContainerGREEN"
-          priceButton="";
+      priceButton="";
     }
-     var thisremoveButton=(<div><button onClick={this.handleRemove} className="btn btn-danger">Remove</button></div>)
+     var thisremoveButton=(<span><button onClick={this.handleRemove} className="btn btn-danger deleteButton">Delete</button></span>)
     if(this.state.message){
       thisremoveButton=<p>You deleted this order</p>
     }
     var allCards = this.props.item.cards.map(function(card){
-      return(<IndivCards key={card.curId} id={card.curId} card={card} />)
+      return(<IndivCards parent={self} key={card.curId} id={card.curId} card={card} />)
     })
+    if(this.props.item.Message!=""){
+      var messageBox = <div><label>Message from buyer</label>
+              <div className="buyerMessage">{this.props.item.Message}</div></div>
+    }
     return(<div className={"col-md-3 " + format}>
     {message}
       <p>{this.props.item.buyer} wants to Purchase: </p>
       {allCards}
+      {messageBox}
       {priceButton}
       {thisremoveButton}
     </div>)
@@ -175,16 +186,36 @@ var Orders = React.createClass({
 })
 
 var IndivCards = React.createClass({
+  getInitialState:function(){
+    return {
+        "format":"",
+    }
+  },
+  handleRemove:function(e){
+    var curId= e.currentTarget.id;
+    var cardBase = Parse.Object.extend("OrderedCards");
+    var query = new Parse.Query(cardBase);
+    query.get(curId, {
+      success: function(myObj) {
+        myObj.destroy({});
+      },
+      error: function(object, error) {
+      }
+    });
+
+    this.setState({"format":"turnRed"})
+  },
   render:function(){
     var foil="";
     var promo="";
+    console.log(this.state.format)
     if(this.props.card.Foil){
       foil=<span>(Foil)</span>
     }
     if(this.props.card.Promo){
       promo=<span>(Promo)</span>
     }
-    return(<p>1 <b>{this.props.card.Name}</b> from {this.props.card.Set}{foil}{promo}</p>)
+    return(<div className={"row " + this.state.format}><p>1 <b>{this.props.card.Name}</b> from {this.props.card.Set}{foil}{promo}<span id={this.props.card.curId} onClick={this.handleRemove} className="removeOrder">X</span></p></div>)
   },
 })
 

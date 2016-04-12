@@ -94,7 +94,7 @@ var searchCard = React.createClass({
                 var curCondition = results[k].get("Condition");
               }
             }
-              var cardInfo ={"quantity":qtyFromStore,"storeName":results[i].get("storeName"),"cardsBySet":cardsBySet}
+              var cardInfo ={"quantity":qtyFromStore,"storeName":results[i].get("storeName"),"seller":results[i].get("userName"),"cardsBySet":cardsBySet}
               cardList.push(cardInfo)
           }
 
@@ -129,18 +129,20 @@ var searchCard = React.createClass({
          })
        } else{
         if(this.state.cardList!="FAIL"){
-          allCards = <h2>Loading</h2>
+          allCards = <div className="loadingContainer"><img src="images/Loading.gif" /></div>
         }
       }
 
     return(
       <div className="row searchCard">
       <h1>Copies of {this.props.cardName} for sale:</h1>
-      <h2>Add cards to your cart, then submit for store owners to reply with the prices</h2>
+      <h2>Add cards to your cart, then go to checkout for store owners to reply with the prices</h2>
       <div className="col-md-3 col-sm-12"><img src={this.state.curImage}  />
         <p>Images and card information courtesy of <a href ="https://deckbrew.com/">deckbrew.com</a></p>
       </div>
+
       <div className="col-md-9 col-sm-12">{allCards}</div>
+        <a href="#checkout"><button style={{"float":"right"}} className="btn btn-primary">Go to Check Out</button></a>
       </div>
     )
   }
@@ -150,19 +152,20 @@ var CardSample = React.createClass({
   handleAddFoil:function(){
     var currentUser = Parse.User.current();
     var cardInfo = {"CardName": this.props.cardName,"Set": this.props.set.Set,"Store": this.props.item.storeName,
-      "Foil":true,"Promo":false,"buyer":currentUser.getUsername(),"Seller":this.props.item.get("userName")}
+      "Foil":true,"Promo":false,"buyer":currentUser.getUsername(),"Seller":this.props.item.seller}
     this.props.collection.add(cardInfo)
   },
   handleAdd:function(){
       var currentUser = Parse.User.current();
       var cardInfo = {"CardName": this.props.cardName,"Set": this.props.set.Set,"Store": this.props.item.storeName,
-        "Foil":false,"Promo":false,"buyer":currentUser.getUsername(),"Seller":this.props.item.get("userName")}
+        "Foil":false,"Promo":false,"buyer":currentUser.getUsername(),"Seller":this.props.item.seller}
       this.props.collection.add(cardInfo)
+      console.log(cardInfo)
   },
   handleAddPromo(){
     var currentUser = Parse.User.current();
     var cardInfo = {"CardName": this.props.cardName,"Set": this.props.set.Set,"Store": this.props.item.storeName,
-      "Foil":false,"Promo":true,"buyer":currentUser.getUsername(),"Seller":this.props.item.get("userName")}
+      "Foil":false,"Promo":true,"buyer":currentUser.getUsername(),"Seller":this.props.item.seller}
     this.props.collection.add(cardInfo)
   },
   render: function(){

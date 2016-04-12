@@ -9,6 +9,7 @@ var Total= React.createClass({
   getInitialState:function(){
     return {
         "allOrders":[],
+        "loading":true,
     }
   },
   componentDidMount(){
@@ -22,9 +23,6 @@ var Total= React.createClass({
       query.find({
         success: function(results) {
           for(var i =0;i<results.length;i++){
-            if(results[i].get("Price")=="" || results[i].get("Agreed")){
-              continue;
-            }
               //set order
               var allOrders = self.state.allOrders;
               allOrders.push({"store":results[i].get("store"),"curId":results[i].id,"Price":results[i].get("Price"),"Agreed":results[i].get("Agreed")})
@@ -48,7 +46,7 @@ var Total= React.createClass({
                   }
                   allOrders[j].cards=cardCollection;
                 }
-                  self.setState({"allOrders":allOrders})
+                  self.setState({"allOrders":allOrders,"loading":false})
                 }
 
               })
@@ -65,9 +63,16 @@ var Total= React.createClass({
     var allOrders = this.state.allOrders.map(function(item){
       return(<Orders parent={self} key={item.curId} item={item} />)
     });
+    if(allOrders.length==0){
+      allOrders=<p>You have no pending orders</p>
+    }
+    if(this.state.loading==true){
+      allOrders= <div className="loadingContainer"><img src="images/Loading.gif" /></div>
+    }
     return(
-      <div className="ownerOrder row">
-      <h2>Orders Pending</h2>
+      <div className="Order row">
+      <h1>Orders Pending</h1>
+      <p>Please note that the sellers may have removed cards from order</p>
       {allOrders}
 
       </div>
@@ -80,7 +85,7 @@ var Orders = React.createClass({
   getInitialState:function(){
     return {
         "message":<p>Do you accept these prices?</p>,
-        "agreed":false,
+        "agreed":this.props.item.Agreed,
     }
   },
   handleAgree:function(){
@@ -124,20 +129,30 @@ var Orders = React.createClass({
   },
   render:function(){
     var theButtons = <div><button onClick={this.handleAgree} className="btn btn-primary">Agree</button><button onClick={this.handleDecline} className="btn btn-primary">Decline</button></div>
-    if(this.state.agreed){
-      theButtons=""
-    }
     var allCards = this.props.item.cards.map(function(card){
       return(<IndivCards key={card.curId} id={card.curId} card={card} />)
     })
+    var message=this.state.message;
+    var heading =<p>{this.props.item.store} prices these cards at {this.props.item.Price}: </p>
+    if(this.props.item.Price==""){
+      heading=<p>Awaiting prices from {this.props.item.store}</p>
+      message=""
+      theButtons=""
+    }
+    if(this.state.agreed){
+      theButtons="";
+      heading=<p>{this.props.item.store} prices these cards at {this.props.item.Price}: </p>
+      message=<p>You've agreed to the prices. Head to the store to pick them up.</p>;
+    }
+
     return(<div className="col-md-3 infoContainer">
 
-      <p>{this.props.item.store} prices these cards at {this.props.item.Price}: </p>
+      {heading}
       {allCards}
-      {this.state.message}
-{theButtons}
-    </div>)
-  },
+      {message}
+  {theButtons}
+      </div>)
+    },
 })
 
 var IndivCards = React.createClass({
