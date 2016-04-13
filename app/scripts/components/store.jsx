@@ -25,10 +25,28 @@ var AllStores = React.createClass({
   },
   render:function(){
     var storeName = this.props.storeName.toLowerCase();
+    var self=this;
   var allStores=<div className="loadingContainer"><img src="images/Loading.gif" /></div>
   if(this.state.Users.length>0){
     var allStores= this.state.Users.map(function(item){
-      if(item.get("storeName") && (storeName=="" || storeName== item.get("storeName").toLowerCase())){
+
+      //check is store is Approved
+      var isApproved = false
+
+     var stores = self.props.storeCollection
+
+      for(var i =0;i<stores.length;i++){
+        if(stores[i].get("storeName")==item.get("storeName")){
+          if(stores[i].get("Approved")){
+
+            isApproved=true
+          }
+        }
+      }
+
+
+      if(isApproved && (storeName=="" || storeName== item.get("storeName").toLowerCase())){
+
         return(<PerStore item={item} key = {item.get("storeName")} />)
       }
     });

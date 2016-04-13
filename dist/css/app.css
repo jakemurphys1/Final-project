@@ -5985,6 +5985,9 @@ body {
 .searchCard button {
   margin: 0 auto;
   font-size: 10px; }
+.searchCard .checkout {
+  margin-right: 60px;
+  font-size: 20px; }
 .searchCard img {
   margin-left: 20px;
   width: 400px;

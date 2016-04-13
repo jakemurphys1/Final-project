@@ -15,6 +15,7 @@ var searchEvent = React.createClass({
 },
   componentDidMount:function(){
   //find card info from parse
+  console.log("users",this.props.userCollection)
   var currentUser = Parse.User.current();
   var self=this;
   var Event = Parse.Object.extend("Events");
@@ -23,7 +24,6 @@ var searchEvent = React.createClass({
     eventQuery.lessThanOrEqualTo("Date", this.props.endDate);
     eventQuery.find({
       success: function(results) {
-        console.log("results",results)
         var newResults = results.sort(function(a,b) {
               return new Date(a.get("Date")).getTime() - new Date(b.get("Date")).getTime()
         });
@@ -40,7 +40,21 @@ var searchEvent = React.createClass({
       var allEvents = <div className="loadingContainer"><img src="images/Loading.gif" /></div>;
       if(this.state.events.length>0){
         allEvents = this.state.events.map(function(item){
-            return(<FoundEvent key = {item.id} parent={self} item={item}/>)
+            //check is store is approved
+            var isApproved = false
+            var stores = self.props.storeCollection
+            for(var i =0;i<stores.length;i++){
+              if(stores[i].get("storeName")==item.get("storeName")){
+                if(stores[i].get("Approved")){
+                  isApproved=true
+                }
+              }
+            }
+
+            if(isApproved==true){
+                  return(<FoundEvent key = {item.id} parent={self} item={item}/>)
+            }
+
         })
       }
 

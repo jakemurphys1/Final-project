@@ -113,13 +113,13 @@ var Home = React.createClass({
       <div className="col-md-5 homeCards home infoContainer">
         <div className="col-xs-6">
           <div className="row"><h2>Buy Cards</h2></div>
-            <p>Search by Name</p>
             <form onSubmit={this.handleCard} id="cardSearch" action="" className="form-events">
                     <input id="buyCardName" type="text" name="cardName" placeholder="Name of Card"/>
                     <p><button className="btn btn-primary Search">Search</button></p>
             </form>
         </div>
         <div className="col-xs-6"><h2>Sell Cards</h2></div>
+
                   <p><button onClick={this.handleSellCard} className="btn btn-primary Search">SellCards</button></p>
 
       </div>

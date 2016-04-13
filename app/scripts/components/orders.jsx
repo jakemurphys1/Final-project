@@ -21,92 +21,69 @@ var Total= React.createClass({
       query.equalTo("buyer", currentUser.getUsername());
       var self = this;
 
-      query.find({
-        success: function(results) {
+      var Card = Parse.Object.extend("OrderedCards");
+      var cardQuery = new Parse.Query(Card);
+        cardQuery.equalTo("buyer", currentUser.getUsername());
 
-          for(var i =0;i<results.length;i++){
-              //set order
+        cardQuery.find({
+          success: function(theCards){
 
-              var allOrders = self.state.allOrders;
+            //use orders in parse
+            query.find({
 
-              allOrders.push({"store":results[i].get("store"),"curId":results[i].id,"Price":results[i].get("Price"),"Agreed":results[i].get("Agreed")})
+              success: function(results) {
 
+                    var allOrders = [];
+                for(var i =0;i<results.length;i++){
 
+                  var cardCollection = [];
+                  for(var k =0;k<theCards.length;k++){
+console.log("results",results.id)
+                    if(results[i].id==theCards[k].get("orderId")){
 
-            var Card = Parse.Object.extend("OrderedCards");
-            var cardQuery = new Parse.Query(Card);
-              cardQuery.equalTo("buyer", currentUser.getUsername());
-
-              cardQuery.find({
-                success: function(theCards){
-                  console.log(theCards);
-                  for(var j = 0;j<allOrders.length;j++){
-                    var cardCollection = [];
-                    for(var k =0;k<theCards.length;k++){
-                      if(allOrders[j].curId==theCards[k].get("orderId")){
-
-                          cardCollection.push({"Name":theCards[k].get("Name"),"Set":theCards[k].get("Set"),"Foil":theCards[k].get("foil"),
-                            "Promo":theCards[k].get("promo"),"curId":theCards[k].id})
-                      }
+                        cardCollection.push({"Name":theCards[k].get("Name"),"Set":theCards[k].get("Set"),"Foil":theCards[k].get("foil"),
+                          "Promo":theCards[k].get("promo"),"curId":theCards[k].id})
                     }
-                    allOrders[j].cards=cardCollection;
                   }
-                  self.setState({"allOrders":allOrders,"loading":false})
+                    allOrders.push({"store":results[i].get("store"),"curId":results[i].id,"Price":results[i].get("Price"),"Agreed":results[i].get("Agreed"),"cards":cardCollection})
                 }
-
-              });
-
-
+                self.setState({"allOrders":allOrders,"loading":false})
+              }
+            })
           }
+        });
 
-        }
-      }).then(function(){
+
 
     //find cards person is selling
     var Sell = Parse.Object.extend("Sells");
     var sellQuery = new Parse.Query(Sell);
       sellQuery.equalTo("seller", currentUser.getUsername());
+      var Card = Parse.Object.extend("SellingCards");
+      var cardQuery = new Parse.Query(Card);
+        cardQuery.equalTo("seller", currentUser.getUsername());
 
-      sellQuery.find({
-        success: function(results) {
-          for(var i =0;i<results.length;i++){
-              //set order
-                    var allOrders = self.state.sellOrders;
-              allOrders.push({"store":results[i].get("store"),"curId":results[i].id,"Price":results[i].get("Price"),"Agreed":results[i].get("Agreed")})
-
-
-
-            var Card = Parse.Object.extend("SellingCards");
-            var cardQuery = new Parse.Query(Card);
-              cardQuery.equalTo("seller", currentUser.getUsername());
-              cardQuery.find({
-                success: function(theCards){
-                for(var j = 0;j<allOrders.length;j++){
+        cardQuery.find({
+          success: function(theCards){
+            sellQuery.find({
+              success: function(results) {
+                  var allOrders = [];
+                for(var i =0;i<results.length;i++){
                   var cardCollection = [];
                   for(var k =0;k<theCards.length;k++){
-                    if(allOrders[j].curId==theCards[k].get("orderId")){
-
+                      if(results[i].id==theCards[k].get("orderId")){
                         cardCollection.push({"Name":theCards[k].get("Name"),"Set":theCards[k].get("Set"),"Foil":theCards[k].get("foil"),
                           "Promo":theCards[k].get("promo"),"Qty":theCards[k].get("Qty"),"curId":theCards[k].id})
+                      }
                     }
-                  }
-                  allOrders[j].cards=cardCollection;
+                    allOrders.push({"store":results[i].get("store"),"curId":results[i].id,"Price":results[i].get("Price"),"Agreed":results[i].get("Agreed"),"cards":cardCollection})
                 }
-                console.log("2")
-                  self.setState({"sellOrders":allOrders,"loading":false})
-                },
-                error:function(){
-                  console.log("error")
-
-                },
+                self.setState({"sellOrders":allOrders,"loading":false})
+              }
               })
-
-
-          }
-        self.setState({"loading":false})
-        }
+            }
         })
-})
+
   },
 
   render:function(){
@@ -120,7 +97,7 @@ var Total= React.createClass({
     if(allOrders.length==0 && sellOrders.length==0){
       allOrders = <p>You have no pending orders</p>
     }
-    if(this.state.loading == true){
+    if(this.state.loading){
       var allOrders = <div className="loadingContainer"><img src="images/Loading.gif" /></div>
     }
     return(
@@ -213,7 +190,12 @@ var Orders = React.createClass({
     }
 
     if(this.props.item.Price==""){
-      heading=<p>Awaiting prices from {this.props.item.store}</p>
+      if(this.props.curtype=="sell"){
+        var ptype = "purchasing"
+      } else{
+        var ptype="selling"
+      }
+      heading=<p>Awaiting {ptype} prices from {this.props.item.store}</p>
       message=""
       theButtons=""
     }

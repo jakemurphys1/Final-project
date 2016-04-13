@@ -116,17 +116,35 @@ var searchCard = React.createClass({
       var allCards=<h2>No stores are selling this card</h2>
       var self=this;
       if(this.state.cardList!="FAIL" && this.state.cardList!=""){
+
         allCards = this.state.cardList.map(function(item){
-                 var cardsBySet = item.cardsBySet.map(function(set){
-                    return(<CardSample cardName={self.props.cardName} collection={self.props.collection} key={set.Set} set={set} item={item}/>)
-                 })
-               return(
-                 <div className="col-md-3 col-sm-6 col-xs-12 infoContainer" key={item.storeName}>
-                   <h2>{item.storeName}:</h2>
-                   <p className="Top">Total Quantity: {item.quantity}</p>
-                   {cardsBySet}
-                 </div>)
+          //check is store is approved
+
+
+          var isApproved = false
+          var stores = self.props.storeCollection
+          for(var i =0;i<stores.length;i++){
+            if(stores[i].get("storeName")==item.storeName){
+              if(stores[i].get("Approved")){
+                isApproved=true
+              }
+            }
+          }
+          if(isApproved){
+            var cardsBySet = item.cardsBySet.map(function(set){
+               return(<CardSample cardName={self.props.cardName} collection={self.props.collection} key={set.Set} set={set} item={item}/>)
+            })
+
+            return(<div className="col-md-3 col-sm-6 col-xs-12 infoContainer" key={item.storeName}>
+                <h2>{item.storeName}:</h2>
+                <p className="Top">Total Quantity: {item.quantity}</p>
+                {cardsBySet}
+              </div>)
+
+          }
+
          })
+
        } else{
         if(this.state.cardList!="FAIL"){
           allCards = <div className="loadingContainer"><img src="images/Loading.gif" /></div>
@@ -135,16 +153,18 @@ var searchCard = React.createClass({
 
     return(
       <div className="row searchCard">
-      <h1>Copies of {this.props.cardName} for sale:</h1>
-      <h2>Add cards to your cart, then go to checkout for store owners to reply with the prices</h2>
-      <div className="col-md-3 col-sm-12"><img src={this.state.curImage}  />
-        <p>Images and card information courtesy of <a href ="https://deckbrew.com/">deckbrew.com</a></p>
-      </div>
+        <div className="row">
+          <h1>Copies of {this.props.cardName} for sale:</h1>
+          <h2>Add cards to your cart, then go to checkout for store owners to reply with the prices</h2>
+          <div className="col-md-3 col-sm-12"><img src={this.state.curImage}  />
+            <p>Images and card information courtesy of <a href ="https://deckbrew.com/">deckbrew.com</a></p>
+          </div>
 
-      <div className="col-md-9 col-sm-12">{allCards}</div>
-        <a href="#checkout"><button style={{"float":"right"}} className="btn btn-primary">Go to Check Out</button></a>
+          <div className="col-md-9 col-sm-12">{allCards}</div>
+        </div>
+      <div className="row"><a href="#checkout"><button style={{"float":"right"}} className="btn btn-primary checkout">Go to Check Out</button></a></div>
       </div>
-    )
+      )
   }
 })
 

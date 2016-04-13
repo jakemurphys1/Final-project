@@ -29,10 +29,23 @@ var OrderModel = new model.Model();
 var OrderCollection = new model.ModelCollection()
 var SellModel = new model.SellModel();
 var SellCollection = new model.SellModelCollection()
+var StoreModel = new model.Model();
+var StoreCollection = new model.ModelCollection()
+
+
 
 var homeContainer= document.getElementById("container")
 Parse.initialize("GLID");
 Parse.serverURL = 'http://gaminglocal.herokuapp.com'
+
+//create collection of users
+var Store = Parse.Object.extend("Stores");
+var storeQuery = new Parse.Query(Store);
+  storeQuery.find({
+    success: function(theCards){
+      StoreCollection=theCards
+    }
+  })
 
 var Router = Backbone.Router.extend({
   routes:{
@@ -71,12 +84,12 @@ var Router = Backbone.Router.extend({
     var startDate = new Date(dates[0])
     var endDate = new Date(dates[1])
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<SearchEventForm startDate={startDate} endDate={endDate} router={this}/>,homeContainer)
+    ReactDOM.render(<SearchEventForm storeCollection={StoreCollection} startDate={startDate} endDate={endDate} router={this}/>,homeContainer)
   },
   searchCard:function(id){
     var cardName = id;
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<SearchCardForm cardName={cardName} collection={OrderCollection} router={this}/>,homeContainer)
+    ReactDOM.render(<SearchCardForm storeCollection={StoreCollection} cardName={cardName} collection={OrderCollection} router={this}/>,homeContainer)
   },
   sellCard:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
@@ -84,7 +97,7 @@ var Router = Backbone.Router.extend({
   },
   specials:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<SpecialForm router={this}/>,homeContainer)
+    ReactDOM.render(<SpecialForm storeCollection={StoreCollection} router={this}/>,homeContainer)
   },
   tagSearch:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);
@@ -99,11 +112,11 @@ var Router = Backbone.Router.extend({
   },
   allStores:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<StoreForm storeName="" router={this}/>,homeContainer)
+    ReactDOM.render(<StoreForm  storeCollection={StoreCollection} storeName="" router={this}/>,homeContainer)
   },
   store:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<StoreForm storeName={id} router={this}/>,homeContainer)
+    ReactDOM.render(<StoreForm storeCollection={StoreCollection}  storeName={id} router={this}/>,homeContainer)
   },
   storeSpecial:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);

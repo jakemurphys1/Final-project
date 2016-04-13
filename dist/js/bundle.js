@@ -347,13 +347,13 @@ var Home = React.createClass({displayName: "Home",
       React.createElement("div", {className: "col-md-5 homeCards home infoContainer"}, 
         React.createElement("div", {className: "col-xs-6"}, 
           React.createElement("div", {className: "row"}, React.createElement("h2", null, "Buy Cards")), 
-            React.createElement("p", null, "Search by Name"), 
             React.createElement("form", {onSubmit: this.handleCard, id: "cardSearch", action: "", className: "form-events"}, 
                     React.createElement("input", {id: "buyCardName", type: "text", name: "cardName", placeholder: "Name of Card"}), 
                     React.createElement("p", null, React.createElement("button", {className: "btn btn-primary Search"}, "Search"))
             )
         ), 
         React.createElement("div", {className: "col-xs-6"}, React.createElement("h2", null, "Sell Cards")), 
+
                   React.createElement("p", null, React.createElement("button", {onClick: this.handleSellCard, className: "btn btn-primary Search"}, "SellCards"))
 
       ), 
@@ -460,92 +460,69 @@ var Total= React.createClass({displayName: "Total",
       query.equalTo("buyer", currentUser.getUsername());
       var self = this;
 
-      query.find({
-        success: function(results) {
+      var Card = Parse.Object.extend("OrderedCards");
+      var cardQuery = new Parse.Query(Card);
+        cardQuery.equalTo("buyer", currentUser.getUsername());
 
-          for(var i =0;i<results.length;i++){
-              //set order
+        cardQuery.find({
+          success: function(theCards){
 
-              var allOrders = self.state.allOrders;
+            //use orders in parse
+            query.find({
 
-              allOrders.push({"store":results[i].get("store"),"curId":results[i].id,"Price":results[i].get("Price"),"Agreed":results[i].get("Agreed")})
+              success: function(results) {
 
+                    var allOrders = [];
+                for(var i =0;i<results.length;i++){
 
+                  var cardCollection = [];
+                  for(var k =0;k<theCards.length;k++){
+console.log("results",results.id)
+                    if(results[i].id==theCards[k].get("orderId")){
 
-            var Card = Parse.Object.extend("OrderedCards");
-            var cardQuery = new Parse.Query(Card);
-              cardQuery.equalTo("buyer", currentUser.getUsername());
-
-              cardQuery.find({
-                success: function(theCards){
-                  console.log(theCards);
-                  for(var j = 0;j<allOrders.length;j++){
-                    var cardCollection = [];
-                    for(var k =0;k<theCards.length;k++){
-                      if(allOrders[j].curId==theCards[k].get("orderId")){
-
-                          cardCollection.push({"Name":theCards[k].get("Name"),"Set":theCards[k].get("Set"),"Foil":theCards[k].get("foil"),
-                            "Promo":theCards[k].get("promo"),"curId":theCards[k].id})
-                      }
+                        cardCollection.push({"Name":theCards[k].get("Name"),"Set":theCards[k].get("Set"),"Foil":theCards[k].get("foil"),
+                          "Promo":theCards[k].get("promo"),"curId":theCards[k].id})
                     }
-                    allOrders[j].cards=cardCollection;
                   }
-                  self.setState({"allOrders":allOrders,"loading":false})
+                    allOrders.push({"store":results[i].get("store"),"curId":results[i].id,"Price":results[i].get("Price"),"Agreed":results[i].get("Agreed"),"cards":cardCollection})
                 }
-
-              });
-
-
+                self.setState({"allOrders":allOrders,"loading":false})
+              }
+            })
           }
+        });
 
-        }
-      }).then(function(){
+
 
     //find cards person is selling
     var Sell = Parse.Object.extend("Sells");
     var sellQuery = new Parse.Query(Sell);
       sellQuery.equalTo("seller", currentUser.getUsername());
+      var Card = Parse.Object.extend("SellingCards");
+      var cardQuery = new Parse.Query(Card);
+        cardQuery.equalTo("seller", currentUser.getUsername());
 
-      sellQuery.find({
-        success: function(results) {
-          for(var i =0;i<results.length;i++){
-              //set order
-                    var allOrders = self.state.sellOrders;
-              allOrders.push({"store":results[i].get("store"),"curId":results[i].id,"Price":results[i].get("Price"),"Agreed":results[i].get("Agreed")})
-
-
-
-            var Card = Parse.Object.extend("SellingCards");
-            var cardQuery = new Parse.Query(Card);
-              cardQuery.equalTo("seller", currentUser.getUsername());
-              cardQuery.find({
-                success: function(theCards){
-                for(var j = 0;j<allOrders.length;j++){
+        cardQuery.find({
+          success: function(theCards){
+            sellQuery.find({
+              success: function(results) {
+                  var allOrders = [];
+                for(var i =0;i<results.length;i++){
                   var cardCollection = [];
                   for(var k =0;k<theCards.length;k++){
-                    if(allOrders[j].curId==theCards[k].get("orderId")){
-
+                      if(results[i].id==theCards[k].get("orderId")){
                         cardCollection.push({"Name":theCards[k].get("Name"),"Set":theCards[k].get("Set"),"Foil":theCards[k].get("foil"),
                           "Promo":theCards[k].get("promo"),"Qty":theCards[k].get("Qty"),"curId":theCards[k].id})
+                      }
                     }
-                  }
-                  allOrders[j].cards=cardCollection;
+                    allOrders.push({"store":results[i].get("store"),"curId":results[i].id,"Price":results[i].get("Price"),"Agreed":results[i].get("Agreed"),"cards":cardCollection})
                 }
-                console.log("2")
-                  self.setState({"sellOrders":allOrders,"loading":false})
-                },
-                error:function(){
-                  console.log("error")
-
-                },
+                self.setState({"sellOrders":allOrders,"loading":false})
+              }
               })
-
-
-          }
-        self.setState({"loading":false})
-        }
+            }
         })
-})
+
   },
 
   render:function(){
@@ -559,7 +536,7 @@ var Total= React.createClass({displayName: "Total",
     if(allOrders.length==0 && sellOrders.length==0){
       allOrders = React.createElement("p", null, "You have no pending orders")
     }
-    if(this.state.loading == true){
+    if(this.state.loading){
       var allOrders = React.createElement("div", {className: "loadingContainer"}, React.createElement("img", {src: "images/Loading.gif"}))
     }
     return(
@@ -652,7 +629,12 @@ var Orders = React.createClass({displayName: "Orders",
     }
 
     if(this.props.item.Price==""){
-      heading=React.createElement("p", null, "Awaiting prices from ", this.props.item.store)
+      if(this.props.curtype=="sell"){
+        var ptype = "purchasing"
+      } else{
+        var ptype="selling"
+      }
+      heading=React.createElement("p", null, "Awaiting ", ptype, " prices from ", this.props.item.store)
       message=""
       theButtons=""
     }
@@ -1083,17 +1065,35 @@ var searchCard = React.createClass({displayName: "searchCard",
       var allCards=React.createElement("h2", null, "No stores are selling this card")
       var self=this;
       if(this.state.cardList!="FAIL" && this.state.cardList!=""){
+
         allCards = this.state.cardList.map(function(item){
-                 var cardsBySet = item.cardsBySet.map(function(set){
-                    return(React.createElement(CardSample, {cardName: self.props.cardName, collection: self.props.collection, key: set.Set, set: set, item: item}))
-                 })
-               return(
-                 React.createElement("div", {className: "col-md-3 col-sm-6 col-xs-12 infoContainer", key: item.storeName}, 
-                   React.createElement("h2", null, item.storeName, ":"), 
-                   React.createElement("p", {className: "Top"}, "Total Quantity: ", item.quantity), 
-                   cardsBySet
-                 ))
+          //check is store is approved
+
+
+          var isApproved = false
+          var stores = self.props.storeCollection
+          for(var i =0;i<stores.length;i++){
+            if(stores[i].get("storeName")==item.storeName){
+              if(stores[i].get("Approved")){
+                isApproved=true
+              }
+            }
+          }
+          if(isApproved){
+            var cardsBySet = item.cardsBySet.map(function(set){
+               return(React.createElement(CardSample, {cardName: self.props.cardName, collection: self.props.collection, key: set.Set, set: set, item: item}))
+            })
+
+            return(React.createElement("div", {className: "col-md-3 col-sm-6 col-xs-12 infoContainer", key: item.storeName}, 
+                React.createElement("h2", null, item.storeName, ":"), 
+                React.createElement("p", {className: "Top"}, "Total Quantity: ", item.quantity), 
+                cardsBySet
+              ))
+
+          }
+
          })
+
        } else{
         if(this.state.cardList!="FAIL"){
           allCards = React.createElement("div", {className: "loadingContainer"}, React.createElement("img", {src: "images/Loading.gif"}))
@@ -1102,16 +1102,18 @@ var searchCard = React.createClass({displayName: "searchCard",
 
     return(
       React.createElement("div", {className: "row searchCard"}, 
-      React.createElement("h1", null, "Copies of ", this.props.cardName, " for sale:"), 
-      React.createElement("h2", null, "Add cards to your cart, then go to checkout for store owners to reply with the prices"), 
-      React.createElement("div", {className: "col-md-3 col-sm-12"}, React.createElement("img", {src: this.state.curImage}), 
-        React.createElement("p", null, "Images and card information courtesy of ", React.createElement("a", {href: "https://deckbrew.com/"}, "deckbrew.com"))
-      ), 
+        React.createElement("div", {className: "row"}, 
+          React.createElement("h1", null, "Copies of ", this.props.cardName, " for sale:"), 
+          React.createElement("h2", null, "Add cards to your cart, then go to checkout for store owners to reply with the prices"), 
+          React.createElement("div", {className: "col-md-3 col-sm-12"}, React.createElement("img", {src: this.state.curImage}), 
+            React.createElement("p", null, "Images and card information courtesy of ", React.createElement("a", {href: "https://deckbrew.com/"}, "deckbrew.com"))
+          ), 
 
-      React.createElement("div", {className: "col-md-9 col-sm-12"}, allCards), 
-        React.createElement("a", {href: "#checkout"}, React.createElement("button", {style: {"float":"right"}, className: "btn btn-primary"}, "Go to Check Out"))
+          React.createElement("div", {className: "col-md-9 col-sm-12"}, allCards)
+        ), 
+      React.createElement("div", {className: "row"}, React.createElement("a", {href: "#checkout"}, React.createElement("button", {style: {"float":"right"}, className: "btn btn-primary checkout"}, "Go to Check Out")))
       )
-    )
+      )
   }
 })
 
@@ -1172,6 +1174,7 @@ var searchEvent = React.createClass({displayName: "searchEvent",
 },
   componentDidMount:function(){
   //find card info from parse
+  console.log("users",this.props.userCollection)
   var currentUser = Parse.User.current();
   var self=this;
   var Event = Parse.Object.extend("Events");
@@ -1180,7 +1183,6 @@ var searchEvent = React.createClass({displayName: "searchEvent",
     eventQuery.lessThanOrEqualTo("Date", this.props.endDate);
     eventQuery.find({
       success: function(results) {
-        console.log("results",results)
         var newResults = results.sort(function(a,b) {
               return new Date(a.get("Date")).getTime() - new Date(b.get("Date")).getTime()
         });
@@ -1197,7 +1199,21 @@ var searchEvent = React.createClass({displayName: "searchEvent",
       var allEvents = React.createElement("div", {className: "loadingContainer"}, React.createElement("img", {src: "images/Loading.gif"}));
       if(this.state.events.length>0){
         allEvents = this.state.events.map(function(item){
-            return(React.createElement(FoundEvent, {key: item.id, parent: self, item: item}))
+            //check is store is approved
+            var isApproved = false
+            var stores = self.props.storeCollection
+            for(var i =0;i<stores.length;i++){
+              if(stores[i].get("storeName")==item.get("storeName")){
+                if(stores[i].get("Approved")){
+                  isApproved=true
+                }
+              }
+            }
+
+            if(isApproved==true){
+                  return(React.createElement(FoundEvent, {key: item.id, parent: self, item: item}))
+            }
+
         })
       }
 
@@ -1591,21 +1607,34 @@ var searchSpecial = React.createClass({displayName: "searchSpecial",
   var query = new Parse.Query(Specials);
     query.find({
       success: function(results) {
-        console.log("got here")
-        console.log("results",results[0].get("specialStart1"))
           self.setState({"specialList":results})
       }
     })
   },
   render:function(){
+    self=this;
 var allSpecials = this.state.specialList.map(function(item){
+  //check is store is Approved
+  var isApproved = false
+ var stores = self.props.storeCollection
+  for(var i =0;i<stores.length;i++){
+    //  console.log(stores[i].get("storeName"))
+    if(stores[i].get("storeName")==item.get("storeName")){
+      if(stores[i].get("Approved")){
+        isApproved=true
+      }
+    }
+  }
+
+
     var All = [];
     for(var i =1;i<4;i++){
       if(item.get("specialName" + i)!=""){
         All.push(React.createElement("p", {key: item.id + i}, item.get("specialName" + i), React.createElement("a", {href: "#specialDescription/" + item.id + "_" + i}, "  More Info")))
       }
     }
-    if(item.get("storeName")){
+
+    if(item.get("storeName") && isApproved){
       return(React.createElement("div", {key: item.get("storeName"), className: "col-md-3 col-sm-6 col-xs-12 infoContainer"}, 
               React.createElement("h2", null, item.get("storeName"), ":"), 
               All
@@ -1706,10 +1735,28 @@ var AllStores = React.createClass({displayName: "AllStores",
   },
   render:function(){
     var storeName = this.props.storeName.toLowerCase();
+    var self=this;
   var allStores=React.createElement("div", {className: "loadingContainer"}, React.createElement("img", {src: "images/Loading.gif"}))
   if(this.state.Users.length>0){
     var allStores= this.state.Users.map(function(item){
-      if(item.get("storeName") && (storeName=="" || storeName== item.get("storeName").toLowerCase())){
+
+      //check is store is Approved
+      var isApproved = false
+
+     var stores = self.props.storeCollection
+
+      for(var i =0;i<stores.length;i++){
+        if(stores[i].get("storeName")==item.get("storeName")){
+          if(stores[i].get("Approved")){
+
+            isApproved=true
+          }
+        }
+      }
+
+
+      if(isApproved && (storeName=="" || storeName== item.get("storeName").toLowerCase())){
+
         return(React.createElement(PerStore, {item: item, key: item.get("storeName")}))
       }
     });
@@ -3402,10 +3449,23 @@ var OrderModel = new model.Model();
 var OrderCollection = new model.ModelCollection()
 var SellModel = new model.SellModel();
 var SellCollection = new model.SellModelCollection()
+var StoreModel = new model.Model();
+var StoreCollection = new model.ModelCollection()
+
+
 
 var homeContainer= document.getElementById("container")
 Parse.initialize("GLID");
 Parse.serverURL = 'http://gaminglocal.herokuapp.com'
+
+//create collection of users
+var Store = Parse.Object.extend("Stores");
+var storeQuery = new Parse.Query(Store);
+  storeQuery.find({
+    success: function(theCards){
+      StoreCollection=theCards
+    }
+  })
 
 var Router = Backbone.Router.extend({
   routes:{
@@ -3444,12 +3504,12 @@ var Router = Backbone.Router.extend({
     var startDate = new Date(dates[0])
     var endDate = new Date(dates[1])
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(React.createElement(SearchEventForm, {startDate: startDate, endDate: endDate, router: this}),homeContainer)
+    ReactDOM.render(React.createElement(SearchEventForm, {storeCollection: StoreCollection, startDate: startDate, endDate: endDate, router: this}),homeContainer)
   },
   searchCard:function(id){
     var cardName = id;
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(React.createElement(SearchCardForm, {cardName: cardName, collection: OrderCollection, router: this}),homeContainer)
+    ReactDOM.render(React.createElement(SearchCardForm, {storeCollection: StoreCollection, cardName: cardName, collection: OrderCollection, router: this}),homeContainer)
   },
   sellCard:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
@@ -3457,7 +3517,7 @@ var Router = Backbone.Router.extend({
   },
   specials:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(React.createElement(SpecialForm, {router: this}),homeContainer)
+    ReactDOM.render(React.createElement(SpecialForm, {storeCollection: StoreCollection, router: this}),homeContainer)
   },
   tagSearch:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);
@@ -3472,11 +3532,11 @@ var Router = Backbone.Router.extend({
   },
   allStores:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(React.createElement(StoreForm, {storeName: "", router: this}),homeContainer)
+    ReactDOM.render(React.createElement(StoreForm, {storeCollection: StoreCollection, storeName: "", router: this}),homeContainer)
   },
   store:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(React.createElement(StoreForm, {storeName: id, router: this}),homeContainer)
+    ReactDOM.render(React.createElement(StoreForm, {storeCollection: StoreCollection, storeName: id, router: this}),homeContainer)
   },
   storeSpecial:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);
