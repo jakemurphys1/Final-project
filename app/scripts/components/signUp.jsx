@@ -33,7 +33,8 @@ var SignUp = React.createClass({
             currentUser.set('username', $('#signupUsername').val());
             currentUser.save();
             console.log("CurrentUser",currentUser.getUsername())
-
+            //go back to home
+            Backbone.history.navigate("#home",{trigger:true})
           }
                   });
 

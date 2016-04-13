@@ -17,14 +17,14 @@ var Total= React.createClass({
     //find order info from parse
     var currentUser = Parse.User.current();
       var self = this;
-    var Order = Parse.Object.extend("Orders");
+    var Order = Parse.Object.extend("Sells");
     var OrderQuery = new Parse.Query(Order);
-    OrderQuery.equalTo("seller", currentUser.getUsername());
+    OrderQuery.equalTo("store", currentUser.get("storeName"));
 
 
-    var Card = Parse.Object.extend("OrderedCards");
+    var Card = Parse.Object.extend("SellingCards");
     var cardQuery = new Parse.Query(Card);
-      cardQuery.equalTo("seller", currentUser.get("storeName"));
+      cardQuery.equalTo("store", currentUser.get("storeName"));
 
 
       cardQuery.find({
@@ -42,14 +42,14 @@ var Total= React.createClass({
                 for(var k =0;k<theCards.length;k++){
 
                   if(results[j].id==theCards[k].get("orderId")){
-
+                      //Based on SellingCards Class
                       cardCollection.push({"Name":theCards[k].get("Name"),"Set":theCards[k].get("Set"),"Foil":theCards[k].get("foil"),
-                        "Promo":theCards[k].get("promo"),"curId":theCards[k].id})
+                        "Promo":theCards[k].get("promo"),"Qty":theCards[k].get("Qty"),"curId":theCards[k].id})
 
                   }
                 }
-
-                allOrders.push({"buyer":results[j].get("buyer"),"curId":results[j].id,"Price":results[j].get("Price"),"Agreed":results[j].get("Agreed"),"cards":cardCollection,"Message":results[j].get("message")})
+                  //Based on Sells Class
+                allOrders.push({"seller":results[j].get("seller"),"curId":results[j].id,"Price":results[j].get("Price"),"Agreed":results[j].get("Agreed"),"cards":cardCollection,"Message":results[j].get("message")})
               }
                 self.setState({"allOrders":allOrders,"loading":false})
             }
@@ -60,26 +60,6 @@ var Total= React.createClass({
 
 
   },
-  handleRemove:function(e){
-    //delete Order
-    var curId= e.currentTarget.id;
-    var CardBase = Parse.Object.extend("Cards");
-    var query = new Parse.Query(CardBase);
-    query.get(curId, {
-      success: function(myObj) {
-        myObj.destroy({});
-      },
-    });
-
-
-
-
-    //remove the item from setInfo
-    var setInfo = this.state.setInfo.filter(function(item){
-    return(item.id!=curId)
-    })
-    this.setState({"setInfo":setInfo})
-  },
 
   render:function(){
     var self = this;
@@ -87,15 +67,15 @@ var Total= React.createClass({
       return(<Orders parent={self} key={item.curId} item={item} />)
     });
     if(allOrders.length==0){
-      allOrders=<p>You have no pending orders</p>
+      allOrders=<p>You have no pending purchases</p>
     }
     if(this.state.loading){
-        allOrders=<div className="loadingContainer"><img src="images/Loading.gif" /></div>
+      allOrders=<div className="loadingContainer"><img src="images/Loading.gif" /></div>
     }
     return(
       <div className="ownerOrder row">
-      <h2>Orders Pending</h2>
-      <p>Click the <span className="removeOrder">X</span>  to remove cards not available</p>
+      <h2>Sells Pending</h2>
+      <p>Click the <span className="removeOrder">X</span>  to remove cards not desired</p>
       {allOrders}
 
       </div>
@@ -114,7 +94,7 @@ var Orders = React.createClass({
   handleSend:function(){
     var price = $("#price"+this.props.item.curId).val();
 
-    var Order = Parse.Object.extend("Orders");
+    var Order = Parse.Object.extend("Sells");
     var query = new Parse.Query(Order);
       query.get(this.props.item.curId,{
               success: function(order) {
@@ -125,7 +105,7 @@ var Orders = React.createClass({
           this.setState({"PriceShown":true})
   },
   handleRemove:function(){
-    var Orders = Parse.Object.extend("Orders");
+    var Orders = Parse.Object.extend("Sells");
     var self=this;
     var query = new Parse.Query(Orders);
     query.get(this.props.item.curId, {
@@ -136,7 +116,7 @@ var Orders = React.createClass({
     });
 
     //delete cards too
-    var Cards = Parse.Object.extend("OrderedCards");
+    var Cards = Parse.Object.extend("SellingCards");
     var query = new Parse.Query(Cards);
           query.equalTo("orderId", this.props.item.curId);
     query.find({
@@ -149,6 +129,9 @@ var Orders = React.createClass({
 
 
     },
+  handleRemoveInv:function(){
+      console.log(this.props.item)
+  },
   render:function(){
     var self=this;
     var message = <h4>Submit price for the customer</h4>
@@ -172,12 +155,12 @@ var Orders = React.createClass({
       return(<IndivCards parent={self} key={card.curId} id={card.curId} card={card} />)
     })
     if(this.props.item.Message!=""){
-      var messageBox = <div><label>Message from buyer</label>
+      var messageBox = <div><label>Message from seller</label>
               <div className="buyerMessage">{this.props.item.Message}</div></div>
     }
     return(<div className={"col-md-3 " + format}>
     {message}
-      <p>{this.props.item.buyer} wants to Purchase: </p>
+      <p>{this.props.item.seller} wants to sell: </p>
       {allCards}
       {messageBox}
       {priceButton}
@@ -194,7 +177,7 @@ var IndivCards = React.createClass({
   },
   handleRemove:function(e){
     var curId= e.currentTarget.id;
-    var cardBase = Parse.Object.extend("OrderedCards");
+    var cardBase = Parse.Object.extend("SellingCards");
     var query = new Parse.Query(cardBase);
     query.get(curId, {
       success: function(myObj) {
@@ -209,14 +192,13 @@ var IndivCards = React.createClass({
   render:function(){
     var foil="";
     var promo="";
-    console.log(this.state.format)
     if(this.props.card.Foil){
       foil=<span>(Foil)</span>
     }
     if(this.props.card.Promo){
       promo=<span>(Promo)</span>
     }
-    return(<div className={"row " + this.state.format}><p>1 <b>{this.props.card.Name}</b> from {this.props.card.Set}{foil}{promo}<span id={this.props.card.curId} onClick={this.handleRemove} className="removeOrder">X</span></p></div>)
+    return(<div className={"row " + this.state.format}><p>{this.props.card.Qty} <b>{this.props.card.Name}</b> from {this.props.card.Set}{foil}{promo}<span id={this.props.card.curId} onClick={this.handleRemove} className="removeOrder">X</span></p></div>)
   },
 })
 

@@ -9,11 +9,12 @@ var Total= React.createClass({
   getInitialState:function(){
     return {
         "allOrders":[],
+        "sellOrders":[],
         "loading":true,
     }
   },
   componentDidMount(){
-    //find order info from parse
+    //find cards person is buying
     var currentUser = Parse.User.current();
     var Order = Parse.Object.extend("Orders");
     var query = new Parse.Query(Order);
@@ -22,9 +23,12 @@ var Total= React.createClass({
 
       query.find({
         success: function(results) {
+
           for(var i =0;i<results.length;i++){
               //set order
+
               var allOrders = self.state.allOrders;
+
               allOrders.push({"store":results[i].get("store"),"curId":results[i].id,"Price":results[i].get("Price"),"Agreed":results[i].get("Agreed")})
 
 
@@ -32,49 +36,99 @@ var Total= React.createClass({
             var Card = Parse.Object.extend("OrderedCards");
             var cardQuery = new Parse.Query(Card);
               cardQuery.equalTo("buyer", currentUser.getUsername());
+
               cardQuery.find({
                 success: function(theCards){
-                var allOrders = self.state.allOrders;
+                  console.log(theCards);
+                  for(var j = 0;j<allOrders.length;j++){
+                    var cardCollection = [];
+                    for(var k =0;k<theCards.length;k++){
+                      if(allOrders[j].curId==theCards[k].get("orderId")){
+
+                          cardCollection.push({"Name":theCards[k].get("Name"),"Set":theCards[k].get("Set"),"Foil":theCards[k].get("foil"),
+                            "Promo":theCards[k].get("promo"),"curId":theCards[k].id})
+                      }
+                    }
+                    allOrders[j].cards=cardCollection;
+                  }
+                  self.setState({"allOrders":allOrders,"loading":false})
+                }
+
+              });
+
+
+          }
+
+        }
+      }).then(function(){
+
+    //find cards person is selling
+    var Sell = Parse.Object.extend("Sells");
+    var sellQuery = new Parse.Query(Sell);
+      sellQuery.equalTo("seller", currentUser.getUsername());
+
+      sellQuery.find({
+        success: function(results) {
+          for(var i =0;i<results.length;i++){
+              //set order
+                    var allOrders = self.state.sellOrders;
+              allOrders.push({"store":results[i].get("store"),"curId":results[i].id,"Price":results[i].get("Price"),"Agreed":results[i].get("Agreed")})
+
+
+
+            var Card = Parse.Object.extend("SellingCards");
+            var cardQuery = new Parse.Query(Card);
+              cardQuery.equalTo("seller", currentUser.getUsername());
+              cardQuery.find({
+                success: function(theCards){
                 for(var j = 0;j<allOrders.length;j++){
                   var cardCollection = [];
                   for(var k =0;k<theCards.length;k++){
                     if(allOrders[j].curId==theCards[k].get("orderId")){
 
                         cardCollection.push({"Name":theCards[k].get("Name"),"Set":theCards[k].get("Set"),"Foil":theCards[k].get("foil"),
-                          "Promo":theCards[k].get("promo"),"curId":theCards[k].id})
+                          "Promo":theCards[k].get("promo"),"Qty":theCards[k].get("Qty"),"curId":theCards[k].id})
                     }
                   }
                   allOrders[j].cards=cardCollection;
                 }
-                  self.setState({"allOrders":allOrders,"loading":false})
-                }
+                console.log("2")
+                  self.setState({"sellOrders":allOrders,"loading":false})
+                },
+                error:function(){
+                  console.log("error")
 
+                },
               })
 
 
           }
-
+        self.setState({"loading":false})
         }
         })
+})
   },
 
   render:function(){
     var self = this;
     var allOrders = this.state.allOrders.map(function(item){
-      return(<Orders parent={self} key={item.curId} item={item} />)
+      return(<Orders curtype={"buy"} parent={self} key={item.curId} item={item} />)
     });
-    if(allOrders.length==0){
-      allOrders=<p>You have no pending orders</p>
+    var sellOrders = this.state.sellOrders.map(function(item){
+      return(<Orders curtype={"sell"} parent={self} key={item.curId} item={item} />)
+    });
+    if(allOrders.length==0 && sellOrders.length==0){
+      allOrders = <p>You have no pending orders</p>
     }
-    if(this.state.loading==true){
-      allOrders= <div className="loadingContainer"><img src="images/Loading.gif" /></div>
+    if(this.state.loading == true){
+      var allOrders = <div className="loadingContainer"><img src="images/Loading.gif" /></div>
     }
     return(
       <div className="Order row">
       <h1>Orders Pending</h1>
       <p>Please note that the sellers may have removed cards from order</p>
       {allOrders}
-
+      {sellOrders}
       </div>
     )
   },
@@ -89,7 +143,13 @@ var Orders = React.createClass({
     }
   },
   handleAgree:function(){
-    var Order = Parse.Object.extend("Orders");
+    if(this.props.curtype=="sell"){
+        var Order = Parse.Object.extend("Sells");
+    }
+    if(this.props.curtype=="buy"){
+        var Order = Parse.Object.extend("Orders");
+    }
+
     var self=this;
     var query = new Parse.Query(Order);
       query.get(this.props.item.curId,{
@@ -101,10 +161,18 @@ var Orders = React.createClass({
         });
   },
   handleDecline:function(){
-    var Orders = Parse.Object.extend("Orders");
+
+    if(this.props.curtype=="sell"){
+        var Orders = Parse.Object.extend("Sells");
+    }
+    if(this.props.curtype=="buy"){
+        var Orders = Parse.Object.extend("Orders");
+    }
     var query = new Parse.Query(Orders);
+        console.log("got here")
     var self=this;
-    query.get(this.props.item.curId, {
+
+    query.get(self.props.item.curId, {
       success: function(myObj) {
         myObj.destroy({});
         self.setState({"message":<p>You've declined these prices.</p>})
@@ -113,7 +181,13 @@ var Orders = React.createClass({
     });
 
     //delete cards too
-    var Cards = Parse.Object.extend("OrderedCards");
+    if(this.props.curtype=="sell"){
+          var Cards = Parse.Object.extend("SellingCards");
+    }
+    if(this.props.curtype=="buy"){
+          var Cards = Parse.Object.extend("OrderedCards");
+    }
+
     var query = new Parse.Query(Cards);
           query.equalTo("orderId", self.props.item.curId);
     query.find({
@@ -133,7 +207,11 @@ var Orders = React.createClass({
       return(<IndivCards key={card.curId} id={card.curId} card={card} />)
     })
     var message=this.state.message;
-    var heading =<p>{this.props.item.store} prices these cards at {this.props.item.Price}: </p>
+    var heading =<p>{this.props.item.store} is selling these cards at {this.props.item.Price}: </p>
+    if(this.props.curtype=="sell"){
+        heading =<p>{this.props.item.store} is buying these cards at {this.props.item.Price}: </p>
+    }
+
     if(this.props.item.Price==""){
       heading=<p>Awaiting prices from {this.props.item.store}</p>
       message=""
@@ -141,7 +219,6 @@ var Orders = React.createClass({
     }
     if(this.state.agreed){
       theButtons="";
-      heading=<p>{this.props.item.store} prices these cards at {this.props.item.Price}: </p>
       message=<p>You've agreed to the prices. Head to the store to pick them up.</p>;
     }
 
@@ -150,22 +227,26 @@ var Orders = React.createClass({
       {heading}
       {allCards}
       {message}
-  {theButtons}
+      {theButtons}
       </div>)
     },
-})
+  })
 
 var IndivCards = React.createClass({
   render:function(){
     var foil="";
     var promo="";
+    var qty=1;
     if(this.props.card.Foil){
       foil=<span>(Foil)</span>
     }
     if(this.props.card.Promo){
       promo=<span>(Promo)</span>
     }
-    return(<p>1 <b>{this.props.card.Name}</b> from {this.props.card.Set}{foil}{promo}</p>)
+    if(this.props.card.Qty){
+      qty=this.props.card.Qty
+    }
+    return(<p>{qty} <b>{this.props.card.Name}</b> from {this.props.card.Set}{foil}{promo}</p>)
   },
 })
 

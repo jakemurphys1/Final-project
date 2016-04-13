@@ -58,7 +58,8 @@ var CheckOut = React.createClass({
             }
 
             cards.save(cardData).then(function(cardobject){
-              var nodes = this.props.collection;
+              console.log("")
+              var nodes = self.props.collection;
               while (nodes.length > 0)
               nodes.remove(nodes.at(0));
             })
@@ -74,9 +75,7 @@ var CheckOut = React.createClass({
     //submit cards to sell
     orderByStore = [];
       storesThatWereUsed=[];
-        console.log("got here")
     this.props.sellCollection.forEach(function(item){
-      console.log(item)
       //checkif order for store already created
       var storeWasUsed=false;
       for(var i =0;i<storesThatWereUsed.length;i++){
@@ -89,31 +88,31 @@ var CheckOut = React.createClass({
 
         //add order
         storesThatWereUsed.push(item.get("Store"))
-        var Orders = Parse.Object.extend("Orders");
+        var Orders = Parse.Object.extend("Sells");
         var orders = new Orders();
-        console.log("item",item)
         var data = {
-          "buyer":currentUser.getUsername(),
-          "seller":item.get("Seller"),
+          "buyer":item.get("Seller"),
+          "seller":currentUser.getUsername(),
           "store":item.get("Store"),
           "Price":"",
           "Agreed":false,
           "Type":"sellToStore",
-          "message":$("#description" + item.get("Seller")).val()
+          "message":$("#sellDescription" + item.get("Seller")).val()
         }
 
       orders.save(data).then(function(object) {
         //add cards
         self.props.sellCollection.forEach(function(card){
           if(card.get("Store")==object.get("store")){
-            var Cards = Parse.Object.extend("OrderedCards");
+            var Cards = Parse.Object.extend("SellingCards");
             var cards = new Cards();
             var cardData = {
               "orderId":object.id,
-              "buyer":currentUser.getUsername(),
-              "seller":card.get("Store"),
-              "Name":card.get("CardName"),
+              "store":card.get("Store"),
+              "seller":currentUser.getUsername(),
+              "Name":card.get("Name"),
               "Set":card.get("Set"),
+                "Qty":card.get("Qty"),
               "foil":card.get("Foil"),
               "promo":card.get("Promo")
             }
@@ -161,10 +160,10 @@ var CheckOut = React.createClass({
               cardsByStore.push(<SellCardSample collection={self.props.sellCollection} parent={self} card={card} />)
           }
         })
-      orderByStore.push(<div className="col-md-4 infoContainer" key={item.get("Store")}>
+      orderByStore.push(<div className="col-md-4 infoContainer" key={item.get("Store")+"sell"}>
           <h2>Selling to {item.get("Store")}</h2>
           {cardsByStore}
-          <textarea id={"description" + item.get("Seller")} className = "description" placeholder="Message to store" />
+          <textarea id={"sellDescription" + item.get("Seller")} className = "description" placeholder="Message to store" />
       </div>)
     });
 
@@ -220,11 +219,11 @@ var SellCardSample = React.createClass({
       promo=<span>(Promo)</span>
     }
     return(<div className="row">
-      1 copy of <b>{this.props.card.get("Name")}</b> from <b>{this.props.card.get("Set")}</b>{foil}{promo}
-  <button onClick={this.handleRemove} className="btn btn-primary remove">Remove</button>
-</div>)
-  },
-})
+              1 copy of <b>{this.props.card.get("Name")}</b> from <b>{this.props.card.get("Set")}</b>{foil}{promo}
+            <button onClick={this.handleRemove} className="btn btn-primary remove">Remove</button>
+          </div>)
+    },
+  })
 
 
 module.exports=CheckOut;

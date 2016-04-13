@@ -90,10 +90,11 @@ var SignUp = React.createClass({
             var stores = new Stores();
             stores.save(storeData).then(function(object) {
                 console.log(object)
+                //go back to home
+                Backbone.history.navigate("#home",{trigger:true})
             })
 
-            //go back to home
-            Backbone.history.navigate("home",{trigger:true})
+
           },
           "error": function(user,error){
             console.log("error",user,error);
