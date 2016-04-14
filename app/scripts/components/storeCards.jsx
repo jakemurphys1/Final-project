@@ -36,14 +36,23 @@ var StoreCards= React.createClass({
             return(<CardSample collection={self.props.collection} key = {item.id} item={item} />)
         })
     }
+    //check if user logged in
+    var lowerText =   <h3>Add cards to your cart, then submit for store owners to reply with the prices</h3>
+    var checkoutButton=<div className="row"><a href="#checkout"><button style={{"float":"right"}} className="btn btn-primary checkout">Go to Check Out</button></a></div>
+  if(!Parse.User.current()){
+       lowerText=<h2>Please <a href="#signUp">sign up</a> or log in to check pricing</h2>
+       checkoutButton=""
+    }
+
       return(<div className=" col-md-8 col-md-offset-2">
           <h1>Cards for sale at {this.props.storeName}</h1>
-            <h3>Add cards to your cart, then submit for store owners to reply with the prices</h3>
+          {lowerText}
+
           <div className="infoContainer">
               {store}
 
           </div>
-          <a href="#checkout"><button style={{"float":"right"}} className="btn btn-primary">Go to Check Out</button></a>
+          {checkoutButton}
       </div>)
   }
 })
@@ -86,7 +95,7 @@ var CardSample = React.createClass({
     }
 
     return(<div className="storeSearchCard">
-          <span>{this.props.item.get("Qty")} {plural} of <b>{this.props.item.get("Name")}</b> from {this.props.item.get("Set")}{foil}{promo}</span>
+          <span>{this.props.item.get("Qty")} {plural} of <b><a href={"#seeCard/"+this.props.item.get("Name")}>{this.props.item.get("Name")}</a></b> from {this.props.item.get("Set")}{foil}{promo}</span>
            <span><button onClick={this.handleAdd} className="btn btn-primary">Add 1</button>{foilButton}{promoButton}</span>
     </div>)
   },

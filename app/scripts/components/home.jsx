@@ -36,11 +36,14 @@ var Home = React.createClass({
   },
   handleCard:function(e){
     e.preventDefault();
+
     var cardName = $("#buyCardName").val();
     Backbone.history.navigate("searchCard/" + cardName,{trigger:true})
   },
   handleSellCard:function(e){
     e.preventDefault();
+
+
     var cardName = $("#sellCardName").val();
     Backbone.history.navigate("sellCard/" + cardName,{trigger:true})
   },
@@ -111,16 +114,19 @@ var Home = React.createClass({
 
     <div className="row">
       <div className="col-md-5 homeCards home infoContainer">
+        <h2>Store Pricing</h2>
         <div className="col-xs-6">
-          <div className="row"><h2>Buy Cards</h2></div>
+          <div className="row"><h4>Check store prices for buying cards</h4></div>
             <form onSubmit={this.handleCard} id="cardSearch" action="" className="form-events">
                     <input id="buyCardName" type="text" name="cardName" placeholder="Name of Card"/>
                     <p><button className="btn btn-primary Search">Search</button></p>
             </form>
         </div>
-        <div className="col-xs-6"><h2>Sell Cards</h2></div>
+        <div className="col-xs-6"><h4>Check store prices for selling your cards</h4>
+            <p><button onClick={this.handleSellCard} className="btn btn-primary Search">Build List</button></p>
+        </div>
 
-                  <p><button onClick={this.handleSellCard} className="btn btn-primary Search">SellCards</button></p>
+
 
       </div>
 

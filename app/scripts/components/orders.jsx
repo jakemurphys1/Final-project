@@ -38,7 +38,6 @@ var Total= React.createClass({
 
                   var cardCollection = [];
                   for(var k =0;k<theCards.length;k++){
-console.log("results",results.id)
                     if(results[i].id==theCards[k].get("orderId")){
 
                         cardCollection.push({"Name":theCards[k].get("Name"),"Set":theCards[k].get("Set"),"Foil":theCards[k].get("foil"),

@@ -30,22 +30,7 @@ var AllStores = React.createClass({
   if(this.state.Users.length>0){
     var allStores= this.state.Users.map(function(item){
 
-      //check is store is Approved
-      var isApproved = false
-
-     var stores = self.props.storeCollection
-
-      for(var i =0;i<stores.length;i++){
-        if(stores[i].get("storeName")==item.get("storeName")){
-          if(stores[i].get("Approved")){
-
-            isApproved=true
-          }
-        }
-      }
-
-
-      if(isApproved && (storeName=="" || storeName== item.get("storeName").toLowerCase())){
+      if(item.get("Approved") && (storeName=="" || storeName== item.get("storeName").toLowerCase())){
 
         return(<PerStore item={item} key = {item.get("storeName")} />)
       }

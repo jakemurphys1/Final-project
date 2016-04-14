@@ -115,6 +115,12 @@ var searchCard = React.createClass({
   render:function(){
       var allCards=<h2>No stores are selling this card</h2>
       var self=this;
+      var lowerText = <h2>Add cards to your cart, then go to checkout for store owners to reply with the prices</h2>
+      var checkoutButton=<div className="row"><a href="#checkout"><button style={{"float":"right"}} className="btn btn-primary checkout">Go to Check Out</button></a></div>
+    if(!Parse.User.current()){
+         lowerText=<h2>Please <a href="#signUp">sign up</a> or log in to check pricing</h2>
+         checkoutButton=""
+      }
       if(this.state.cardList!="FAIL" && this.state.cardList!=""){
 
         allCards = this.state.cardList.map(function(item){
@@ -155,14 +161,15 @@ var searchCard = React.createClass({
       <div className="row searchCard">
         <div className="row">
           <h1>Copies of {this.props.cardName} for sale:</h1>
-          <h2>Add cards to your cart, then go to checkout for store owners to reply with the prices</h2>
+
+          {lowerText}
           <div className="col-md-3 col-sm-12"><img src={this.state.curImage}  />
             <p>Images and card information courtesy of <a href ="https://deckbrew.com/">deckbrew.com</a></p>
           </div>
 
           <div className="col-md-9 col-sm-12">{allCards}</div>
         </div>
-      <div className="row"><a href="#checkout"><button style={{"float":"right"}} className="btn btn-primary checkout">Go to Check Out</button></a></div>
+        {checkoutButton}
       </div>
       )
   }

@@ -83,20 +83,53 @@ var Total= React.createClass({
 
   render:function(){
     var self = this;
-    var allOrders = this.state.allOrders.map(function(item){
+
+    //orders with fewer cards come first
+    function myAbcSort(a, b){
+    if(a.cards.length > b.cards.length) {
+        return 1;
+    } else {
+        return -1;
+    }
+  }
+var allOrders = this.state.allOrders.sort(myAbcSort);
+
+    //turn data into JSX for render
+    var allOrders = allOrders.map(function(item){
       return(<Orders parent={self} key={item.curId} item={item} />)
     });
+
+    //put orders into even rows
+    var count = 0;
+    var rowcount=0;
+    var allrows=[];
+    var currow=[];
+    while(count<=allOrders.length){
+
+      if(rowcount==3){
+        rowcount=0
+        allrows.push(<div key={count} className="row">{currow}</div>)
+        currow=[];
+      }
+      currow.push(allOrders[count])
+        count+=1
+        rowcount+=1;
+    }
+    allrows.push(<div key={count} className="row">{currow}</div>)
+
+    //deal with loading and if there are no orders
     if(allOrders.length==0){
       allOrders=<p>You have no pending orders</p>
     }
     if(this.state.loading){
         allOrders=<div className="loadingContainer"><img src="images/Loading.gif" /></div>
     }
+
     return(
       <div className="ownerOrder row">
       <h2>Orders Pending</h2>
       <p>Click the <span className="removeOrder">X</span>  to remove cards not available</p>
-      {allOrders}
+      {allrows}
 
       </div>
     )
@@ -209,14 +242,13 @@ var IndivCards = React.createClass({
   render:function(){
     var foil="";
     var promo="";
-    console.log(this.state.format)
     if(this.props.card.Foil){
       foil=<span>(Foil)</span>
     }
     if(this.props.card.Promo){
       promo=<span>(Promo)</span>
     }
-    return(<div className={"row " + this.state.format}><p>1 <b>{this.props.card.Name}</b> from {this.props.card.Set}{foil}{promo}<span id={this.props.card.curId} onClick={this.handleRemove} className="removeOrder">X</span></p></div>)
+    return(<div className={"row " + this.state.format}><p>1 <b><a href={"#seeCard/"+this.props.card.Name}>{this.props.card.Name}</a></b> from {this.props.card.Set}{foil}{promo}<span id={this.props.card.curId} onClick={this.handleRemove} className="removeOrder">X</span></p></div>)
   },
 })
 

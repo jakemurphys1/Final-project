@@ -66,6 +66,27 @@ var Total= React.createClass({
     var allOrders = this.state.allOrders.map(function(item){
       return(<Orders parent={self} key={item.curId} item={item} />)
     });
+
+    //put orders into even rows
+    var count = 0;
+    var rowcount=0;
+    var allrows=[];
+    var currow=[];
+    while(count<=allOrders.length){
+
+      if(rowcount==3){
+        rowcount=0
+        allrows.push(<div key={count} className="row">{currow}</div>)
+        currow=[];
+      }
+      currow.push(allOrders[count])
+        count+=1
+        rowcount+=1;
+    }
+    allrows.push(<div key={count} className="row">{currow}</div>)
+
+
+
     if(allOrders.length==0){
       allOrders=<p>You have no pending purchases</p>
     }
@@ -76,7 +97,7 @@ var Total= React.createClass({
       <div className="ownerOrder row">
       <h2>Sells Pending</h2>
       <p>Click the <span className="removeOrder">X</span>  to remove cards not desired</p>
-      {allOrders}
+      {allrows}
 
       </div>
     )
@@ -198,7 +219,7 @@ var IndivCards = React.createClass({
     if(this.props.card.Promo){
       promo=<span>(Promo)</span>
     }
-    return(<div className={"row " + this.state.format}><p>{this.props.card.Qty} <b>{this.props.card.Name}</b> from {this.props.card.Set}{foil}{promo}<span id={this.props.card.curId} onClick={this.handleRemove} className="removeOrder">X</span></p></div>)
+    return(<div className={"row " + this.state.format}><p>{this.props.card.Qty} <b><a href={"#seeCard/"+this.props.card.Name}>{this.props.card.Name}</a></b> from {this.props.card.Set}{foil}{promo}<span id={this.props.card.curId} onClick={this.handleRemove} className="removeOrder">X</span></p></div>)
   },
 })
 

@@ -91,11 +91,17 @@ handleAddCard:function(e){
 
       }.bind(this))
 
+      var lowerText = ""
+      var checkoutButton=<div className="row"><a href="#checkout"><button style={{"float":"right"}} className="btn btn-primary checkout">Go to Check Out</button></a></div>
+    if(!Parse.User.current()){
+         lowerText=<h2>Please <a href="#signUp">sign up</a> or log in to check pricing</h2>
+         checkoutButton=""
+      }
 
     return(
       <div className="ownerCards row infoContainer">
-      <h1>Sell Your Cards</h1>
-
+      <h1>Check store pricing for selling your cards</h1>
+      {lowerText}
 
       <div className="col-md-4 col-xs-12 imageContainer">
           <h3>{this.state.curName}</h3>
@@ -160,7 +166,7 @@ handleAddCard:function(e){
             <div onClick={this.handleAddCard} className="row"><button type="submit" className="btn btn-lg btn-block btn-primary signinbutton">Add</button></div>
           </div>
       </form>
-      <a href="#checkout"><button style={{"float":"right"}} className="btn btn-primary">Go to Check Out</button></a>
+      {checkoutButton}
         </div>
 
 

@@ -92,20 +92,27 @@ var Total= React.createClass({
 
   },
   handleSearch:function(e){
+    e.preventDefault();
     var cardName = $("#cardName").val();
     this.setState({"searchCard":cardName})
   },
   render:function(){
     var self = this;
+    var count=0
+    var oddCards = [];
     var allCards = this.state.setInfo.map(function(item){
+      count+=1;
       if(self.state.searchCard =="" || self.state.searchCard==item.get("Name")){
-          return(<IndivCard parent={self} item = {item} id={item.id} key={item.id}/>)
+        if((count/2)==parseInt(count/2)){
+            return(<IndivCard parent={self} item = {item} id={item.id} key={item.id}/>)
+        }
+            oddCards.push(<IndivCard parent={self} item = {item} id={item.id} key={item.id}/>)
       }
     })
     return(
       <div className="ownerCards infoContainer row">
       <h2>Cards for sale</h2>
-      <div className="col-md-4">
+      <div className="col-md-2">
 
         <div>
               <h3>Search by Card</h3>
@@ -117,8 +124,8 @@ var Total= React.createClass({
 
 
       </div>
-      <div className="col-md-8">{allCards}</div>
-
+      <div className="col-md-5">{allCards}</div>
+      <div className="col-md-5">{oddCards}</div>
 
       </div>
     )
@@ -136,13 +143,17 @@ var IndivCard = React.createClass({
     if(this.props.item.get("Promo")){
       promo=<span>(Promo)</span>
     }
-    return(<p id={this.props.id} className="removeCard">
-            <span>{this.props.item.get("Name")}: {this.props.item.get("Qty")} from {this.props.item.get("Set")} {foil}{promo}</span>
-            <span className="buttonContainer"><button id={this.props.item.id} onClick={this.props.parent.handleRemove} className="btn btn-danger">Remove</button>
-            <button id={this.props.item.id} onClick={this.props.parent.handleDecrease} className="btn btn-danger">- 1</button>
-            <button id={this.props.item.id} onClick={this.props.parent.handleIncrease} className="btn btn-danger">+ 1</button>
-            </span>
-      </p>
+    return(<div id={this.props.id} className="removeCard row">
+            <div className="col-md-7">
+                <span>{this.props.item.get("Qty")} <b><a href={"#seeCard/"+this.props.item.get("Name")}>{this.props.item.get("Name")}</a></b>-{this.props.item.get("Set")} {foil}{promo}</span>
+            </div>
+            <div className="col-md-5">
+              <span className="buttonContainer"><button id={this.props.item.id} onClick={this.props.parent.handleRemove} className="btn btn-danger">Remove</button>
+              <button id={this.props.item.id} onClick={this.props.parent.handleDecrease} className="btn btn-danger">- 1</button>
+              <button id={this.props.item.id} onClick={this.props.parent.handleIncrease} className="btn btn-danger">+ 1</button>
+              </span>
+            </div>
+      </div>
     )
   },
 })

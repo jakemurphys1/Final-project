@@ -132,6 +132,9 @@ margin-top: -30px;
 
 
 .ownerCards{
+  h2{
+    text-align: center;
+  }
   h3{
     margin-top: -15px;
     margin-bottom: 30px;
@@ -215,7 +218,7 @@ margin-top: 6px;
 
 .removeCard{
   text-align: left;
-  margin-top: 20px;
+  margin-top: 5px;
   font-size: 20px;
   .buttonContainer{
   float:right;
@@ -396,5 +399,16 @@ button{
     margin-left:auto;
     margin-right: auto;
     display: block;
+  }
+}
+
+.seeCard{
+  h4{
+    text-align: center;
+  }
+  img{
+    margin-left: 20px;
+    width:400px;
+    height: auto;
   }
 }

@@ -5898,6 +5898,8 @@ body {
         width: 100px;
         margin-left: 20px; }
 
+.ownerCards h2 {
+  text-align: center; }
 .ownerCards h3 {
   margin-top: -15px;
   margin-bottom: 30px; }
@@ -5962,7 +5964,7 @@ body {
 
 .removeCard {
   text-align: left;
-  margin-top: 20px;
+  margin-top: 5px;
   font-size: 20px; }
   .removeCard .buttonContainer {
     float: right; }
@@ -6088,5 +6090,12 @@ body {
   margin-left: auto;
   margin-right: auto;
   display: block; }
+
+.seeCard h4 {
+  text-align: center; }
+.seeCard img {
+  margin-left: 20px;
+  width: 400px;
+  height: auto; }
 
 /*# sourceMappingURL=app.css.map */
