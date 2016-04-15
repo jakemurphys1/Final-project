@@ -312,7 +312,7 @@ var Home = React.createClass({displayName: "Home",
   React.createElement("div", {className: "Total"}, 
     React.createElement("div", {id: "signFloat", className: "hidden signFloat col-xs-6 col-md-3 col-md-offset-4"}), 
     React.createElement("div", {className: "header row"}, 
-      React.createElement("h1", null, "Gaming Local")
+      React.createElement("div", {className: "col-md-4 col-md-offset-4 title"}, React.createElement("h1", null, "Gaming Local"))
     ), 
     React.createElement("div", {className: "row"}, 
       React.createElement("div", {className: "col-xs-12 col-xs-offset-1"}, 
@@ -2935,8 +2935,8 @@ var allOrders = this.state.allOrders.sort(myAbcSort);
       React.createElement("div", {className: "ownerOrder row"}, 
       React.createElement("h2", null, "Orders Pending"), 
       React.createElement("div", {className: "row instructions"}, 
-        React.createElement("div", {className: "col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step One:"), React.createElement("p", null, "Receive a list of cards from customer. These cards will be from the cards you entered under the \"Add Cards to Sale\" tab. Remove the cards that are not available by clicking the ", React.createElement("span", {className: "removeOrder"}, "X"), " next to cards.")), 
-        React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Two:"), React.createElement("p", null, "Calculate price you are willing to sell those cards and type it into \"Price\" field for order. Click \"Send\" to send the price information back to the customer. Wait for reply.")), 
+        React.createElement("div", {className: "col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step One:"), React.createElement("p", null, "Receive a list of cards from customer. These cards will be from the cards you entered under the \"Add Cards to Sale\" tab. Remove the cards that are not available by clicking the ", React.createElement("span", {className: "removeOrder"}, "X"), " next to the card.")), 
+        React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Two:"), React.createElement("p", null, "Calculate the price you are willing to sell those cards and type it into \"Price\" field for order. Click \"Send\" to send the price information back to the customer. Wait for reply.")), 
         React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Three:"), React.createElement("p", null, "If the customer agrees to the price, the order will turn green. If they disagree, the order will simply be removed.")), 
           React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Four:"), React.createElement("p", null, "Set the cards aside for two days for pickup unless otherwise specified. If the customer hasn't retrieved the cards by then, delete the order, and put cards back for sale.")), 
           React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Five:"), React.createElement("p", null, "Once the customer has retrieved the cards, remember to remove them from your inventory by going to your \"View Cards\" tab and removing or reducing the card count."))
@@ -3332,11 +3332,11 @@ var Total= React.createClass({displayName: "Total",
       React.createElement("div", {className: "ownerOrder row"}, 
       React.createElement("h2", null, "Purchases Pending"), 
         React.createElement("div", {className: "row instructions"}, 
-          React.createElement("div", {className: "col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step One:"), React.createElement("p", null, "Create a list of cards, specifying the store to which to want to see the them. Click the \"Go To Check Out\" button at the bottom to go to check. Verify the information is correct, and click \"Send\" to send the list to the Store.")), 
+          React.createElement("div", {className: "col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step One:"), React.createElement("p", null, "Receive a list of cards from customer. These are cards the customer wants to sell to you. Remove any cards that you do not wish to purchase by clicking the ", React.createElement("span", {className: "removeOrder"}, "X"), " next to the card.")), 
           React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Two:"), React.createElement("p", null, "Calculate the price you are willing to buy those cards and type it into \"Price\" field for order. Click \"Send\" to send the price information back to the customer. Wait for reply.")), 
           React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Three:"), React.createElement("p", null, "If the customer agrees to the price, the order will turn green. If they disagree, the order will simply be removed.")), 
             React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Four:"), React.createElement("p", null, "The customer has two days to bring the cards to sell. After that, the purchase price will no longer be valid. Do not alter price before then.")), 
-            React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Five:"), React.createElement("p", null, "Once the customer has sold the cards, remember to add them to your inventory by going to your \"Add card to sale\" tab and adding the cards for sale if you wish to sale them."))
+            React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Five:"), React.createElement("p", null, "Once the customer has sold the cards, remember to add them from your inventory by going to your \"Add card to sale\" tab and adding the cards for sale if you wish to sale them."))
         ), 
       allrows
 

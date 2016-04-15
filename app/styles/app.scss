@@ -25,6 +25,7 @@ body{
   .header{
     background : url("../images/MagicPic.JPG");
     background-size: cover;
+    background-position: 0px -600px;
         height:180px;
         position: relative;
 
@@ -34,9 +35,8 @@ body{
     background-color:rgba(0,0,0,0.8);
     top:0;
     left:0;
-    bottom:1000;
+    bottom:0;
     right:0;
-    position: absolute;
     //z-index: -1;
 
   }
@@ -44,6 +44,13 @@ body{
     font-size: 60px;
     text-align: center;
           text-shadow: 2px 2px #111111;
+  }
+  .title{
+    background-color: rgb(235, 235, 235);
+    display: block;
+    border-radius: 5px;
+    margin-top: 30px;
+          box-shadow: 2px 2px #111111;
   }
   .logIn{
 margin-left:30px;
