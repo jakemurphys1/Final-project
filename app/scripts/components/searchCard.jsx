@@ -161,8 +161,14 @@ var searchCard = React.createClass({
       <div className="row searchCard">
         <div className="row">
           <h1>Copies of {this.props.cardName} for sale:</h1>
-
           {lowerText}
+          <div className="row instructions">
+            <div className="col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"><h4>Step One:</h4><p>Search for all the cards you want to purchase. Click "Add 1" to add the specific card from the specific store to your cart. Click "Add Foil" or "Add Promo" for foils or promos</p></div>
+            <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Two:</h4><p>Once you have completed your list, click the "Go to Check Out" to review your list. Verify the information is correct, then click "Send" to request prices for the cards from the store or stores.</p></div>
+            <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Three:</h4><p>Click the "Your Orders" tab on the home page to check on your requests. When the store replies with the price they are willing to sell the cards, the order will change color.</p></div>
+              <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Four:</h4><p>If you agreed to the prices, click agree. Otherwise, Click Decline to delete the order and try another offer or another store. </p></div>
+              <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Five:</h4><p>If you agree, you have two days to go to the store and purchase the cards. If you wait longer, the store reserves the right to withdraw the offer.</p></div>
+          </div>
           <div className="col-md-3 col-sm-12"><img src={this.state.curImage}  />
             <p>Images and card information courtesy of <a href ="https://deckbrew.com/">deckbrew.com</a></p>
           </div>

@@ -17,15 +17,28 @@ img {
 }
 
 body{
-    background-color: rgb(121, 86, 57);
+    background-color: white;
 }
 
 #container{
-  background-color: rgb(121, 86, 57);
+  background-color: white;
   .header{
-    background-image : url("../images/MagicPic.JPG");
+    background : url("../images/MagicPic.JPG");
     background-size: cover;
-        background-position: 0px -600px;
+        height:180px;
+        position: relative;
+
+  }
+  .header:after{
+    content:"";
+    background-color:rgba(0,0,0,0.8);
+    top:0;
+    left:0;
+    bottom:1000;
+    right:0;
+    position: absolute;
+    //z-index: -1;
+
   }
   h1{
     font-size: 60px;
@@ -46,19 +59,11 @@ margin-left:30px;
         cursor: pointer;
         color:red;
     }
-a{
-  text-decoration: none;
-  color:white;
-    text-shadow: 1px 1px #111111;
-}
-a:hover{
-  color:red;
-}
   }
   .infoContainer{
     border: rgb(44, 33, 21) solid 1px;
     border-radius:10px;
-    background-color: rgb(190, 157, 127);
+    background-color: rgb(235, 235, 235);
     margin:40px;
       box-shadow: 2px 2px #111111;
     h3{
@@ -138,6 +143,9 @@ margin-top: -30px;
   h3{
     margin-top: -15px;
     margin-bottom: 30px;
+  }
+  .balk{
+    margin-top: 50px;
   }
   img{
     width:300px;
@@ -240,8 +248,10 @@ margin-top: 6px;
         background-position: 0px -500px;
   }
   .footer{
+    padding-top: 40px;
+    padding-bottom:60px;
     text-align: center;
-    background-color:rgb(190, 157, 127);
+    background-color:rgb(235, 235, 235);
   }
 }
 
@@ -340,7 +350,7 @@ button{
 .infoContainerGREEN{
   border: rgb(44, 33, 21) solid 1px;
   border-radius:10px;
-  background-color: green;
+  background-color: rgb(119, 226, 55);
   margin:40px;
     box-shadow: 2px 2px #111111;
   h3{
@@ -415,4 +425,15 @@ button{
     width:400px;
     height: auto;
   }
+}
+
+.instructionContainer{
+  p{
+    padding:5;
+  }
+
+}
+.instructions{
+    background-color: rgb(235, 235, 235);
+
 }
