@@ -140,6 +140,13 @@ var Home = React.createClass({
         <div><a href="#allStores">View all Stores</a></div>
       </div>
     </div>
+
+    <div className="footer row">
+    <p>This website was created and is maintained by Jake Murphy</p>
+    <p>Contact him for any web development and design jobs</p>
+    <p>jakemurphys1@gmail.com</p>
+    <p><a href="http://jakemurphywebdesigner.com/">jakemurphywebdesiger.com</a></p>
+      </div>
   </div>
 )
   },

@@ -373,7 +373,14 @@ var Home = React.createClass({displayName: "Home",
         ), 
         React.createElement("div", null, React.createElement("a", {href: "#allStores"}, "View all Stores"))
       )
-    )
+    ), 
+
+    React.createElement("div", {className: "footer row"}, 
+    React.createElement("p", null, "This website was created and is maintained by Jake Murphy"), 
+    React.createElement("p", null, "Contact him for any web development and design jobs"), 
+    React.createElement("p", null, "jakemurphys1@gmail.com"), 
+    React.createElement("p", null, React.createElement("a", {href: "http://jakemurphywebdesigner.com/"}, "jakemurphywebdesiger.com"))
+      )
   )
 )
   },

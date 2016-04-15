@@ -5978,6 +5978,9 @@ body {
   background-image: url("../images/MagicPic.JPG");
   background-size: cover;
   background-position: 0px -500px; }
+.Total .footer {
+  text-align: center;
+  background-color: #be9d7f; }
 
 .searchCard p {
   font-size: 15px; }
