@@ -78,7 +78,7 @@ var Home = React.createClass({
   <div className="Total">
     <div id="signFloat" className="hidden signFloat col-xs-6 col-md-3 col-md-offset-4"></div>
     <div className="header row">
-      <h1>Gaming Local</h1>
+      <div className="col-md-4 col-md-offset-4 title"><h1>Gaming Local</h1></div>
     </div>
     <div className="row">
       <div className="col-xs-12 col-xs-offset-1">

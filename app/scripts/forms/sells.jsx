@@ -97,11 +97,11 @@ var Total= React.createClass({
       <div className="ownerOrder row">
       <h2>Purchases Pending</h2>
         <div className="row instructions">
-          <div className="col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"><h4>Step One:</h4><p>Create a list of cards, specifying the store to which to want to see the them. Click the "Go To Check Out" button at the bottom to go to check. Verify the information is correct, and click "Send" to send the list to the Store.</p></div>
+          <div className="col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"><h4>Step One:</h4><p>Receive a list of cards from customer. These are cards the customer wants to sell to you. Remove any cards that you do not wish to purchase by clicking the <span className="removeOrder">X</span> next to the card.</p></div>
           <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Two:</h4><p>Calculate the price you are willing to buy those cards and type it into "Price" field for order. Click "Send" to send the price information back to the customer. Wait for reply.</p></div>
           <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Three:</h4><p>If the customer agrees to the price, the order will turn green. If they disagree, the order will simply be removed.</p></div>
             <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Four:</h4><p>The customer has two days to bring the cards to sell. After that, the purchase price will no longer be valid. Do not alter price before then.</p></div>
-            <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Five:</h4><p>Once the customer has sold the cards, remember to add them to your inventory by going to your "Add card to sale" tab and adding the cards for sale if you wish to sale them.</p></div>
+            <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Five:</h4><p>Once the customer has sold the cards, remember to add them from your inventory by going to your "Add card to sale" tab and adding the cards for sale if you wish to sale them.</p></div>
         </div>
       {allrows}
 
