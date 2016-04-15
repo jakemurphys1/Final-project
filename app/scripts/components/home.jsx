@@ -58,30 +58,35 @@ var Home = React.createClass({
   render:function(){
       var currentUser = this.state.currentUser
       var storeSight = ""
-      var logContents = <span><span onClick={this.handleShowLogin} id="headerUser">Log In</span>
-        <span><a href="#signUp">Sign Up</a></span>
-        <span><a href="#register">Register Store</a></span>
-      </span>
+      var logContents = [<li onClick={this.handleShowLogin} id="headerUser"><a>Log In</a></li>,
+        <li><a href="#signUp">Sign Up</a></li>,
+        <li><a href="#register">Register Store</a></li>
+      ]
+      console.log(logContents)
 
       if(currentUser){
+
+          logContents =[<li onClick={this.handleLogOut} id="headerUser"><a>Log Out</a></li>,
+            <li><a href="#checkout">CheckOut</a></li>,
+            <li><a href="#orders">Your Orders</a></li>]
+
           if(currentUser.get("hasStore")){
-              storeSight = <span><a href="#owner">Manage Store</a></span>
+              logContents.push(<li><a href="#owner">Manage Store</a></li>)
           }
-          logContents =<span><span onClick={this.handleLogOut} id="headerUser">Log Out</span>
-            <span><a href="#checkout">CheckOut</a></span>
-            <span><a href="#orders">Your Orders</a></span>
-          </span>
       }
     return(
   <div className="Total">
     <div id="signFloat" className="hidden signFloat col-xs-6 col-md-3 col-md-offset-4"></div>
     <div className="header row">
       <h1>Gaming Local</h1>
-      <div className="logIn">
+    </div>
+    <div className="row">
+      <div className="col-xs-12 col-xs-offset-1">
+      <div className="list-inline nav nav-tabs tabs">
         {logContents}
-
             {storeSight}
       </div>
+    </div>
     </div>
 
     <div className="row">
@@ -140,6 +145,13 @@ var Home = React.createClass({
         <div><a href="#allStores">View all Stores</a></div>
       </div>
     </div>
+
+    <div className="footer row">
+    <p>This website was created and is maintained by Jake Murphy</p>
+    <p>Contact him for any web development and design jobs</p>
+    <p>jakemurphys1@gmail.com</p>
+    <p><a href="http://jakemurphywebdesigner.com/">jakemurphywebdesiger.com</a></p>
+      </div>
   </div>
 )
   },

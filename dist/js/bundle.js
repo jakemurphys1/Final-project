@@ -292,30 +292,35 @@ var Home = React.createClass({displayName: "Home",
   render:function(){
       var currentUser = this.state.currentUser
       var storeSight = ""
-      var logContents = React.createElement("span", null, React.createElement("span", {onClick: this.handleShowLogin, id: "headerUser"}, "Log In"), 
-        React.createElement("span", null, React.createElement("a", {href: "#signUp"}, "Sign Up")), 
-        React.createElement("span", null, React.createElement("a", {href: "#register"}, "Register Store"))
-      )
+      var logContents = [React.createElement("li", {onClick: this.handleShowLogin, id: "headerUser"}, React.createElement("a", null, "Log In")),
+        React.createElement("li", null, React.createElement("a", {href: "#signUp"}, "Sign Up")),
+        React.createElement("li", null, React.createElement("a", {href: "#register"}, "Register Store"))
+      ]
+      console.log(logContents)
 
       if(currentUser){
+
+          logContents =[React.createElement("li", {onClick: this.handleLogOut, id: "headerUser"}, React.createElement("a", null, "Log Out")),
+            React.createElement("li", null, React.createElement("a", {href: "#checkout"}, "CheckOut")),
+            React.createElement("li", null, React.createElement("a", {href: "#orders"}, "Your Orders"))]
+
           if(currentUser.get("hasStore")){
-              storeSight = React.createElement("span", null, React.createElement("a", {href: "#owner"}, "Manage Store"))
+              logContents.push(React.createElement("li", null, React.createElement("a", {href: "#owner"}, "Manage Store")))
           }
-          logContents =React.createElement("span", null, React.createElement("span", {onClick: this.handleLogOut, id: "headerUser"}, "Log Out"), 
-            React.createElement("span", null, React.createElement("a", {href: "#checkout"}, "CheckOut")), 
-            React.createElement("span", null, React.createElement("a", {href: "#orders"}, "Your Orders"))
-          )
       }
     return(
   React.createElement("div", {className: "Total"}, 
     React.createElement("div", {id: "signFloat", className: "hidden signFloat col-xs-6 col-md-3 col-md-offset-4"}), 
     React.createElement("div", {className: "header row"}, 
-      React.createElement("h1", null, "Gaming Local"), 
-      React.createElement("div", {className: "logIn"}, 
+      React.createElement("h1", null, "Gaming Local")
+    ), 
+    React.createElement("div", {className: "row"}, 
+      React.createElement("div", {className: "col-xs-12 col-xs-offset-1"}, 
+      React.createElement("div", {className: "list-inline nav nav-tabs tabs"}, 
         logContents, 
-
             storeSight
       )
+    )
     ), 
 
     React.createElement("div", {className: "row"}, 
@@ -373,7 +378,14 @@ var Home = React.createClass({displayName: "Home",
         ), 
         React.createElement("div", null, React.createElement("a", {href: "#allStores"}, "View all Stores"))
       )
-    )
+    ), 
+
+    React.createElement("div", {className: "footer row"}, 
+    React.createElement("p", null, "This website was created and is maintained by Jake Murphy"), 
+    React.createElement("p", null, "Contact him for any web development and design jobs"), 
+    React.createElement("p", null, "jakemurphys1@gmail.com"), 
+    React.createElement("p", null, React.createElement("a", {href: "http://jakemurphywebdesigner.com/"}, "jakemurphywebdesiger.com"))
+      )
   )
 )
   },
@@ -1115,8 +1127,14 @@ var searchCard = React.createClass({displayName: "searchCard",
       React.createElement("div", {className: "row searchCard"}, 
         React.createElement("div", {className: "row"}, 
           React.createElement("h1", null, "Copies of ", this.props.cardName, " for sale:"), 
-
           lowerText, 
+          React.createElement("div", {className: "row instructions"}, 
+            React.createElement("div", {className: "col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step One:"), React.createElement("p", null, "Search for all the cards you want to purchase. Click \"Add 1\" to add the specific card from the specific store to your cart. Click \"Add Foil\" or \"Add Promo\" for foils or promos")), 
+            React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Two:"), React.createElement("p", null, "Once you have completed your list, click the \"Go to Check Out\" to review your list. Verify the information is correct, then click \"Send\" to request prices for the cards from the store or stores.")), 
+            React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Three:"), React.createElement("p", null, "Click the \"Your Orders\" tab on the home page to check on your requests. When the store replies with the price they are willing to sell the cards, the order will change color.")), 
+              React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Four:"), React.createElement("p", null, "If you agreed to the prices, click agree. Otherwise, Click Decline to delete the order and try another offer or another store. ")), 
+              React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Five:"), React.createElement("p", null, "If you agree, you have two days to go to the store and purchase the cards. If you wait longer, the store reserves the right to withdraw the offer."))
+          ), 
           React.createElement("div", {className: "col-md-3 col-sm-12"}, React.createElement("img", {src: this.state.curImage}), 
             React.createElement("p", null, "Images and card information courtesy of ", React.createElement("a", {href: "https://deckbrew.com/"}, "deckbrew.com"))
           ), 
@@ -1450,10 +1468,17 @@ handleAddCard:function(e){
       }
 
     return(
-      React.createElement("div", {className: "ownerCards row infoContainer"}, 
+      React.createElement("div", {className: "ownerCards row"}, 
       React.createElement("h1", null, "Check store pricing for selling your cards"), 
+        React.createElement("div", {className: "row instructions"}, 
+          React.createElement("div", {className: "col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step One:"), React.createElement("p", null, "Create a list of cards, specifying the store to which to want to sell them. Your list will be shown on the right as you build it.")), 
+          React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Two:"), React.createElement("p", null, "Once you are done building the list, click the \"Go To Check Out\" button at the bottom. Verify the information is correct, and then click \"Send\" to send the list to the Store. Wait for reply.")), 
+          React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Three:"), React.createElement("p", null, "Click the \"Your Orders\" tab on the home page to check on your orders. When the store replies with the price, the order will change color.")), 
+            React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Four:"), React.createElement("p", null, "If you agreed to the prices, click agree. Otherwise, Click Decline to delete the order and try another offer or another store. ")), 
+            React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Five:"), React.createElement("p", null, "If you agree, you have two days to bring the cards to the store. If you wait longer, the store reserves the right to alter the price."))
+        ), 
       lowerText, 
-
+      React.createElement("div", {className: "row balk"}, 
       React.createElement("div", {className: "col-md-4 col-xs-12 imageContainer"}, 
           React.createElement("h3", null, this.state.curName), 
           React.createElement("div", null, React.createElement("img", {src: this.state.curImage})), 
@@ -1516,8 +1541,8 @@ handleAddCard:function(e){
           ), 
             React.createElement("div", {onClick: this.handleAddCard, className: "row"}, React.createElement("button", {type: "submit", className: "btn btn-lg btn-block btn-primary signinbutton"}, "Add"))
           )
-      ), 
-      checkoutButton
+      )
+
         ), 
 
 
@@ -1526,6 +1551,8 @@ handleAddCard:function(e){
               curCollection
             )
 
+), 
+  checkoutButton
       )
       )
   },
@@ -2907,7 +2934,13 @@ var allOrders = this.state.allOrders.sort(myAbcSort);
     return(
       React.createElement("div", {className: "ownerOrder row"}, 
       React.createElement("h2", null, "Orders Pending"), 
-      React.createElement("p", null, "Click the ", React.createElement("span", {className: "removeOrder"}, "X"), "  to remove cards not available"), 
+      React.createElement("div", {className: "row instructions"}, 
+        React.createElement("div", {className: "col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step One:"), React.createElement("p", null, "Receive a list of cards from customer. These cards will be from the cards you entered under the \"Add Cards to Sale\" tab. Remove the cards that are not available by clicking the ", React.createElement("span", {className: "removeOrder"}, "X"), " next to cards.")), 
+        React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Two:"), React.createElement("p", null, "Calculate price you are willing to sell those cards and type it into \"Price\" field for order. Click \"Send\" to send the price information back to the customer. Wait for reply.")), 
+        React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Three:"), React.createElement("p", null, "If the customer agrees to the price, the order will turn green. If they disagree, the order will simply be removed.")), 
+          React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Four:"), React.createElement("p", null, "Set the cards aside for two days for pickup unless otherwise specified. If the customer hasn't retrieved the cards by then, delete the order, and put cards back for sale.")), 
+          React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Five:"), React.createElement("p", null, "Once the customer has retrieved the cards, remember to remove them from your inventory by going to your \"View Cards\" tab and removing or reducing the card count."))
+      ), 
       allrows
 
       )
@@ -3297,8 +3330,14 @@ var Total= React.createClass({displayName: "Total",
     }
     return(
       React.createElement("div", {className: "ownerOrder row"}, 
-      React.createElement("h2", null, "Sells Pending"), 
-      React.createElement("p", null, "Click the ", React.createElement("span", {className: "removeOrder"}, "X"), "  to remove cards not desired"), 
+      React.createElement("h2", null, "Purchases Pending"), 
+        React.createElement("div", {className: "row instructions"}, 
+          React.createElement("div", {className: "col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step One:"), React.createElement("p", null, "Create a list of cards, specifying the store to which to want to see the them. Click the \"Go To Check Out\" button at the bottom to go to check. Verify the information is correct, and click \"Send\" to send the list to the Store.")), 
+          React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Two:"), React.createElement("p", null, "Calculate the price you are willing to buy those cards and type it into \"Price\" field for order. Click \"Send\" to send the price information back to the customer. Wait for reply.")), 
+          React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Three:"), React.createElement("p", null, "If the customer agrees to the price, the order will turn green. If they disagree, the order will simply be removed.")), 
+            React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Four:"), React.createElement("p", null, "The customer has two days to bring the cards to sell. After that, the purchase price will no longer be valid. Do not alter price before then.")), 
+            React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Five:"), React.createElement("p", null, "Once the customer has sold the cards, remember to add them to your inventory by going to your \"Add card to sale\" tab and adding the cards for sale if you wish to sale them."))
+        ), 
       allrows
 
       )

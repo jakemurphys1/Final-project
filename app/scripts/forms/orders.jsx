@@ -128,7 +128,13 @@ var allOrders = this.state.allOrders.sort(myAbcSort);
     return(
       <div className="ownerOrder row">
       <h2>Orders Pending</h2>
-      <p>Click the <span className="removeOrder">X</span>  to remove cards not available</p>
+      <div className="row instructions">
+        <div className="col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"><h4>Step One:</h4><p>Receive a list of cards from customer. These cards will be from the cards you entered under the "Add Cards to Sale" tab. Remove the cards that are not available by clicking the <span className="removeOrder">X</span> next to cards.</p></div>
+        <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Two:</h4><p>Calculate price you are willing to sell those cards and type it into "Price" field for order. Click "Send" to send the price information back to the customer. Wait for reply.</p></div>
+        <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Three:</h4><p>If the customer agrees to the price, the order will turn green. If they disagree, the order will simply be removed.</p></div>
+          <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Four:</h4><p>Set the cards aside for two days for pickup unless otherwise specified. If the customer hasn't retrieved the cards by then, delete the order, and put cards back for sale.</p></div>
+          <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Five:</h4><p>Once the customer has retrieved the cards, remember to remove them from your inventory by going to your "View Cards" tab and removing or reducing the card count.</p></div>
+      </div>
       {allrows}
 
       </div>

@@ -5818,14 +5818,23 @@ img {
   max-width: 100%; }
 
 body {
-  background-color: #795639; }
+  background-color: white; }
 
 #container {
-  background-color: #795639; }
+  background-color: white; }
   #container .header {
-    background-image: url("../images/MagicPic.JPG");
+    background: url("../images/MagicPic.JPG");
     background-size: cover;
-    background-position: 0px -600px; }
+    height: 180px;
+    position: relative; }
+  #container .header:after {
+    content: "";
+    background-color: rgba(0, 0, 0, 0.8);
+    top: 0;
+    left: 0;
+    bottom: 1000;
+    right: 0;
+    position: absolute; }
   #container h1 {
     font-size: 60px;
     text-align: center;
@@ -5841,16 +5850,10 @@ body {
     #container .logIn span:hover {
       cursor: pointer;
       color: red; }
-    #container .logIn a {
-      text-decoration: none;
-      color: white;
-      text-shadow: 1px 1px #111111; }
-    #container .logIn a:hover {
-      color: red; }
   #container .infoContainer {
     border: #2c2115 solid 1px;
     border-radius: 10px;
-    background-color: #be9d7f;
+    background-color: #ebebeb;
     margin: 40px;
     box-shadow: 2px 2px #111111; }
     #container .infoContainer h3 {
@@ -5903,6 +5906,8 @@ body {
 .ownerCards h3 {
   margin-top: -15px;
   margin-bottom: 30px; }
+.ownerCards .balk {
+  margin-top: 50px; }
 .ownerCards img {
   width: 300px;
   height: auto; }
@@ -5978,6 +5983,11 @@ body {
   background-image: url("../images/MagicPic.JPG");
   background-size: cover;
   background-position: 0px -500px; }
+.Total .footer {
+  padding-top: 40px;
+  padding-bottom: 60px;
+  text-align: center;
+  background-color: #ebebeb; }
 
 .searchCard p {
   font-size: 15px; }
@@ -6043,7 +6053,7 @@ body {
 .infoContainerGREEN {
   border: #2c2115 solid 1px;
   border-radius: 10px;
-  background-color: green;
+  background-color: #77e237;
   margin: 40px;
   box-shadow: 2px 2px #111111; }
   .infoContainerGREEN h3 {
@@ -6097,5 +6107,11 @@ body {
   margin-left: 20px;
   width: 400px;
   height: auto; }
+
+.instructionContainer p {
+  padding: 5; }
+
+.instructions {
+  background-color: #ebebeb; }
 
 /*# sourceMappingURL=app.css.map */

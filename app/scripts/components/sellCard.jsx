@@ -99,10 +99,17 @@ handleAddCard:function(e){
       }
 
     return(
-      <div className="ownerCards row infoContainer">
+      <div className="ownerCards row">
       <h1>Check store pricing for selling your cards</h1>
+        <div className="row instructions">
+          <div className="col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"><h4>Step One:</h4><p>Create a list of cards, specifying the store to which to want to sell them. Your list will be shown on the right as you build it.</p></div>
+          <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Two:</h4><p>Once you are done building the list, click the "Go To Check Out" button at the bottom. Verify the information is correct, and then click "Send" to send the list to the Store. Wait for reply.</p></div>
+          <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Three:</h4><p>Click the "Your Orders" tab on the home page to check on your orders. When the store replies with the price, the order will change color.</p></div>
+            <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Four:</h4><p>If you agreed to the prices, click agree. Otherwise, Click Decline to delete the order and try another offer or another store. </p></div>
+            <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Five:</h4><p>If you agree, you have two days to bring the cards to the store. If you wait longer, the store reserves the right to alter the price.</p></div>
+        </div>
       {lowerText}
-
+      <div className="row balk">
       <div className="col-md-4 col-xs-12 imageContainer">
           <h3>{this.state.curName}</h3>
           <div><img src={this.state.curImage}  /></div>
@@ -166,7 +173,7 @@ handleAddCard:function(e){
             <div onClick={this.handleAddCard} className="row"><button type="submit" className="btn btn-lg btn-block btn-primary signinbutton">Add</button></div>
           </div>
       </form>
-      {checkoutButton}
+
         </div>
 
 
@@ -175,6 +182,8 @@ handleAddCard:function(e){
               {curCollection}
             </div>
 
+</div>
+  {checkoutButton}
       </div>
       )
   },
