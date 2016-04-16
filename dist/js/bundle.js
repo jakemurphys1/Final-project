@@ -322,7 +322,17 @@ var Home = React.createClass({displayName: "Home",
       )
     )
     ), 
+React.createElement("div", {className: "row"}, 
 
+  React.createElement("div", {className: "infoContainer intro"}, 
+      React.createElement("h3", null, "Welcome to Gaming Local!"), 
+    React.createElement("h4", null, "Your one place for all things Magic: The gathering around the Greenville SC area."), 
+    React.createElement("p", null, "If you are a player, search for events based on date, or specials based on tags. Need some cards? See what the stores have, send a list, and they will reply with their prices. Looking to sell cards? Send a list to a store to check what they will buy them for."), 
+    React.createElement("p", null, "If you are a store owner, please register your store and enter your events, and specials. You can also build a list of all your cards you want to sell so players know what you have and allow them to request prices from you.")
+
+  )
+
+), 
     React.createElement("div", {className: "row"}, 
       React.createElement("div", {className: "col-md-5 homeEvent home infoContainer"}, 
         React.createElement("div", {className: "row"}, React.createElement("h2", null, "Events")), 

@@ -6120,4 +6120,10 @@ body {
 .instructions {
   background-color: #ebebeb; }
 
+.intro h3, .intro h4 {
+  text-align: center; }
+.intro p {
+  padding-left: 20px;
+  padding-right: 20px; }
+
 /*# sourceMappingURL=app.css.map */

@@ -88,7 +88,17 @@ var Home = React.createClass({
       </div>
     </div>
     </div>
+<div className="row">
 
+  <div className="infoContainer intro">
+      <h3>Welcome to Gaming Local!</h3>
+    <h4>Your one place for all things Magic: The gathering around the Greenville SC area.</h4>
+    <p>If you are a player, search for events based on date, or specials based on tags. Need some cards? See what the stores have, send a list, and they will reply with their prices. Looking to sell cards? Send a list to a store to check what they will buy them for.</p>
+    <p>If you are a store owner, please register your store and enter your events, and specials. You can also build a list of all your cards you want to sell so players know what you have and allow them to request prices from you.</p>
+
+  </div>
+
+</div>
     <div className="row">
       <div className="col-md-5 homeEvent home infoContainer">
         <div className="row"><h2>Events</h2></div>
