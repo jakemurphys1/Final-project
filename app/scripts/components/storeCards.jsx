@@ -9,6 +9,7 @@ var StoreCards= React.createClass({
   getInitialState:function(){
   return {
     "CurStore":[],
+    "loading":true,
   }
 },
   componentDidMount(){
@@ -20,7 +21,7 @@ var StoreCards= React.createClass({
       query.equalTo("storeName", this.props.storeName);
       query.find({
         success: function(results) {
-            self.setState({"CurStore":results})
+            self.setState({"CurStore":results,"loading":false})
             self.forceUpdate();
         },
         error: function(error) {
@@ -29,13 +30,17 @@ var StoreCards= React.createClass({
     })
   },
   render:function(){
-    var store = <p>Loading</p>;
+    var store = <div className="loadingContainer"><img src="images/Loading.gif" /></div>;
       var self=this;
-    if(this.state.CurStore.length>0){
+    if(this.state.loading==false){
         store=this.state.CurStore.map(function(item){
             return(<CardSample collection={self.props.collection} key = {item.id} item={item} />)
         })
     }
+    if(this.state.CurStore.length==0 && this.state.loading==false){
+      store=<p>This store has no cards posted.</p>
+    }
+
     //check if user logged in
     var lowerText =   <h3>Add cards to your cart, then submit for store owners to reply with the prices</h3>
     var checkoutButton=<div className="row"><a href="#checkout"><button style={{"float":"right"}} className="btn btn-primary checkout">Go to Check Out</button></a></div>

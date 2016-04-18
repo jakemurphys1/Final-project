@@ -9,6 +9,7 @@ var StoreSpecial= React.createClass({
   getInitialState:function(){
   return {
     "CurStore":[],
+    "loading":true,
   }
 },
   componentDidMount(){
@@ -20,9 +21,7 @@ var StoreSpecial= React.createClass({
       query.equalTo("storeName", this.props.storeName);
       query.find({
         success: function(results) {
-          console.log(results)
-          console.log("results",results[0].get("specialName1"))
-            self.setState({"CurStore":results})
+            self.setState({"CurStore":results,"loading":false})
             self.forceUpdate();
         },
         error: function(error) {
@@ -31,7 +30,7 @@ var StoreSpecial= React.createClass({
     })
   },
   render:function(){
-    var store = <p>Loading</p>;
+    var store = <div className="loadingContainer"><img src="images/Loading.gif" /></div>;
     if(this.state.CurStore.length>0){
       var name = this.state.CurStore[0];
       store=(<div>
@@ -52,6 +51,10 @@ var StoreSpecial= React.createClass({
         </div>
       </div>)
 
+    }
+    console.log(this.state.loading)
+    if(this.state.CurStore.length==0 && this.state.loading==false){
+      store=<p>This store has no specials posted.</p>
     }
       return(<div>
           {store}

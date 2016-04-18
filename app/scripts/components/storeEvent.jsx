@@ -9,6 +9,7 @@ var StoreSpecial= React.createClass({
   getInitialState:function(){
   return {
     "CurStore":[],
+    "loading":true,
   }
 },
   componentDidMount(){
@@ -20,7 +21,7 @@ var StoreSpecial= React.createClass({
       query.equalTo("storeName", this.props.storeName);
       query.find({
         success: function(results) {
-            self.setState({"CurStore":results})
+            self.setState({"CurStore":results,"loading":false})
             self.forceUpdate();
         },
         error: function(error) {
@@ -29,7 +30,7 @@ var StoreSpecial= React.createClass({
     })
   },
   render:function(){
-    var store = <p>Loading</p>;
+    var store = <div className="loadingContainer"><img src="images/Loading.gif" /></div>;
     if(this.state.CurStore.length>0){
         store=this.state.CurStore.map(function(item){
           //reformat the date
@@ -52,6 +53,10 @@ var StoreSpecial= React.createClass({
                 <p>{item.get("Description")}</p>
           </div>)
         })
+    }
+
+    if(this.state.CurStore.length==0 && this.state.loading==false){
+      store=<p>This store has no events posted.</p>
     }
       return(<div>
           <h1>Events for {this.props.storeName}</h1>

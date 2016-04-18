@@ -1214,7 +1214,6 @@ var searchEvent = React.createClass({displayName: "searchEvent",
 },
   componentDidMount:function(){
   //find card info from parse
-  console.log("users",this.props.userCollection)
   var currentUser = Parse.User.current();
   var self=this;
   var Event = Parse.Object.extend("Events");
@@ -1893,6 +1892,7 @@ var StoreCards= React.createClass({displayName: "StoreCards",
   getInitialState:function(){
   return {
     "CurStore":[],
+    "loading":true,
   }
 },
   componentDidMount(){
@@ -1904,7 +1904,7 @@ var StoreCards= React.createClass({displayName: "StoreCards",
       query.equalTo("storeName", this.props.storeName);
       query.find({
         success: function(results) {
-            self.setState({"CurStore":results})
+            self.setState({"CurStore":results,"loading":false})
             self.forceUpdate();
         },
         error: function(error) {
@@ -1913,13 +1913,17 @@ var StoreCards= React.createClass({displayName: "StoreCards",
     })
   },
   render:function(){
-    var store = React.createElement("p", null, "Loading");
+    var store = React.createElement("div", {className: "loadingContainer"}, React.createElement("img", {src: "images/Loading.gif"}));
       var self=this;
-    if(this.state.CurStore.length>0){
+    if(this.state.loading==false){
         store=this.state.CurStore.map(function(item){
             return(React.createElement(CardSample, {collection: self.props.collection, key: item.id, item: item}))
         })
     }
+    if(this.state.CurStore.length==0 && this.state.loading==false){
+      store=React.createElement("p", null, "This store has no cards posted.")
+    }
+
     //check if user logged in
     var lowerText =   React.createElement("h3", null, "Add cards to your cart, then submit for store owners to reply with the prices")
     var checkoutButton=React.createElement("div", {className: "row"}, React.createElement("a", {href: "#checkout"}, React.createElement("button", {style: {"float":"right"}, className: "btn btn-primary checkout"}, "Go to Check Out")))
@@ -2000,6 +2004,7 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
   getInitialState:function(){
   return {
     "CurStore":[],
+    "loading":true,
   }
 },
   componentDidMount(){
@@ -2011,7 +2016,7 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
       query.equalTo("storeName", this.props.storeName);
       query.find({
         success: function(results) {
-            self.setState({"CurStore":results})
+            self.setState({"CurStore":results,"loading":false})
             self.forceUpdate();
         },
         error: function(error) {
@@ -2020,7 +2025,7 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
     })
   },
   render:function(){
-    var store = React.createElement("p", null, "Loading");
+    var store = React.createElement("div", {className: "loadingContainer"}, React.createElement("img", {src: "images/Loading.gif"}));
     if(this.state.CurStore.length>0){
         store=this.state.CurStore.map(function(item){
           //reformat the date
@@ -2043,6 +2048,10 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
                 React.createElement("p", null, item.get("Description"))
           ))
         })
+    }
+
+    if(this.state.CurStore.length==0 && this.state.loading==false){
+      store=React.createElement("p", null, "This store has no events posted.")
     }
       return(React.createElement("div", null, 
           React.createElement("h1", null, "Events for ", this.props.storeName), 
@@ -2148,6 +2157,7 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
   getInitialState:function(){
   return {
     "CurStore":[],
+    "loading":true,
   }
 },
   componentDidMount(){
@@ -2159,9 +2169,7 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
       query.equalTo("storeName", this.props.storeName);
       query.find({
         success: function(results) {
-          console.log(results)
-          console.log("results",results[0].get("specialName1"))
-            self.setState({"CurStore":results})
+            self.setState({"CurStore":results,"loading":false})
             self.forceUpdate();
         },
         error: function(error) {
@@ -2170,7 +2178,7 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
     })
   },
   render:function(){
-    var store = React.createElement("p", null, "Loading");
+    var store = React.createElement("div", {className: "loadingContainer"}, React.createElement("img", {src: "images/Loading.gif"}));
     if(this.state.CurStore.length>0){
       var name = this.state.CurStore[0];
       store=(React.createElement("div", null, 
@@ -2191,6 +2199,10 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
         )
       ))
 
+    }
+    console.log(this.state.loading)
+    if(this.state.CurStore.length==0 && this.state.loading==false){
+      store=React.createElement("p", null, "This store has no specials posted.")
     }
       return(React.createElement("div", null, 
           store
