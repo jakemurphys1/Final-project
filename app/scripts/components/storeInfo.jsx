@@ -38,7 +38,7 @@ var StoreInfo= React.createClass({
           <div className="row">
             <div className="col-md-6">
               <p><b>Address:</b></p>
-              <p>{name.get("address")}, {name.get("city")} {name.get("state")} {name.get("zip")}</p>
+              <p>{name.get("address")}</p> <p>{name.get("city")}, {name.get("state")} {name.get("zip")}</p>
             </div>
             <div className="col-md-6">
               <p><b>Phone Number:</b></p>

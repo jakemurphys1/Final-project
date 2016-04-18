@@ -2104,7 +2104,7 @@ var StoreInfo= React.createClass({displayName: "StoreInfo",
           React.createElement("div", {className: "row"}, 
             React.createElement("div", {className: "col-md-6"}, 
               React.createElement("p", null, React.createElement("b", null, "Address:")), 
-              React.createElement("p", null, name.get("address"), ", ", name.get("city"), " ", name.get("state"), " ", name.get("zip"))
+              React.createElement("p", null, name.get("address")), " ", React.createElement("p", null, name.get("city"), ", ", name.get("state"), " ", name.get("zip"))
             ), 
             React.createElement("div", {className: "col-md-6"}, 
               React.createElement("p", null, React.createElement("b", null, "Phone Number:")), 
