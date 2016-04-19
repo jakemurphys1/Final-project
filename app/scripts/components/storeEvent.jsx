@@ -18,7 +18,10 @@ var StoreSpecial= React.createClass({
     var self=this;
     var Event = Parse.Object.extend("Events");
     var query = new Parse.Query(Event);
+    var thisDate = new Date(Date.now())
+    thisDate.setDate(thisDate.getDate() - 1);
       query.equalTo("storeName", this.props.storeName);
+      query.greaterThanOrEqualTo("Date", thisDate);
       query.find({
         success: function(results) {
             self.setState({"CurStore":results,"loading":false})
@@ -45,6 +48,7 @@ var StoreSpecial= React.createClass({
           var monthIndex = date.getMonth();
           var year = date.getFullYear();
           var redate = monthNames[monthIndex] + " " + day + " " + year
+
           return(<div key={item.id} className = "col-md-3 infoContainer">
                 <h3>{item.get("Name")}</h3>
                 <p>Format: {item.get("Format")}</p>
@@ -52,6 +56,7 @@ var StoreSpecial= React.createClass({
                 <p>From {item.get("startTime")} to {item.get("endTime")}</p>
                 <p>{item.get("Description")}</p>
           </div>)
+
         })
     }
 
