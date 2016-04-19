@@ -5826,8 +5826,22 @@ body {
     background: url("../images/MagicPic.JPG");
     background-size: cover;
     background-position: 0px -600px;
-    height: 180px;
+    height: 300px;
     position: relative; }
+    #container .header .overlay {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background-color: black;
+      opacity: 0.7; }
+    #container .header .title {
+      margin-top: 30px; }
+      #container .header .title img {
+        border-radius: 5px;
+        height: 200px;
+        width: 340px;
+        opacity: 1;
+        box-shadow: 4px 4px #111111; }
   #container .header:after {
     content: "";
     background-color: rgba(0, 0, 0, 0.8);
@@ -5839,12 +5853,6 @@ body {
     font-size: 60px;
     text-align: center;
     text-shadow: 2px 2px #111111; }
-  #container .title {
-    background-color: #ebebeb;
-    display: block;
-    border-radius: 5px;
-    margin-top: 30px;
-    box-shadow: 2px 2px #111111; }
   #container .logIn {
     margin-left: 30px; }
     #container .logIn span {
@@ -5868,7 +5876,7 @@ body {
     text-align: center;
     height: 230px; }
   #container .homeEvent input {
-    width: 150px; }
+    width: 130px; }
 
 .specialDescription {
   text-align: center; }
@@ -6134,5 +6142,12 @@ body {
   float: right;
   margin-right: 20px;
   margin-top: 20px; }
+
+.mana img {
+  width: 50px;
+  margin-left: 40px; }
+  @media screen and (max-width: 550px) {
+    .mana img {
+      margin-left: 0px; } }
 
 /*# sourceMappingURL=app.css.map */

@@ -78,7 +78,8 @@ var Home = React.createClass({
   <div className="Total">
     <div id="signFloat" className="hidden signFloat col-xs-6 col-md-3 col-md-offset-4"></div>
     <div className="header row">
-      <div className="col-md-4 col-md-offset-4 title"><h1>Gaming Local</h1></div>
+      <div className="overlay"></div>
+      <div className=" col-sm-8 col-sm-offset-4 col-xs-10 col-xs-offset-1 title"><img src="images/logo2.png" /></div>
     </div>
     <div className="row">
       <div className="col-xs-12 col-xs-offset-1">
@@ -99,6 +100,14 @@ var Home = React.createClass({
   </div>
 
 </div>
+
+<div className="row mana">
+  <div className="col-xs-2 col-xs-offset-1"><img src="images/Black.gif" /></div>
+    <div className="col-xs-2"><img src="images/Red.gif" /></div>
+      <div className="col-xs-2"><img src="images/Green.gif" /></div>
+  <div className="col-xs-2"><img src="images/White.gif" /></div>
+  <div className="col-xs-2"><img src="images/Blue.gif" /></div>
+</div>
     <div className="row">
       <div className="col-md-5 homeEvent home infoContainer">
         <div className="row"><h2>Events</h2></div>
@@ -106,11 +115,11 @@ var Home = React.createClass({
           <form id="eventDate" onSubmit={this.handleEvent} action="" className="form-events">
               <div className="col-xs-6">
                 <label>StartDate</label>
-                  <p><input id="startDate" type="date" name="startDate" placeholder="Start Date"/></p>
+                  <p><input id="startDate" class="dateHolder" type="date" name="startDate" placeholder="Start Date"/></p>
               </div>
               <div className="col-xs-6">
                 <label>EndDate</label>
-                  <p><input id="endDate" type="date" name="endDate" placeholder="End Date"/></p>
+                  <p><input id="endDate" type="date" name="endDate" class="dateHolder" placeholder="End Date"/></p>
               </div>
                   <p><button className="btn btn-primary Search">Search</button></p>
           </form>
@@ -160,11 +169,12 @@ var Home = React.createClass({
     <p>This website was created and is maintained by Jake Murphy</p>
     <p>Contact him for any web development and design jobs</p>
     <p>jakemurphys1@gmail.com</p>
-    <p><a href="http://jakemurphywebdesigner.com/">jakemurphywebdesiger.com</a></p>
+    <p><a href="http://jakemurphywebdesigner.com/">jakemurphywebdesigner.com</a></p>
       </div>
   </div>
 )
   },
 })
 
+//<div>Logo made by <a href="http://logotypemaker.com" title="Free Logo Maker">LogotypeMaker.com</a> | licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
 module.exports=Home;

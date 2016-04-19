@@ -312,7 +312,8 @@ var Home = React.createClass({displayName: "Home",
   React.createElement("div", {className: "Total"}, 
     React.createElement("div", {id: "signFloat", className: "hidden signFloat col-xs-6 col-md-3 col-md-offset-4"}), 
     React.createElement("div", {className: "header row"}, 
-      React.createElement("div", {className: "col-md-4 col-md-offset-4 title"}, React.createElement("h1", null, "Gaming Local"))
+      React.createElement("div", {className: "overlay"}), 
+      React.createElement("div", {className: " col-sm-8 col-sm-offset-4 col-xs-10 col-xs-offset-1 title"}, React.createElement("img", {src: "images/logo2.png"}))
     ), 
     React.createElement("div", {className: "row"}, 
       React.createElement("div", {className: "col-xs-12 col-xs-offset-1"}, 
@@ -333,6 +334,14 @@ React.createElement("div", {className: "row"},
   )
 
 ), 
+
+React.createElement("div", {className: "row mana"}, 
+  React.createElement("div", {className: "col-xs-2 col-xs-offset-1"}, React.createElement("img", {src: "images/Black.gif"})), 
+    React.createElement("div", {className: "col-xs-2"}, React.createElement("img", {src: "images/Red.gif"})), 
+      React.createElement("div", {className: "col-xs-2"}, React.createElement("img", {src: "images/Green.gif"})), 
+  React.createElement("div", {className: "col-xs-2"}, React.createElement("img", {src: "images/White.gif"})), 
+  React.createElement("div", {className: "col-xs-2"}, React.createElement("img", {src: "images/Blue.gif"}))
+), 
     React.createElement("div", {className: "row"}, 
       React.createElement("div", {className: "col-md-5 homeEvent home infoContainer"}, 
         React.createElement("div", {className: "row"}, React.createElement("h2", null, "Events")), 
@@ -340,11 +349,11 @@ React.createElement("div", {className: "row"},
           React.createElement("form", {id: "eventDate", onSubmit: this.handleEvent, action: "", className: "form-events"}, 
               React.createElement("div", {className: "col-xs-6"}, 
                 React.createElement("label", null, "StartDate"), 
-                  React.createElement("p", null, React.createElement("input", {id: "startDate", type: "date", name: "startDate", placeholder: "Start Date"}))
+                  React.createElement("p", null, React.createElement("input", {id: "startDate", class: "dateHolder", type: "date", name: "startDate", placeholder: "Start Date"}))
               ), 
               React.createElement("div", {className: "col-xs-6"}, 
                 React.createElement("label", null, "EndDate"), 
-                  React.createElement("p", null, React.createElement("input", {id: "endDate", type: "date", name: "endDate", placeholder: "End Date"}))
+                  React.createElement("p", null, React.createElement("input", {id: "endDate", type: "date", name: "endDate", class: "dateHolder", placeholder: "End Date"}))
               ), 
                   React.createElement("p", null, React.createElement("button", {className: "btn btn-primary Search"}, "Search"))
           )
@@ -394,13 +403,14 @@ React.createElement("div", {className: "row"},
     React.createElement("p", null, "This website was created and is maintained by Jake Murphy"), 
     React.createElement("p", null, "Contact him for any web development and design jobs"), 
     React.createElement("p", null, "jakemurphys1@gmail.com"), 
-    React.createElement("p", null, React.createElement("a", {href: "http://jakemurphywebdesigner.com/"}, "jakemurphywebdesiger.com"))
+    React.createElement("p", null, React.createElement("a", {href: "http://jakemurphywebdesigner.com/"}, "jakemurphywebdesigner.com"))
       )
   )
 )
   },
 })
 
+//<div>Logo made by <a href="http://logotypemaker.com" title="Free Logo Maker">LogotypeMaker.com</a> | licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
 module.exports=Home;
 
 },{"./login.jsx":3,"backbone":47,"jquery":151,"parse":152,"react":339,"react-bootstrap/lib/Input":201,"react-dom":207}],3:[function(require,module,exports){
