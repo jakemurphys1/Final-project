@@ -9,49 +9,75 @@ var Total= React.createClass({
   getInitialState:function(){
     return {
       "eventList":[],
+      "allDates":[<p><input key={1} id="eventDate1" type="date" name="eventDate" placeholder="Event Date"/></p>],
+      "dateCount":1,
     }
+  },
+  handleAddDate:function(){
+    var newDates = this.state.allDates;
+    newDates.push(<p><input key={this.state.dateCount + 1} id={"eventDate" +  (this.state.dateCount + 1)} type="date" name="eventDate" placeholder="Event Date"/></p>)
+    this.setState({"allDates":newDates,"dateCount":this.state.dateCount+1})
   },
   handleAddEvent:function(e){
     e.preventDefault();
     if($("#eventName").val()==""){
-      alert("Please enter a Name for your event")
       return
     }
     if($("#eventDate").val()==""){
-      alert("Please enter a Date")
       return
     }
     if($("#eventFormat").val()==""){
-      alert("Please enter a Format")
       return
     }
     var currentUser = Parse.User.current();
     var Events = Parse.Object.extend("Events");
-    var events = new Events();
+    var dataList=[];
     var self=this;
-    var data = {
-      "Name":$("#eventName").val(),
-      "Format":$("#eventFormat").val(),
-      "Date":new Date($("#eventDate").val()),
-      "startTime":$("#startTime").val(),
-      "endTime":$("#endTime").val(),
-      "Description":$("#Description").val(),
-      "userName":currentUser.getUsername(),
-      "storeName":this.props.storeName,
+    var dateCount=this.state.dateCount;
+
+    for(var i =1;i<=dateCount;i++){
+
+      var data = {
+        "Name":$("#eventName").val(),
+        "Format":$("#eventFormat").val(),
+        "Date":new Date($("#eventDate" + i).val()),
+        "startTime":$("#startTime").val(),
+        "endTime":$("#endTime").val(),
+        "Description":$("#Description").val(),
+        "userName":currentUser.getUsername(),
+        "storeName":this.props.storeName,
+      }
+      if($("#eventDate" + i).val()){
+        var events = new Events(data);
+      dataList.push(events)
+      }
+
+
     }
-    events.save(data).then(function(object) {
-      var newResults = Object.sort(function(a,b) {
-            return new Date(a.get("Date")).getTime() - new Date(b.get("Date")).getTime()
-      });
-        self.setState({"eventList":newResults})
-            self.forceUpdate();
+
+    Parse.Object.saveAll(dataList,{
+      success:function(object){
+        console.log("here")
+        var newResults = object.sort(function(a,b) {
+          return new Date(a.get("Date")).getTime() - new Date(b.get("Date")).getTime()
+        });
+
+
+                    $("#eventName").val("")
+                    $("#eventFormat").val("")
+                    $("#eventDate1").val("")
+                    $("#startTime").val("")
+                    $("#endTime").val("")
+                    $("#Description").val("")
+                      // self.replaceState(self.getInitialState())
+                      //     self.setState({"eventList":newResults})
+                      location.reload()
+                      self.forceUpdate();
+      },
     })
-    $("#eventName").val("")
-    $("#eventFormat").val("")
-    $("#eventDate").val("")
-    $("#startTime").val("")
-    $("#endTime").val("")
-    $("#Description").val("")
+
+
+
 
   },
   componentDidMount(){
@@ -61,6 +87,7 @@ var Total= React.createClass({
     var Event = Parse.Object.extend("Events");
     var eventQuery = new Parse.Query(Event);
     var thisDate = new Date(Date.now())
+    thisDate.setDate(thisDate.getDate() - 1);
 
       eventQuery.greaterThanOrEqualTo("Date", thisDate);
       eventQuery.equalTo("userName", currentUser.getUsername());
@@ -82,7 +109,6 @@ var Total= React.createClass({
     var eventList=this.state.eventList.map(function(event){
         return(<IndivEvent parent={self} key={event.id} event={event} />)
     })
-
     return(<div className="ownerEvent infoContainer row">
       <h3>Events</h3>
       <form onSubmit={this.handleAddEvent} id="eventForm" action="" className="form-events">
@@ -91,14 +117,20 @@ var Total= React.createClass({
               <input id="eventName" type="text" name="eventName" placeholder="Event Name"/>
               <div className="row"><label>Format</label></div>
               <input id="eventFormat" type="text" name="eventFormat" placeholder="Standard, Modern, ect."/>
-                    <div className="row"><label>Date</label></div>
-              <input id="eventDate" type="date" name="eventDate" placeholder="Event Date"/>
+                <div className="row times">
+                        <div className="row"><label>Time</label></div>
+                  <input id="startTime" type="time" name="startTime" placeholder="Start Time"/>
+                  <input id="endTime" type="time" name="endTime" placeholder="End Time"/>
+                </div>
+                    <div className="row"><label>Date(s)</label>
+                    <p>Create multiple events with the same information but different dates.</p>
+                    <p><button type="button" onClick={this.handleAddDate} className="btn btn-primary addDate">Add More Dates</button></p>
+                    </div>
 
-            <div className="row times">
-                    <div className="row"><label>Time</label></div>
-              <input id="startTime" type="time" name="startTime" placeholder="Start Time"/>
-              <input id="endTime" type="time" name="endTime" placeholder="End Time"/>
-            </div>
+                      {this.state.allDates}
+
+
+
 
           </div>
           <div className="col-md-4 col-sm-12"><textarea id="Description" placeholder="Details of the event"></textarea>
@@ -134,7 +166,6 @@ var IndivEvent = React.createClass({
     this.props.parent.setState({"eventList":eventList})
   },
   render:function(){
-    console.log("id",this.props.event.id)
     var monthNames = [
       "January", "February", "March",
       "April", "May", "June", "July",

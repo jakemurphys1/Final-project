@@ -115,7 +115,7 @@ var Description = React.createClass({
     return(<div className="infoContainer">
         <h1>{this.props.item.get("Name")}</h1>
         <p>{this.props.item.get("Description")}</p>
-        <button onClick={this.handleBack} className="btn btn-secondary">Back</button>
+        <button onClick={this.handleBack} className="btn btn-secondary back">Back</button>
         </div>
     )
   }

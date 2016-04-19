@@ -386,6 +386,11 @@ button{
     margin-left: 5px;
       float:right;
   }
+  .addDate{
+    margin-top: -10px;
+    width:120px;
+float:none;
+  }
 }
 
 .removeOrder{
@@ -453,4 +458,10 @@ button{
     padding-left:20px;
     padding-right:20px;
   }
+}
+
+.back{
+  float:right;
+  margin-right:20px;
+  margin-top:20px;
 }

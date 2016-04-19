@@ -6082,6 +6082,10 @@ body {
   background-color: red;
   margin-left: 5px;
   float: right; }
+.ownerEvent .addDate {
+  margin-top: -10px;
+  width: 120px;
+  float: none; }
 
 .removeOrder {
   border: black solid 1px;
@@ -6125,5 +6129,10 @@ body {
 .intro p {
   padding-left: 20px;
   padding-right: 20px; }
+
+.back {
+  float: right;
+  margin-right: 20px;
+  margin-top: 20px; }
 
 /*# sourceMappingURL=app.css.map */

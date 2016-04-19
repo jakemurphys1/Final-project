@@ -1314,7 +1314,7 @@ var Description = React.createClass({displayName: "Description",
     return(React.createElement("div", {className: "infoContainer"}, 
         React.createElement("h1", null, this.props.item.get("Name")), 
         React.createElement("p", null, this.props.item.get("Description")), 
-        React.createElement("button", {onClick: this.handleBack, className: "btn btn-secondary"}, "Back")
+        React.createElement("button", {onClick: this.handleBack, className: "btn btn-secondary back"}, "Back")
         )
     )
   }
@@ -2503,49 +2503,75 @@ var Total= React.createClass({displayName: "Total",
   getInitialState:function(){
     return {
       "eventList":[],
+      "allDates":[React.createElement("p", null, React.createElement("input", {key: 1, id: "eventDate1", type: "date", name: "eventDate", placeholder: "Event Date"}))],
+      "dateCount":1,
     }
+  },
+  handleAddDate:function(){
+    var newDates = this.state.allDates;
+    newDates.push(React.createElement("p", null, React.createElement("input", {key: this.state.dateCount + 1, id: "eventDate" +  (this.state.dateCount + 1), type: "date", name: "eventDate", placeholder: "Event Date"})))
+    this.setState({"allDates":newDates,"dateCount":this.state.dateCount+1})
   },
   handleAddEvent:function(e){
     e.preventDefault();
     if($("#eventName").val()==""){
-      alert("Please enter a Name for your event")
       return
     }
     if($("#eventDate").val()==""){
-      alert("Please enter a Date")
       return
     }
     if($("#eventFormat").val()==""){
-      alert("Please enter a Format")
       return
     }
     var currentUser = Parse.User.current();
     var Events = Parse.Object.extend("Events");
-    var events = new Events();
+    var dataList=[];
     var self=this;
-    var data = {
-      "Name":$("#eventName").val(),
-      "Format":$("#eventFormat").val(),
-      "Date":new Date($("#eventDate").val()),
-      "startTime":$("#startTime").val(),
-      "endTime":$("#endTime").val(),
-      "Description":$("#Description").val(),
-      "userName":currentUser.getUsername(),
-      "storeName":this.props.storeName,
+    var dateCount=this.state.dateCount;
+
+    for(var i =1;i<=dateCount;i++){
+
+      var data = {
+        "Name":$("#eventName").val(),
+        "Format":$("#eventFormat").val(),
+        "Date":new Date($("#eventDate" + i).val()),
+        "startTime":$("#startTime").val(),
+        "endTime":$("#endTime").val(),
+        "Description":$("#Description").val(),
+        "userName":currentUser.getUsername(),
+        "storeName":this.props.storeName,
+      }
+      if($("#eventDate" + i).val()){
+        var events = new Events(data);
+      dataList.push(events)
+      }
+
+
     }
-    events.save(data).then(function(object) {
-      var newResults = Object.sort(function(a,b) {
-            return new Date(a.get("Date")).getTime() - new Date(b.get("Date")).getTime()
-      });
-        self.setState({"eventList":newResults})
-            self.forceUpdate();
+
+    Parse.Object.saveAll(dataList,{
+      success:function(object){
+        console.log("here")
+        var newResults = object.sort(function(a,b) {
+          return new Date(a.get("Date")).getTime() - new Date(b.get("Date")).getTime()
+        });
+
+
+                    $("#eventName").val("")
+                    $("#eventFormat").val("")
+                    $("#eventDate1").val("")
+                    $("#startTime").val("")
+                    $("#endTime").val("")
+                    $("#Description").val("")
+                      // self.replaceState(self.getInitialState())
+                      //     self.setState({"eventList":newResults})
+                      location.reload()
+                      self.forceUpdate();
+      },
     })
-    $("#eventName").val("")
-    $("#eventFormat").val("")
-    $("#eventDate").val("")
-    $("#startTime").val("")
-    $("#endTime").val("")
-    $("#Description").val("")
+
+
+
 
   },
   componentDidMount(){
@@ -2555,6 +2581,7 @@ var Total= React.createClass({displayName: "Total",
     var Event = Parse.Object.extend("Events");
     var eventQuery = new Parse.Query(Event);
     var thisDate = new Date(Date.now())
+    thisDate.setDate(thisDate.getDate() - 1);
 
       eventQuery.greaterThanOrEqualTo("Date", thisDate);
       eventQuery.equalTo("userName", currentUser.getUsername());
@@ -2576,7 +2603,6 @@ var Total= React.createClass({displayName: "Total",
     var eventList=this.state.eventList.map(function(event){
         return(React.createElement(IndivEvent, {parent: self, key: event.id, event: event}))
     })
-
     return(React.createElement("div", {className: "ownerEvent infoContainer row"}, 
       React.createElement("h3", null, "Events"), 
       React.createElement("form", {onSubmit: this.handleAddEvent, id: "eventForm", action: "", className: "form-events"}, 
@@ -2585,14 +2611,20 @@ var Total= React.createClass({displayName: "Total",
               React.createElement("input", {id: "eventName", type: "text", name: "eventName", placeholder: "Event Name"}), 
               React.createElement("div", {className: "row"}, React.createElement("label", null, "Format")), 
               React.createElement("input", {id: "eventFormat", type: "text", name: "eventFormat", placeholder: "Standard, Modern, ect."}), 
-                    React.createElement("div", {className: "row"}, React.createElement("label", null, "Date")), 
-              React.createElement("input", {id: "eventDate", type: "date", name: "eventDate", placeholder: "Event Date"}), 
+                React.createElement("div", {className: "row times"}, 
+                        React.createElement("div", {className: "row"}, React.createElement("label", null, "Time")), 
+                  React.createElement("input", {id: "startTime", type: "time", name: "startTime", placeholder: "Start Time"}), 
+                  React.createElement("input", {id: "endTime", type: "time", name: "endTime", placeholder: "End Time"})
+                ), 
+                    React.createElement("div", {className: "row"}, React.createElement("label", null, "Date(s)"), 
+                    React.createElement("p", null, "Create multiple events with the same information but different dates."), 
+                    React.createElement("p", null, React.createElement("button", {type: "button", onClick: this.handleAddDate, className: "btn btn-primary addDate"}, "Add More Dates"))
+                    ), 
 
-            React.createElement("div", {className: "row times"}, 
-                    React.createElement("div", {className: "row"}, React.createElement("label", null, "Time")), 
-              React.createElement("input", {id: "startTime", type: "time", name: "startTime", placeholder: "Start Time"}), 
-              React.createElement("input", {id: "endTime", type: "time", name: "endTime", placeholder: "End Time"})
-            )
+                      this.state.allDates
+
+
+
 
           ), 
           React.createElement("div", {className: "col-md-4 col-sm-12"}, React.createElement("textarea", {id: "Description", placeholder: "Details of the event"}), 
@@ -2628,7 +2660,6 @@ var IndivEvent = React.createClass({displayName: "IndivEvent",
     this.props.parent.setState({"eventList":eventList})
   },
   render:function(){
-    console.log("id",this.props.event.id)
     var monthNames = [
       "January", "February", "March",
       "April", "May", "June", "July",
