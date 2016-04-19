@@ -170,11 +170,11 @@ var Home = React.createClass({
     <p>Contact him for any web development and design jobs</p>
     <p>jakemurphys1@gmail.com</p>
     <p><a href="http://jakemurphywebdesigner.com/">jakemurphywebdesigner.com</a></p>
+    <div>Logo made by <a href="http://logotypemaker.com" title="Free Logo Maker">LogotypeMaker.com</a> | licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
       </div>
   </div>
 )
   },
 })
 
-//<div>Logo made by <a href="http://logotypemaker.com" title="Free Logo Maker">LogotypeMaker.com</a> | licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
 module.exports=Home;

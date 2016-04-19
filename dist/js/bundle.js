@@ -403,14 +403,14 @@ React.createElement("div", {className: "row mana"},
     React.createElement("p", null, "This website was created and is maintained by Jake Murphy"), 
     React.createElement("p", null, "Contact him for any web development and design jobs"), 
     React.createElement("p", null, "jakemurphys1@gmail.com"), 
-    React.createElement("p", null, React.createElement("a", {href: "http://jakemurphywebdesigner.com/"}, "jakemurphywebdesigner.com"))
+    React.createElement("p", null, React.createElement("a", {href: "http://jakemurphywebdesigner.com/"}, "jakemurphywebdesigner.com")), 
+    React.createElement("div", null, "Logo made by ", React.createElement("a", {href: "http://logotypemaker.com", title: "Free Logo Maker"}, "LogotypeMaker.com"), " | licensed by ", React.createElement("a", {href: "http://creativecommons.org/licenses/by/3.0/", title: "Creative Commons BY 3.0"}, "CC BY 3.0"))
       )
   )
 )
   },
 })
 
-//<div>Logo made by <a href="http://logotypemaker.com" title="Free Logo Maker">LogotypeMaker.com</a> | licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
 module.exports=Home;
 
 },{"./login.jsx":3,"backbone":47,"jquery":151,"parse":152,"react":339,"react-bootstrap/lib/Input":201,"react-dom":207}],3:[function(require,module,exports){
