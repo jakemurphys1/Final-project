@@ -5874,7 +5874,7 @@ body {
       margin-top: 20px; }
   #container .home {
     text-align: center;
-    height: 230px; }
+    min-height: 230px; }
   #container .homeEvent input {
     width: 130px; }
 

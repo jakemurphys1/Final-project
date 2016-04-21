@@ -979,8 +979,7 @@ var SignUp = React.createClass({displayName: "SignUp",
         }
 
       }
-console.log("got through!")
-return;
+
           var $form = $(this);
           var userData={"username":$("#signupUsername").val(),"password":$("#signupPassword1").val(),"Fname":$("#signupFname").val(),
                       "Lname":$("#signupLname").val(),"storeName":$("#signupStoreName").val(),"hasStore":true,"PersonalEmail":$("#signupEmail").val(),}
