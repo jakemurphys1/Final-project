@@ -24,6 +24,8 @@ var StoreInfoForm =require("./components/storeInfo.jsx")
 var CheckoutForm =require("./components/checkout.jsx")
 var OrderForm =require("./components/orders.jsx")
 var SeeCardForm =require("./components/seeCard.jsx")
+var LoginForm=require("./components/login.jsx")
+var ChangeForm=require("./components/changepassword.jsx")
 //Models
 var model = require("./models/models.js");
 var OrderModel = new model.Model();
@@ -56,6 +58,8 @@ var Router = Backbone.Router.extend({
     "register":"register",
     "signin":"signin",
     "signUp":"signUp",
+      "login":"login",
+    "change":"change",
     "searchEvent/:dates":"searchEvent",
     "searchCard/:name":"searchCard",
     "sellCard/:name":"sellCard",
@@ -75,11 +79,19 @@ var Router = Backbone.Router.extend({
   },
   home:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<HomeForm router={this}/>,homeContainer)
+    ReactDOM.render(<HomeForm storeCollection={StoreCollection} router={this}/>,homeContainer)
   },
   signUp:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
     ReactDOM.render(<SignUpForm router={this}/>,homeContainer)
+  },
+  login:function(){
+    ReactDOM.unmountComponentAtNode(document.getElementById("signFloat"));
+      ReactDOM.render(<LoginForm />,document.getElementById("signFloat"))
+  },
+  change:function(type){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+      ReactDOM.render(<ChangeForm />,homeContainer)
   },
   searchEvent:function(id){
     var dates = id.split("_")

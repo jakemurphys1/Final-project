@@ -11,7 +11,8 @@ var LoginForm=require("./login.jsx")
 var Home = React.createClass({
   componentDidMount(){
     var self=this;
-    ReactDOM.render(<LoginForm parent={self} />,document.getElementById("signFloat"))
+    console.log("collection",this.props.storeCollection)
+    ReactDOM.render(<LoginForm storeCollection={this.props.storeCollection} parent={self} />,document.getElementById("signFloat"))
   },
   getInitialState:function(){
       return {
@@ -115,11 +116,11 @@ var Home = React.createClass({
           <form id="eventDate" onSubmit={this.handleEvent} action="" className="form-events">
               <div className="col-xs-6">
                 <label>StartDate</label>
-                  <p><input id="startDate" class="dateHolder" type="date" name="startDate" placeholder="Start Date"/></p>
+                  <p><input id="startDate" className="dateHolder" type="date" name="startDate" placeholder="Start Date"/></p>
               </div>
               <div className="col-xs-6">
                 <label>EndDate</label>
-                  <p><input id="endDate" type="date" name="endDate" class="dateHolder" placeholder="End Date"/></p>
+                  <p><input id="endDate" type="date" name="endDate" className="dateHolder" placeholder="End Date"/></p>
               </div>
                   <p><button className="btn btn-primary Search">Search</button></p>
           </form>
