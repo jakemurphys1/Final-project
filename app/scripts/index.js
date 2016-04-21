@@ -154,7 +154,7 @@ var Router = Backbone.Router.extend({
   },
   register:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<RegisterForm router={this}/>,homeContainer)
+    ReactDOM.render(<RegisterForm storeCollection={StoreCollection} router={this}/>,homeContainer)
   },
   checkout:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);

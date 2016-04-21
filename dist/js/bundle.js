@@ -966,7 +966,21 @@ var SignUp = React.createClass({displayName: "SignUp",
         alert("Your passwords did not match.")
         return;
       }
+      var uniqueStoreName=this.props.storeCollection
+      console.log("storeCollection",uniqueStoreName[0].get("storeName"))
+      for(var i =0;i<uniqueStoreName.length;i++){
+        if($("#signupStoreName").val()==uniqueStoreName[i].get("storeName")){
+          alert("That store name has already been taken, please use another.")
+          return
+        }
+        if($("#signupUsername").val()==uniqueStoreName[i].get("username")){
+          alert("That username has already been taken, please use another.")
+          return
+        }
 
+      }
+console.log("got through!")
+return;
           var $form = $(this);
           var userData={"username":$("#signupUsername").val(),"password":$("#signupPassword1").val(),"Fname":$("#signupFname").val(),
                       "Lname":$("#signupLname").val(),"storeName":$("#signupStoreName").val(),"hasStore":true,"PersonalEmail":$("#signupEmail").val(),}
@@ -3949,7 +3963,7 @@ var Router = Backbone.Router.extend({
   },
   register:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(React.createElement(RegisterForm, {router: this}),homeContainer)
+    ReactDOM.render(React.createElement(RegisterForm, {storeCollection: StoreCollection, router: this}),homeContainer)
   },
   checkout:function(){
     ReactDOM.unmountComponentAtNode(homeContainer);
