@@ -101,6 +101,9 @@ var Total= React.createClass({
     }
     return(
       <div className="Order row">
+        <div className="headerSmall row">
+          <div className="overlay"></div>
+        </div>
       <h1>Orders Pending</h1>
       <p>Please note that the sellers may have removed cards from order</p>
       {allOrders}

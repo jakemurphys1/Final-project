@@ -49,7 +49,12 @@ var StoreCards= React.createClass({
        checkoutButton=""
     }
 
-      return(<div className=" col-md-8 col-md-offset-2">
+      return(<div>
+        <div className="headerSmall row">
+          <div className="overlay"></div>
+        </div>
+        <div className=" col-md-8 col-md-offset-2">
+
           <h1>Cards for sale at {this.props.storeName}</h1>
           {lowerText}
 
@@ -58,6 +63,7 @@ var StoreCards= React.createClass({
 
           </div>
           {checkoutButton}
+      </div>
       </div>)
   }
 })

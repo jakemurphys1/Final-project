@@ -33,13 +33,17 @@ self.setState({"results":results})
       name=this.state.results[0].get("specialName" + this.props.specialNum)
       insert = this.state.results[0].get("specialDescription" + this.props.specialNum)
     }
-  return(<div className="row infoContainer specialDescription">
+  return(<div>
+    <div className="headerSmall row">
+      <div className="overlay"></div>
+    </div>
+    <div className="row infoContainer specialDescription">
           <h2>{name}</h2>
           <div className="col-md-6 col-md-offset-3">
             <p>{insert}</p>
           </div>
         </div>
-        )
+  </div>)
   },
 })
 

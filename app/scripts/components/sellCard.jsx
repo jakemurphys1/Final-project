@@ -100,6 +100,9 @@ handleAddCard:function(e){
 
     return(
       <div className="ownerCards row">
+        <div className="headerSmall row">
+          <div className="overlay"></div>
+        </div>
       <h1>Check store pricing for selling your cards</h1>
         <div className="row instructions">
           <div className="col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"><h4>Step One:</h4><p>Create a list of cards, specifying the store to which to want to sell them. Your list will be shown on the right as you build it.</p></div>

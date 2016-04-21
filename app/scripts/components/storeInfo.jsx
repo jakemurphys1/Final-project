@@ -70,8 +70,13 @@ var StoreInfo= React.createClass({
         </div>)
 
     }
-      return(<div className="infoContainer">
+      return(<div>
+      <div className="headerSmall row">
+        <div className="overlay"></div>
+      </div>
+        <div className="infoContainer">
           {store}
+      </div>
       </div>)
   }
 })

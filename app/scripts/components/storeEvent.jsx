@@ -64,6 +64,9 @@ var StoreSpecial= React.createClass({
       store=<p>This store has no events posted.</p>
     }
       return(<div>
+        <div className="headerSmall row">
+          <div className="overlay"></div>
+        </div>
           <h1>Events for {this.props.storeName}</h1>
           {store}
       </div>)

@@ -54,9 +54,12 @@ var StoreSpecial= React.createClass({
     }
     console.log(this.state.loading)
     if(this.state.CurStore.length==0 && this.state.loading==false){
-      store=<p>This store has no specials posted.</p>
+      store=<h1>This store has no specials posted.</h1>
     }
       return(<div>
+        <div className="headerSmall row">
+          <div className="overlay"></div>
+        </div>
           {store}
       </div>)
   }

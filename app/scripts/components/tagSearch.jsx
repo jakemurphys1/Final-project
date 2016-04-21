@@ -35,11 +35,16 @@ this.state.specialList.forEach(function(item){
 
 }.bind(this))
 
-    return(
+    return(<div>
+      <div className="headerSmall row">
+        <div className="overlay"></div>
+      </div>
       <div className="row infoContainer searchTag">
       <h2>All Specials with the tag(s): {this.props.searchTerm}</h2>
       <div className="tagContainer">{All}</div>
       </div>
+    </div>
+
     )
   }
 })

@@ -40,8 +40,10 @@ var SignUp = React.createClass({
 
         },
   render:function(){
-      return(
-
+      return(<div>
+        <div className="headerSmall row">
+          <div className="overlay"></div>
+        </div>
         <div className="row infoContainer">
 
           <div className="row Header">
@@ -61,6 +63,7 @@ var SignUp = React.createClass({
             </form>
           </div>
         </div>
+      </div>
       )
   },
 })

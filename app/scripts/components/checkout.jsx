@@ -172,6 +172,9 @@ if(this.props.collection.length==0 && this.props.sellCollection.length==0){
 }
     return(
       <div className="row checkout">
+        <div className="headerSmall row">
+          <div className="overlay"></div>
+        </div>
       <h1>Card Cart:</h1>
       <p>Click 'Send' to submit these orders to the store owners. They will reply with the prices for those cards.</p>
       <div className="row">{orderByStore}</div>

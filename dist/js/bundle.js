@@ -208,6 +208,9 @@ if(this.props.collection.length==0 && this.props.sellCollection.length==0){
 }
     return(
       React.createElement("div", {className: "row checkout"}, 
+        React.createElement("div", {className: "headerSmall row"}, 
+          React.createElement("div", {className: "overlay"})
+        ), 
       React.createElement("h1", null, "Card Cart:"), 
       React.createElement("p", null, "Click 'Send' to submit these orders to the store owners. They will reply with the prices for those cards."), 
       React.createElement("div", {className: "row"}, orderByStore), 
@@ -408,16 +411,19 @@ React.createElement("div", {className: "row mana"},
     React.createElement("div", {className: "row"}, 
       React.createElement("div", {className: "col-md-5 homeCards home infoContainer"}, 
         React.createElement("h2", null, "Store Pricing"), 
-        React.createElement("div", {className: "col-xs-6"}, 
-          React.createElement("div", {className: "row"}, React.createElement("h4", null, "Check store prices for buying cards")), 
-            React.createElement("form", {onSubmit: this.handleCard, id: "cardSearch", action: "", className: "form-events"}, 
-                    React.createElement("input", {id: "buyCardName", type: "text", name: "cardName", placeholder: "Name of Card"}), 
-                    React.createElement("p", null, React.createElement("button", {className: "btn btn-primary Search"}, "Search"))
-            )
-        ), 
-        React.createElement("div", {className: "col-xs-6"}, React.createElement("h4", null, "Check store prices for selling your cards"), 
-            React.createElement("p", null, React.createElement("button", {onClick: this.handleSellCard, className: "btn btn-primary Search"}, "Build List"))
+        React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "col-sm-6 col-xs-12"}, 
+            React.createElement("div", {className: "row"}, React.createElement("h4", null, "Check store prices for buying cards")), 
+              React.createElement("form", {onSubmit: this.handleCard, id: "cardSearch", action: "", className: "form-events"}, 
+                      React.createElement("input", {id: "buyCardName", type: "text", name: "cardName", placeholder: "Name of Card"}), 
+                      React.createElement("p", null, React.createElement("button", {className: "btn btn-primary Search"}, "Search"))
+              )
+          ), 
+          React.createElement("div", {className: "col-sm-6 col-xs-12"}, React.createElement("h4", null, "Check store prices for selling your cards"), 
+              React.createElement("p", null, React.createElement("button", {onClick: this.handleSellCard, className: "btn btn-primary Search"}, "Build List"))
+          )
         )
+
 
 
 
@@ -482,13 +488,15 @@ var SignUp = React.createClass({displayName: "SignUp",
         var currentUser = Parse.User.current();
         currentUser.set('username', $("#loginEmail").val());
         currentUser.save();
-
+    $(".signFloat").addClass("hidden");
+        self.setState({"bottomMessage":""})
       },
       error: function(user, error) {
+        self.setState({"bottomMessage":React.createElement("p", null, "You failed to log in")})
         console.log("You failed to log in as ",user,error)
       }
     });
-    $(".signFloat").addClass("hidden");
+
 
   },
   sendUsername:function(e){
@@ -718,6 +726,9 @@ var Total= React.createClass({displayName: "Total",
     }
     return(
       React.createElement("div", {className: "Order row"}, 
+        React.createElement("div", {className: "headerSmall row"}, 
+          React.createElement("div", {className: "overlay"})
+        ), 
       React.createElement("h1", null, "Orders Pending"), 
       React.createElement("p", null, "Please note that the sellers may have removed cards from order"), 
       allOrders, 
@@ -967,7 +978,6 @@ var SignUp = React.createClass({displayName: "SignUp",
         return;
       }
       var uniqueStoreName=this.props.storeCollection
-      console.log("storeCollection",uniqueStoreName[0].get("storeName"))
       for(var i =0;i<uniqueStoreName.length;i++){
         if($("#signupStoreName").val()==uniqueStoreName[i].get("storeName")){
           alert("That store name has already been taken, please use another.")
@@ -1068,67 +1078,72 @@ var SignUp = React.createClass({displayName: "SignUp",
         },
   render:function(){
       return(
-
-        React.createElement("div", {className: "row infoContainer"}, 
-
-          React.createElement("div", {className: "row Header"}, 
-            React.createElement("h1", null, "Store Owner Signup")
+        React.createElement("div", null, 
+          React.createElement("div", {className: "headerSmall row"}, 
+            React.createElement("div", {className: "overlay"})
           ), 
+          React.createElement("div", {className: "row infoContainer"}, 
 
-          React.createElement("div", {className: "col-xs-8 col-xs-offset-2"}, 
-                React.createElement("form", {onSubmit: this.handleSignup, id: "signin", action: "", className: "form-login"}, 
-                React.createElement("div", {className: "row"}, 
-                        React.createElement("div", {className: "col-md-6"}, 
-                          React.createElement("label", null, "User Information"), 
-                            React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupFname", type: "text", name: "Fname", className: "input", placeholder: "First Name"})), 
-                            React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupLname", type: "text", name: "Lname", className: "input", placeholder: "Last Name"})), 
-                            React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupUsername", type: "text", name: "Username", className: "input", placeholder: "Username"})), 
-                            React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupEmail", type: "text", name: "signupEmail", className: "input", placeholder: "Personal Email"})), 
-                            React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupPassword1", type: "password", name: "password1", className: "input", placeholder: "Password"})), 
-                            React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupPassword2", type: "password", name: "password2", className: "input", placeholder: "Confirm Password"}))
+            React.createElement("div", {className: "row Header"}, 
+              React.createElement("h1", null, "Store Owner Signup")
+            ), 
 
-                        ), 
-                        React.createElement("div", {className: "col-md-6"}, 
-                          React.createElement("label", null, "Address of Store"), 
-                            React.createElement("div", {className: "row"}, React.createElement("input", {id: "addressStreet", type: "text", name: "addressStreet", className: "input", placeholder: "Street Address"})), 
-                            React.createElement("div", {className: "row"}, React.createElement("input", {id: "addressCity", type: "text", name: "addressCity", className: "input", placeholder: "City"})), 
-                            React.createElement("div", {className: "row"}, React.createElement("input", {id: "addressState", type: "text", name: "addressState", className: "input", placeholder: "State"})), 
-                            React.createElement("div", {className: "row"}, React.createElement("input", {id: "addressZip", type: "text", name: "addressZip", className: "input", placeholder: "Zip Code"}))
-                        )
-                      ), 
-                        React.createElement("div", {className: "row"}, 
+            React.createElement("div", {className: "col-xs-8 col-xs-offset-2"}, 
+                  React.createElement("form", {onSubmit: this.handleSignup, id: "signin", action: "", className: "form-login"}, 
+                  React.createElement("div", {className: "row"}, 
                           React.createElement("div", {className: "col-md-6"}, 
-                              React.createElement("label", null, "Store Information"), 
-                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupStoreName", type: "text", name: "storeName", className: "input", placeholder: "Name of Store"})), 
-                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupEmail", type: "email", name: "email", className: "input", placeholder: "Email for Store"})), 
-                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupPhone", type: "text", name: "phone", className: "input", placeholder: "Phone Number for Store"})), 
-                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupWebsite", type: "text", name: "website", className: "input", placeholder: "Website for Store"}))
+                            React.createElement("label", null, "User Information"), 
+                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupFname", type: "text", name: "Fname", className: "input", placeholder: "First Name"})), 
+                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupLname", type: "text", name: "Lname", className: "input", placeholder: "Last Name"})), 
+                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupUsername", type: "text", name: "Username", className: "input", placeholder: "Username"})), 
+                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupEmail", type: "text", name: "signupEmail", className: "input", placeholder: "Personal Email"})), 
+                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupPassword1", type: "password", name: "password1", className: "input", placeholder: "Password"})), 
+                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupPassword2", type: "password", name: "password2", className: "input", placeholder: "Confirm Password"}))
+
                           ), 
-                          React.createElement("div", {className: "col-md-6 "}, 
-                              React.createElement("label", null, "Hours of Operation"), 
-                              React.createElement("p", null, "(leave empty if closed)"), 
-                              React.createElement("div", {className: "row"}, 
-                                React.createElement("div", {className: "col-md-6"}, 
-                                  React.createElement("span", null, "Mon:  "), React.createElement("p", null, React.createElement("input", {id: "mon1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "mon2", type: "text", className: "Time"})), 
-                                  React.createElement("span", null, "Tues: "), React.createElement("p", null, React.createElement("input", {id: "tues1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "tues2", type: "text", className: "Time"})), 
-                                  React.createElement("span", null, "Wed:  "), React.createElement("p", null, React.createElement("input", {id: "wed1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "wed2", type: "text", className: "Time"})), 
-                                  React.createElement("span", null, "Thur: "), React.createElement("p", null, React.createElement("input", {id: "thur1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "thur2", type: "text", className: "Time"}))
-                                ), 
-                                React.createElement("div", {className: "col-md-6"}, 
-                                  React.createElement("span", null, "Fri:  "), React.createElement("p", null, React.createElement("input", {id: "fri1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "fri2", type: "text", className: "Time"})), 
-                                  React.createElement("span", null, "Sat:  "), React.createElement("p", null, React.createElement("input", {id: "sat1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "sat2", type: "text", className: "Time"})), 
-                                  React.createElement("span", null, "Sun:  "), React.createElement("p", null, React.createElement("input", {id: "sun1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "sun2", type: "text", className: "Time"}))
-                                )
-                                )
+                          React.createElement("div", {className: "col-md-6"}, 
+                            React.createElement("label", null, "Address of Store"), 
+                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "addressStreet", type: "text", name: "addressStreet", className: "input", placeholder: "Street Address"})), 
+                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "addressCity", type: "text", name: "addressCity", className: "input", placeholder: "City"})), 
+                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "addressState", type: "text", name: "addressState", className: "input", placeholder: "State"})), 
+                              React.createElement("div", {className: "row"}, React.createElement("input", {id: "addressZip", type: "text", name: "addressZip", className: "input", placeholder: "Zip Code"}))
                           )
                         ), 
+                          React.createElement("div", {className: "row"}, 
+                            React.createElement("div", {className: "col-md-6"}, 
+                                React.createElement("label", null, "Store Information"), 
+                                React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupStoreName", type: "text", name: "storeName", className: "input", placeholder: "Name of Store"})), 
+                                React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupEmail", type: "email", name: "email", className: "input", placeholder: "Email for Store"})), 
+                                React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupPhone", type: "text", name: "phone", className: "input", placeholder: "Phone Number for Store"})), 
+                                React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupWebsite", type: "text", name: "website", className: "input", placeholder: "Website for Store"}))
+                            ), 
+                            React.createElement("div", {className: "col-md-6 "}, 
+                                React.createElement("label", null, "Hours of Operation"), 
+                                React.createElement("p", null, "(leave empty if closed)"), 
+                                React.createElement("div", {className: "row"}, 
+                                  React.createElement("div", {className: "col-md-6"}, 
+                                    React.createElement("span", null, "Mon:  "), React.createElement("p", null, React.createElement("input", {id: "mon1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "mon2", type: "text", className: "Time"})), 
+                                    React.createElement("span", null, "Tues: "), React.createElement("p", null, React.createElement("input", {id: "tues1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "tues2", type: "text", className: "Time"})), 
+                                    React.createElement("span", null, "Wed:  "), React.createElement("p", null, React.createElement("input", {id: "wed1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "wed2", type: "text", className: "Time"})), 
+                                    React.createElement("span", null, "Thur: "), React.createElement("p", null, React.createElement("input", {id: "thur1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "thur2", type: "text", className: "Time"}))
+                                  ), 
+                                  React.createElement("div", {className: "col-md-6"}, 
+                                    React.createElement("span", null, "Fri:  "), React.createElement("p", null, React.createElement("input", {id: "fri1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "fri2", type: "text", className: "Time"})), 
+                                    React.createElement("span", null, "Sat:  "), React.createElement("p", null, React.createElement("input", {id: "sat1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "sat2", type: "text", className: "Time"})), 
+                                    React.createElement("span", null, "Sun:  "), React.createElement("p", null, React.createElement("input", {id: "sun1", type: "text", className: "Time"}), " to ", React.createElement("input", {id: "sun2", type: "text", className: "Time"}))
+                                  )
+                                  )
+                            )
+                          ), 
 
 
 
-                      React.createElement("button", {type: "submit", className: "btn btn-lg btn-block btn-primary signinbutton"}, "Sign Up")
+                        React.createElement("button", {type: "submit", className: "btn btn-lg btn-block btn-primary signinbutton"}, "Sign Up")
+              )
             )
           )
         )
+
       )
   },
 })
@@ -1298,6 +1313,9 @@ var searchCard = React.createClass({displayName: "searchCard",
 
     return(
       React.createElement("div", {className: "row searchCard"}, 
+        React.createElement("div", {className: "headerSmall row"}, 
+          React.createElement("div", {className: "overlay"})
+        ), 
         React.createElement("div", {className: "row"}, 
           React.createElement("h1", null, "Copies of ", this.props.cardName, " for sale:"), 
           lowerText, 
@@ -1427,6 +1445,9 @@ var searchEvent = React.createClass({displayName: "searchEvent",
       console.log(allEvents)
     return(
       React.createElement("div", null, 
+        React.createElement("div", {className: "headerSmall row"}, 
+          React.createElement("div", {className: "overlay"})
+        ), 
       React.createElement("h1", null, "All events at shops near you:"), 
       React.createElement("div", null, allEvents)
       )
@@ -1522,6 +1543,9 @@ var searchCard = React.createClass({displayName: "searchCard",
 
     return(
         React.createElement("div", {className: "row seeCard"}, 
+          React.createElement("div", {className: "headerSmall row"}, 
+            React.createElement("div", {className: "overlay"})
+          ), 
           React.createElement("div", {className: "row"}, 
             React.createElement("h1", null, this.props.curId), 
             React.createElement("h4", null, "Image is a stock image of the card, and does not reflect any real card. Image may be different based on edition."), 
@@ -1641,6 +1665,9 @@ handleAddCard:function(e){
 
     return(
       React.createElement("div", {className: "ownerCards row"}, 
+        React.createElement("div", {className: "headerSmall row"}, 
+          React.createElement("div", {className: "overlay"})
+        ), 
       React.createElement("h1", null, "Check store pricing for selling your cards"), 
         React.createElement("div", {className: "row instructions"}, 
           React.createElement("div", {className: "col-md-2 col-md-offset-1 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step One:"), React.createElement("p", null, "Create a list of cards, specifying the store to which to want to sell them. Your list will be shown on the right as you build it.")), 
@@ -1825,8 +1852,10 @@ var SignUp = React.createClass({displayName: "SignUp",
 
         },
   render:function(){
-      return(
-
+      return(React.createElement("div", null, 
+        React.createElement("div", {className: "headerSmall row"}, 
+          React.createElement("div", {className: "overlay"})
+        ), 
         React.createElement("div", {className: "row infoContainer"}, 
 
           React.createElement("div", {className: "row Header"}, 
@@ -1846,6 +1875,7 @@ var SignUp = React.createClass({displayName: "SignUp",
             )
           )
         )
+      )
       )
   },
 })
@@ -1917,6 +1947,9 @@ if(allSpecials.length==0){
 }
     return(
       React.createElement("div", {className: "row"}, 
+        React.createElement("div", {className: "headerSmall row"}, 
+          React.createElement("div", {className: "overlay"})
+        ), 
       React.createElement("h1", null, "All current Specials:"), 
       React.createElement("div", null, allSpecials)
       )
@@ -1963,13 +1996,17 @@ self.setState({"results":results})
       name=this.state.results[0].get("specialName" + this.props.specialNum)
       insert = this.state.results[0].get("specialDescription" + this.props.specialNum)
     }
-  return(React.createElement("div", {className: "row infoContainer specialDescription"}, 
+  return(React.createElement("div", null, 
+    React.createElement("div", {className: "headerSmall row"}, 
+      React.createElement("div", {className: "overlay"})
+    ), 
+    React.createElement("div", {className: "row infoContainer specialDescription"}, 
           React.createElement("h2", null, name), 
           React.createElement("div", {className: "col-md-6 col-md-offset-3"}, 
             React.createElement("p", null, insert)
           )
         )
-        )
+  ))
   },
 })
 
@@ -2019,6 +2056,9 @@ var AllStores = React.createClass({displayName: "AllStores",
 
     return(
       React.createElement("div", {className: "row"}, 
+        React.createElement("div", {className: "headerSmall row"}, 
+          React.createElement("div", {className: "overlay"})
+        ), 
       React.createElement("h1", null, "All Registered Stores:"), 
       React.createElement("div", null, allStores)
       )
@@ -2095,7 +2135,12 @@ var StoreCards= React.createClass({displayName: "StoreCards",
        checkoutButton=""
     }
 
-      return(React.createElement("div", {className: " col-md-8 col-md-offset-2"}, 
+      return(React.createElement("div", null, 
+        React.createElement("div", {className: "headerSmall row"}, 
+          React.createElement("div", {className: "overlay"})
+        ), 
+        React.createElement("div", {className: " col-md-8 col-md-offset-2"}, 
+
           React.createElement("h1", null, "Cards for sale at ", this.props.storeName), 
           lowerText, 
 
@@ -2104,6 +2149,7 @@ var StoreCards= React.createClass({displayName: "StoreCards",
 
           ), 
           checkoutButton
+      )
       ))
   }
 })
@@ -2222,6 +2268,9 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
       store=React.createElement("p", null, "This store has no events posted.")
     }
       return(React.createElement("div", null, 
+        React.createElement("div", {className: "headerSmall row"}, 
+          React.createElement("div", {className: "overlay"})
+        ), 
           React.createElement("h1", null, "Events for ", this.props.storeName), 
           store
       ))
@@ -2304,8 +2353,13 @@ var StoreInfo= React.createClass({displayName: "StoreInfo",
         ))
 
     }
-      return(React.createElement("div", {className: "infoContainer"}, 
+      return(React.createElement("div", null, 
+      React.createElement("div", {className: "headerSmall row"}, 
+        React.createElement("div", {className: "overlay"})
+      ), 
+        React.createElement("div", {className: "infoContainer"}, 
           store
+      )
       ))
   }
 })
@@ -2370,9 +2424,12 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
     }
     console.log(this.state.loading)
     if(this.state.CurStore.length==0 && this.state.loading==false){
-      store=React.createElement("p", null, "This store has no specials posted.")
+      store=React.createElement("h1", null, "This store has no specials posted.")
     }
       return(React.createElement("div", null, 
+        React.createElement("div", {className: "headerSmall row"}, 
+          React.createElement("div", {className: "overlay"})
+        ), 
           store
       ))
   }
@@ -2419,11 +2476,16 @@ this.state.specialList.forEach(function(item){
 
 }.bind(this))
 
-    return(
+    return(React.createElement("div", null, 
+      React.createElement("div", {className: "headerSmall row"}, 
+        React.createElement("div", {className: "overlay"})
+      ), 
       React.createElement("div", {className: "row infoContainer searchTag"}, 
       React.createElement("h2", null, "All Specials with the tag(s): ", this.props.searchTerm), 
       React.createElement("div", {className: "tagContainer"}, All)
       )
+    )
+
     )
   }
 })

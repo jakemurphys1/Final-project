@@ -30,13 +30,15 @@ var SignUp = React.createClass({
         var currentUser = Parse.User.current();
         currentUser.set('username', $("#loginEmail").val());
         currentUser.save();
-
+    $(".signFloat").addClass("hidden");
+        self.setState({"bottomMessage":""})
       },
       error: function(user, error) {
+        self.setState({"bottomMessage":<p>You failed to log in</p>})
         console.log("You failed to log in as ",user,error)
       }
     });
-    $(".signFloat").addClass("hidden");
+
 
   },
   sendUsername:function(e){

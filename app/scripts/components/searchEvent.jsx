@@ -65,6 +65,9 @@ var searchEvent = React.createClass({
       console.log(allEvents)
     return(
       <div>
+        <div className="headerSmall row">
+          <div className="overlay"></div>
+        </div>
       <h1>All events at shops near you:</h1>
       <div>{allEvents}</div>
       </div>

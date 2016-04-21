@@ -33,6 +33,9 @@ var searchCard = React.createClass({
 
     return(
         <div className="row seeCard">
+          <div className="headerSmall row">
+            <div className="overlay"></div>
+          </div>
           <div className="row">
             <h1>{this.props.curId}</h1>
             <h4>Image is a stock image of the card, and does not reflect any real card. Image may be different based on edition.</h4>

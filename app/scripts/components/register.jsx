@@ -19,7 +19,6 @@ var SignUp = React.createClass({
         return;
       }
       var uniqueStoreName=this.props.storeCollection
-      console.log("storeCollection",uniqueStoreName[0].get("storeName"))
       for(var i =0;i<uniqueStoreName.length;i++){
         if($("#signupStoreName").val()==uniqueStoreName[i].get("storeName")){
           alert("That store name has already been taken, please use another.")
@@ -120,67 +119,72 @@ var SignUp = React.createClass({
         },
   render:function(){
       return(
-
-        <div className="row infoContainer">
-
-          <div className="row Header">
-            <h1>Store Owner Signup</h1>
+        <div>
+          <div className="headerSmall row">
+            <div className="overlay"></div>
           </div>
+          <div className="row infoContainer">
 
-          <div className="col-xs-8 col-xs-offset-2">
-                <form onSubmit={this.handleSignup} id="signin" action="" className="form-login">
-                <div className="row">
-                        <div className="col-md-6">
-                          <label>User Information</label>
-                            <div className="row"><input id="signupFname" type="text" name="Fname" className="input" placeholder="First Name"/></div>
-                            <div className="row"><input id="signupLname" type="text" name="Lname" className="input" placeholder="Last Name"/></div>
-                            <div className="row"><input id="signupUsername" type="text" name="Username" className="input" placeholder="Username"/></div>
-                            <div className="row"><input id="signupEmail" type="text" name="signupEmail" className="input" placeholder="Personal Email"/></div>
-                            <div className="row"><input id="signupPassword1" type="password" name="password1" className="input" placeholder="Password"/></div>
-                            <div className="row"><input id="signupPassword2" type="password" name="password2" className="input" placeholder="Confirm Password"/></div>
+            <div className="row Header">
+              <h1>Store Owner Signup</h1>
+            </div>
 
-                        </div>
-                        <div className="col-md-6">
-                          <label>Address of Store</label>
-                            <div className="row"><input id="addressStreet" type="text" name="addressStreet" className="input" placeholder="Street Address"/></div>
-                            <div className="row"><input id="addressCity" type="text" name="addressCity" className="input" placeholder="City"/></div>
-                            <div className="row"><input id="addressState" type="text" name="addressState" className="input" placeholder="State"/></div>
-                            <div className="row"><input id="addressZip" type="text" name="addressZip" className="input" placeholder="Zip Code"/></div>
-                        </div>
-                      </div>
-                        <div className="row">
+            <div className="col-xs-8 col-xs-offset-2">
+                  <form onSubmit={this.handleSignup} id="signin" action="" className="form-login">
+                  <div className="row">
                           <div className="col-md-6">
-                              <label>Store Information</label>
-                              <div className="row"><input id="signupStoreName" type="text" name="storeName" className="input" placeholder="Name of Store"/></div>
-                              <div className="row"><input id="signupEmail" type="email" name="email" className="input" placeholder="Email for Store"/></div>
-                              <div className="row"><input id="signupPhone" type="text" name="phone" className="input" placeholder="Phone Number for Store"/></div>
-                              <div className="row"><input id="signupWebsite" type="text" name="website" className="input" placeholder="Website for Store"/></div>
+                            <label>User Information</label>
+                              <div className="row"><input id="signupFname" type="text" name="Fname" className="input" placeholder="First Name"/></div>
+                              <div className="row"><input id="signupLname" type="text" name="Lname" className="input" placeholder="Last Name"/></div>
+                              <div className="row"><input id="signupUsername" type="text" name="Username" className="input" placeholder="Username"/></div>
+                              <div className="row"><input id="signupEmail" type="text" name="signupEmail" className="input" placeholder="Personal Email"/></div>
+                              <div className="row"><input id="signupPassword1" type="password" name="password1" className="input" placeholder="Password"/></div>
+                              <div className="row"><input id="signupPassword2" type="password" name="password2" className="input" placeholder="Confirm Password"/></div>
+
                           </div>
-                          <div className="col-md-6 ">
-                              <label>Hours of Operation</label>
-                              <p>(leave empty if closed)</p>
-                              <div className="row">
-                                <div className="col-md-6">
-                                  <span>Mon:  </span><p><input id="mon1" type="text" className="Time"/> to <input id="mon2" type="text" className="Time"/></p>
-                                  <span>Tues: </span><p><input id="tues1" type="text" className="Time"/> to <input id="tues2" type="text" className="Time"/></p>
-                                  <span>Wed:  </span><p><input id="wed1" type="text" className="Time"/> to <input id="wed2" type="text" className="Time"/></p>
-                                  <span>Thur: </span><p><input id="thur1" type="text" className="Time"/> to <input id="thur2" type="text" className="Time"/></p>
-                                </div>
-                                <div className="col-md-6">
-                                  <span>Fri:  </span><p><input id="fri1" type="text" className="Time"/> to <input id="fri2" type="text" className="Time"/></p>
-                                  <span>Sat:  </span><p><input id="sat1" type="text" className="Time"/> to <input id="sat2" type="text" className="Time"/></p>
-                                  <span>Sun:  </span><p><input id="sun1" type="text" className="Time"/> to <input id="sun2" type="text" className="Time"/></p>
-                                </div>
-                                </div>
+                          <div className="col-md-6">
+                            <label>Address of Store</label>
+                              <div className="row"><input id="addressStreet" type="text" name="addressStreet" className="input" placeholder="Street Address"/></div>
+                              <div className="row"><input id="addressCity" type="text" name="addressCity" className="input" placeholder="City"/></div>
+                              <div className="row"><input id="addressState" type="text" name="addressState" className="input" placeholder="State"/></div>
+                              <div className="row"><input id="addressZip" type="text" name="addressZip" className="input" placeholder="Zip Code"/></div>
                           </div>
                         </div>
+                          <div className="row">
+                            <div className="col-md-6">
+                                <label>Store Information</label>
+                                <div className="row"><input id="signupStoreName" type="text" name="storeName" className="input" placeholder="Name of Store"/></div>
+                                <div className="row"><input id="signupEmail" type="email" name="email" className="input" placeholder="Email for Store"/></div>
+                                <div className="row"><input id="signupPhone" type="text" name="phone" className="input" placeholder="Phone Number for Store"/></div>
+                                <div className="row"><input id="signupWebsite" type="text" name="website" className="input" placeholder="Website for Store"/></div>
+                            </div>
+                            <div className="col-md-6 ">
+                                <label>Hours of Operation</label>
+                                <p>(leave empty if closed)</p>
+                                <div className="row">
+                                  <div className="col-md-6">
+                                    <span>Mon:  </span><p><input id="mon1" type="text" className="Time"/> to <input id="mon2" type="text" className="Time"/></p>
+                                    <span>Tues: </span><p><input id="tues1" type="text" className="Time"/> to <input id="tues2" type="text" className="Time"/></p>
+                                    <span>Wed:  </span><p><input id="wed1" type="text" className="Time"/> to <input id="wed2" type="text" className="Time"/></p>
+                                    <span>Thur: </span><p><input id="thur1" type="text" className="Time"/> to <input id="thur2" type="text" className="Time"/></p>
+                                  </div>
+                                  <div className="col-md-6">
+                                    <span>Fri:  </span><p><input id="fri1" type="text" className="Time"/> to <input id="fri2" type="text" className="Time"/></p>
+                                    <span>Sat:  </span><p><input id="sat1" type="text" className="Time"/> to <input id="sat2" type="text" className="Time"/></p>
+                                    <span>Sun:  </span><p><input id="sun1" type="text" className="Time"/> to <input id="sun2" type="text" className="Time"/></p>
+                                  </div>
+                                  </div>
+                            </div>
+                          </div>
 
 
 
-                      <button type="submit" className="btn btn-lg btn-block btn-primary signinbutton">Sign Up</button>
-            </form>
+                        <button type="submit" className="btn btn-lg btn-block btn-primary signinbutton">Sign Up</button>
+              </form>
+            </div>
           </div>
         </div>
+
       )
   },
 })

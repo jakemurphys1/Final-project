@@ -159,6 +159,9 @@ var searchCard = React.createClass({
 
     return(
       <div className="row searchCard">
+        <div className="headerSmall row">
+          <div className="overlay"></div>
+        </div>
         <div className="row">
           <h1>Copies of {this.props.cardName} for sale:</h1>
           {lowerText}

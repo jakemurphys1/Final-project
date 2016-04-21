@@ -40,6 +40,9 @@ var AllStores = React.createClass({
 
     return(
       <div className="row">
+        <div className="headerSmall row">
+          <div className="overlay"></div>
+        </div>
       <h1>All Registered Stores:</h1>
       <div>{allStores}</div>
       </div>

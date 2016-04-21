@@ -61,6 +61,9 @@ if(allSpecials.length==0){
 }
     return(
       <div className="row">
+        <div className="headerSmall row">
+          <div className="overlay"></div>
+        </div>
       <h1>All current Specials:</h1>
       <div>{allSpecials}</div>
       </div>

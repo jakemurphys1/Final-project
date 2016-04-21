@@ -140,16 +140,19 @@ var Home = React.createClass({
     <div className="row">
       <div className="col-md-5 homeCards home infoContainer">
         <h2>Store Pricing</h2>
-        <div className="col-xs-6">
-          <div className="row"><h4>Check store prices for buying cards</h4></div>
-            <form onSubmit={this.handleCard} id="cardSearch" action="" className="form-events">
-                    <input id="buyCardName" type="text" name="cardName" placeholder="Name of Card"/>
-                    <p><button className="btn btn-primary Search">Search</button></p>
-            </form>
+        <div className="row">
+          <div className="col-sm-6 col-xs-12">
+            <div className="row"><h4>Check store prices for buying cards</h4></div>
+              <form onSubmit={this.handleCard} id="cardSearch" action="" className="form-events">
+                      <input id="buyCardName" type="text" name="cardName" placeholder="Name of Card"/>
+                      <p><button className="btn btn-primary Search">Search</button></p>
+              </form>
+          </div>
+          <div className="col-sm-6 col-xs-12"><h4>Check store prices for selling your cards</h4>
+              <p><button onClick={this.handleSellCard} className="btn btn-primary Search">Build List</button></p>
+          </div>
         </div>
-        <div className="col-xs-6"><h4>Check store prices for selling your cards</h4>
-            <p><button onClick={this.handleSellCard} className="btn btn-primary Search">Build List</button></p>
-        </div>
+
 
 
 
