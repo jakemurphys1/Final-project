@@ -1796,7 +1796,10 @@ var StoreSelect= React.createClass({displayName: "StoreSelect",
   render:function(){
     var allStores= this.state.storeList.map(function(item){
       console.log(item.get("storeName"))
-        return(React.createElement("option", {key: item.id, value: item.get("storeName")}, item.get("storeName")))
+      if(item.get("Approved")){
+            return(React.createElement("option", {key: item.id, value: item.get("storeName")}, item.get("storeName")))
+      }
+
     })
     return(
       React.createElement("select", {id: "Stores"}, 

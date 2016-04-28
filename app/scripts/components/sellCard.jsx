@@ -231,7 +231,10 @@ var StoreSelect= React.createClass({
   render:function(){
     var allStores= this.state.storeList.map(function(item){
       console.log(item.get("storeName"))
-        return(<option key={item.id} value={item.get("storeName")}>{item.get("storeName")}</option>)
+      if(item.get("Approved")){
+            return(<option key={item.id} value={item.get("storeName")}>{item.get("storeName")}</option>)
+      }
+
     })
     return(
       <select id="Stores">
