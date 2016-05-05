@@ -105,7 +105,7 @@ var FoundEvent = React.createClass({
 
     var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     Date.prototype.getDayName = function() {
-      return days[ this.getDay() ];
+      return days[ this.getDay() -1 ];
     };
     var now = new Date();
 

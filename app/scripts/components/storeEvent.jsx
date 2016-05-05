@@ -59,6 +59,9 @@ var StoreSpecial= React.createClass({
             var now = new Date();
 
             var dayname = date.getDayName();
+            if(dayname==undefined){
+              dayname="Monday"
+            }
 
           var redate = dayname + ", " + monthNames[monthIndex] + " " + day + " " + year;
 

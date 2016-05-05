@@ -1648,7 +1648,7 @@ var FoundEvent = React.createClass({displayName: "FoundEvent",
 
     var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     Date.prototype.getDayName = function() {
-      return days[ this.getDay() ];
+      return days[ this.getDay() -1 ];
     };
     var now = new Date();
 
@@ -2490,6 +2490,9 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
             var now = new Date();
 
             var dayname = date.getDayName();
+            if(dayname==undefined){
+              dayname="Monday"
+            }
 
           var redate = dayname + ", " + monthNames[monthIndex] + " " + day + " " + year;
 
