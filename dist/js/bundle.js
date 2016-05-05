@@ -280,16 +280,59 @@ var LoginForm=require("./login.jsx")
 
 
 var Home = React.createClass({displayName: "Home",
-  componentDidMount(){
-    var self=this;
-    console.log("collection",this.props.storeCollection)
-    ReactDOM.render(React.createElement(LoginForm, {storeCollection: this.props.storeCollection, parent: self}),document.getElementById("signFloat"))
-  },
   getInitialState:function(){
       return {
         "currentUser":Parse.User.current(),
+        "events":[],
+        "specials":[],
+        "stores":[],
       }
     },
+  componentDidMount(){
+    var self=this;
+    ReactDOM.render(React.createElement(LoginForm, {storeCollection: this.props.storeCollection, parent: self}),document.getElementById("signFloat"))
+
+    var Store = Parse.Object.extend("Stores");
+    var storeQuery = new Parse.Query(Store);
+      storeQuery.find({
+        success: function(theCards){
+          self.setState({"stores":theCards});
+        }
+      })
+
+    //find events info from parse
+    var currentUser = Parse.User.current();
+    var self=this;
+    var Event = Parse.Object.extend("Events");
+    var eventQuery = new Parse.Query(Event);
+      eventQuery.find({
+        success: function(results) {
+          var newResults = results.sort(function(a,b) {
+                return new Date(a.get("Date")).getTime() - new Date(b.get("Date")).getTime()
+          });
+            self.setState({"events":newResults})
+            self.forceUpdate();
+        },
+        error: function(error) {
+          console.log("Event Server not find")
+        }
+    })
+
+
+    //find specials info from parse
+    var Special = Parse.Object.extend("Specials");
+    var query = new Parse.Query(Special);
+      query.find({
+        success: function(results) {
+
+            self.setState({"specials":results})
+            self.forceUpdate();
+        },
+        error: function(error) {
+          console.log("Event Server not find")
+        }
+    })
+  },
   handleShowLogin:function(){
     $(".signFloat").removeClass("hidden")
     },
@@ -327,14 +370,20 @@ var Home = React.createClass({displayName: "Home",
     e.preventDefault();
     Backbone.history.navigate("tagSearch/" + $("#tagSearch").val(),{trigger:true})
   },
+  handleSpecificEvent:function(event){
+    Backbone.history.navigate("searchSpecificEvent/" + event.id,{trigger:true})
+
+  },
   render:function(){
       var currentUser = this.state.currentUser
       var storeSight = ""
+      var self=this;
+
       var logContents = [React.createElement("li", {onClick: this.handleShowLogin, id: "headerUser"}, React.createElement("a", null, "Log In")),
         React.createElement("li", null, React.createElement("a", {href: "#signUp"}, "Sign Up")),
         React.createElement("li", null, React.createElement("a", {href: "#register"}, "Register Store"))
       ]
-      console.log(logContents)
+
 
       if(currentUser){
 
@@ -346,6 +395,77 @@ var Home = React.createClass({displayName: "Home",
               logContents.push(React.createElement("li", null, React.createElement("a", {href: "#owner"}, "Manage Store")))
           }
       }
+//carousel event stuff
+var eventcount=0
+var events = this.state.events.map(function(thisevent){
+
+  var activeWord="";
+  if(eventcount==1){
+    activeWord="active"
+  }
+
+  //check is store is approved
+  var isApproved = false
+  var stores = self.state.stores;
+  for(var i =0;i<stores.length;i++){
+    if(stores[i].get("storeName")==thisevent.get("storeName")){
+      if(stores[i].get("Approved")){
+        isApproved=true
+      }
+    }
+  }
+
+  if(eventcount<6 && isApproved && thisevent.get("Date")>=Date.now()){
+      eventcount+=1;
+    return(
+      React.createElement("div", {className: "item " + activeWord}, 
+          React.createElement("div", {key: "event" + eventcount, onClick: self.handleSpecificEvent.bind(null,thisevent), className: "carousel-content"}, 
+              React.createElement("div", null, 
+                React.createElement("h4", null, thisevent.get("storeName")), 
+                  React.createElement("p", null, thisevent.get("Name"))
+              )
+          )
+      )
+    )
+  }
+})
+var specials = this.state.specials.map(function(thisspecial){
+  var activeWord="";
+  if(eventcount==1){
+    activeWord="active"
+  }
+
+  //check is store is approved
+  var isApproved = false
+  var stores = self.state.stores;
+  for(var i =0;i<stores.length;i++){
+
+    if(stores[i].get("storeName")==thisspecial.get("storeName")){
+
+      if(stores[i].get("Approved")){
+        isApproved=true
+
+      }
+    }
+  }
+
+  if(eventcount<6){
+      eventcount+=1;
+    return(React.createElement("div", {key: thisspecial.get("specialName1") + eventcount, className: "item " + activeWord}, 
+          React.createElement("div", {className: "carousel-content"}, 
+              React.createElement("div", null, 
+                React.createElement("h4", null, thisspecial.get("storeName")), 
+                  React.createElement("p", null, thisspecial.get("specialName1")), 
+                    React.createElement("p", null, thisspecial.get("specialName2")), 
+                      React.createElement("p", null, thisspecial.get("specialName3"))
+              )
+          )
+      )
+
+    )
+  }
+})
+
     return(
   React.createElement("div", {className: "Total"}, 
     React.createElement("div", {id: "signFloat", className: "hidden signFloat col-xs-6 col-md-3 col-md-offset-4"}), 
@@ -359,8 +479,9 @@ var Home = React.createClass({displayName: "Home",
         logContents, 
             storeSight
       )
-    )
+      )
     ), 
+
 React.createElement("div", {className: "row"}, 
 
   React.createElement("div", {className: "infoContainer intro"}, 
@@ -380,9 +501,30 @@ React.createElement("div", {className: "row mana"},
   React.createElement("div", {className: "col-xs-2"}, React.createElement("img", {src: "images/White.gif"})), 
   React.createElement("div", {className: "col-xs-2"}, React.createElement("img", {src: "images/Blue.gif"}))
 ), 
+
     React.createElement("div", {className: "row"}, 
-      React.createElement("div", {className: "col-md-5 homeEvent home infoContainer"}, 
+      React.createElement("div", {className: "col-md-5 homeEvent home hometop infoContainer"}, 
         React.createElement("div", {className: "row"}, React.createElement("h2", null, "Events")), 
+
+      React.createElement("div", {id: "text-carousel", className: "carousel slide", "data-ride": "carousel"}, 
+        React.createElement("div", {className: "row"}, 
+            React.createElement("div", {className: "col-xs-offset-3 col-xs-6"}, 
+                React.createElement("div", {className: "carousel-inner"}, 
+                    events
+                )
+            )
+        ), 
+
+        React.createElement("a", {className: "left carousel-control", href: "#text-carousel", "data-slide": "prev"}, 
+            React.createElement("span", {className: "glyphicon glyphicon-chevron-left"})
+        ), 
+        React.createElement("a", {className: "right carousel-control", href: "#text-carousel", "data-slide": "next"}, 
+            React.createElement("span", {className: "glyphicon glyphicon-chevron-right"})
+        )
+
+    ), 
+
+
           React.createElement("p", null, "Search by Date"), 
           React.createElement("form", {id: "eventDate", onSubmit: this.handleEvent, action: "", className: "form-events"}, 
               React.createElement("div", {className: "col-xs-6"}, 
@@ -397,8 +539,25 @@ React.createElement("div", {className: "row mana"},
           )
       ), 
 
-      React.createElement("div", {className: "col-md-5 homeSpecials home infoContainer"}, 
+      React.createElement("div", {className: "col-md-5 homeSpecials home hometop infoContainer"}, 
         React.createElement("div", {className: "row"}, React.createElement("h2", null, "Specials")), 
+          React.createElement("div", {id: "text-carousel", className: "carousel slide", "data-ride": "carousel"}, 
+            React.createElement("div", {className: "row"}, 
+                React.createElement("div", {className: "col-xs-offset-3 col-xs-6"}, 
+                    React.createElement("div", {className: "carousel-inner"}, 
+                        specials
+                    )
+                )
+            ), 
+
+            React.createElement("a", {className: "left carousel-control", href: "#text-carousel", "data-slide": "prev"}, 
+                React.createElement("span", {className: "glyphicon glyphicon-chevron-left"})
+            ), 
+            React.createElement("a", {className: "right carousel-control", href: "#text-carousel", "data-slide": "next"}, 
+                React.createElement("span", {className: "glyphicon glyphicon-chevron-right"})
+            )
+
+        ), 
           React.createElement("p", null, "Search by Tags"), 
           React.createElement("form", {onSubmit: this.handleSpecial, id: "cardSearch", action: "", className: "form-events"}, 
                   React.createElement("input", {id: "tagSearch", type: "text", name: "cardName", placeholder: "Keyword to search"}), 
@@ -409,7 +568,7 @@ React.createElement("div", {className: "row mana"},
     ), 
 
     React.createElement("div", {className: "row"}, 
-      React.createElement("div", {className: "col-md-5 homeCards home infoContainer"}, 
+      React.createElement("div", {className: "col-md-5 homeCards home homebottom infoContainer"}, 
         React.createElement("h2", null, "Store Pricing"), 
         React.createElement("div", {className: "row"}, 
           React.createElement("div", {className: "col-sm-6 col-xs-12"}, 
@@ -429,7 +588,7 @@ React.createElement("div", {className: "row mana"},
 
       ), 
 
-      React.createElement("div", {className: "col-md-5 homeStores home infoContainer"}, 
+      React.createElement("div", {className: "col-md-5 homeStores home homebottom infoContainer"}, 
         React.createElement("div", {className: "row"}, React.createElement("h2", null, "Search for Stores near you!")), 
           React.createElement("p", null, "Search by Name"), 
         React.createElement("form", {onSubmit: this.handleStore, id: "storeSearch", action: "", className: "form-events"}, 
@@ -1325,13 +1484,17 @@ var searchCard = React.createClass({displayName: "searchCard",
             React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Three:"), React.createElement("p", null, "Click the \"Your Orders\" tab on the home page to check on your requests. When the store replies with the price they are willing to sell the cards, the order will change color.")), 
               React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Four:"), React.createElement("p", null, "If you agreed to the prices, click agree. Otherwise, Click Decline to delete the order and try another offer or another store. ")), 
               React.createElement("div", {className: "col-md-2 col-sm-4 col-xs-6 instructionContainer"}, React.createElement("h4", null, "Step Five:"), React.createElement("p", null, "If you agree, you have two days to go to the store and purchase the cards. If you wait longer, the store reserves the right to withdraw the offer."))
-          ), 
-          React.createElement("div", {className: "col-md-3 col-sm-12"}, React.createElement("img", {src: this.state.curImage}), 
-            React.createElement("p", null, "Images and card information courtesy of ", React.createElement("a", {href: "https://deckbrew.com/"}, "deckbrew.com"))
-          ), 
+          )
+            ), 
+          React.createElement("div", {className: "row"}, 
+            React.createElement("div", {className: "col-md-3 col-sm-12 searchImage"}, 
+              React.createElement("img", {src: this.state.curImage}), 
+              React.createElement("p", null, "Images and card information courtesy of ", React.createElement("a", {href: "https://deckbrew.com/"}, "deckbrew.com"))
+            ), 
 
-          React.createElement("div", {className: "col-md-9 col-sm-12"}, allCards)
-        ), 
+            React.createElement("div", {className: "col-md-9 col-sm-12"}, allCards)
+          ), 
+  
         checkoutButton
       )
       )
@@ -1399,8 +1562,18 @@ var searchEvent = React.createClass({displayName: "searchEvent",
   var self=this;
   var Event = Parse.Object.extend("Events");
   var eventQuery = new Parse.Query(Event);
+console.log("outside",this.props.endDate)
+  if(this.props.endDate !=""){
     eventQuery.greaterThanOrEqualTo("Date", this.props.startDate);
     eventQuery.lessThanOrEqualTo("Date", this.props.endDate);
+  }else{
+        console.log("id",this.props.id)
+    eventQuery.equalTo("objectId", this.props.id);
+
+
+  }
+
+
     eventQuery.find({
       success: function(results) {
         var newResults = results.sort(function(a,b) {
@@ -1475,7 +1648,49 @@ var FoundEvent = React.createClass({displayName: "FoundEvent",
     var redate = monthNames[monthIndex] + " " + day + " " + year
 
     if(this.props.item.get("startTime")){
-      var time = React.createElement("p", null, "Time: ", this.props.item.get("startTime") + " Through " + this.props.item.get("endTime"))
+      var start = this.props.item.get("startTime").split(":")
+      var starthr = start[0];
+      var startmin = start[1];
+      var startampm = "AM"
+      if(parseInt(starthr)>12){
+        starthr=parseInt(starthr)-12;
+        startampm="PM"
+      }
+      if(parseInt(starthr)==12){
+          startampm="PM"
+      }
+      if(parseInt(starthr)==0){
+        starthr=12;
+        startampm="AM"
+      }
+      if(startmin==undefined){
+        startampm=""
+        starthr="???"
+        startmin=""
+      }
+
+      var end = this.props.item.get("endTime").split(":")
+      var endhr = end[0];
+      var endmin = end[1];
+      var endampm = "AM"
+      if(parseInt(endhr)>12){
+        endhr=parseInt(endhr)-12;
+        endampm="PM"
+      }
+      if(parseInt(endhr)==12){
+          endampm="PM"
+      }
+      if(parseInt(endhr)==0){
+        endhr=12;
+        endampm="AM"
+      }
+      if(endmin==undefined){
+        endampm=""
+        endhr="???"
+        endmin=""
+      }
+
+      var time = React.createElement("p", null, "Time: ", starthr + ":" + startmin + " " + startampm + " To " + endhr + ":" + endmin + " " + endampm)
     }
 
     return(React.createElement("div", {className: "col-md-2 col-sm-4 col-sx-12 infoContainer"}, 
@@ -2231,7 +2446,10 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
       query.greaterThanOrEqualTo("Date", thisDate);
       query.find({
         success: function(results) {
-            self.setState({"CurStore":results,"loading":false})
+          var newResults = results.sort(function(a,b) {
+                return new Date(a.get("Date")).getTime() - new Date(b.get("Date")).getTime()
+          });
+            self.setState({"CurStore":newResults,"loading":false})
             self.forceUpdate();
         },
         error: function(error) {
@@ -2254,13 +2472,57 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
           var day = date.getDate();
           var monthIndex = date.getMonth();
           var year = date.getFullYear();
-          var redate = monthNames[monthIndex] + " " + day + " " + year
+          var redate = monthNames[monthIndex] + " " + day + " " + year;
+
+          var start = item.get("startTime").split(":")
+          var starthr = start[0];
+          var startmin = start[1];
+          var startampm = "AM"
+          if(parseInt(starthr)>12){
+            starthr=parseInt(starthr)-12;
+            startampm="PM"
+          }
+          if(parseInt(starthr)==12){
+              startampm="PM"
+          }
+          if(parseInt(starthr)==0){
+            starthr=12;
+            startampm="AM"
+          }
+          if(startmin==undefined){
+            startampm=""
+            starthr="???"
+            startmin=""
+          }
+
+          var end = item.get("endTime").split(":")
+          var endhr = end[0];
+          var endmin = end[1];
+          var endampm = "AM"
+          if(parseInt(endhr)>12){
+            endhr=parseInt(endhr)-12;
+            endampm="PM"
+          }
+          if(parseInt(endhr)==12){
+              endampm="PM"
+          }
+          if(parseInt(endhr)==0){
+            endhr=12;
+            endampm="AM"
+          }
+          if(endmin==undefined){
+            endampm=""
+            endhr="???"
+            endmin=""
+          }
+
+          var time = React.createElement("p", null, "Time: ", starthr + ":" + startmin + " " + startampm + " To " + endhr + ":" + endmin + " " + endampm)
 
           return(React.createElement("div", {key: item.id, className: "col-md-3 infoContainer"}, 
                 React.createElement("h3", null, item.get("Name")), 
                 React.createElement("p", null, "Format: ", item.get("Format")), 
                 React.createElement("p", null, "Date: ", redate), 
-                React.createElement("p", null, "From ", item.get("startTime"), " to ", item.get("endTime")), 
+                React.createElement("p", null, time), 
                 React.createElement("p", null, item.get("Description"))
           ))
 
@@ -3934,6 +4196,7 @@ var Router = Backbone.Router.extend({
       "login":"login",
     "change":"change",
     "searchEvent/:dates":"searchEvent",
+    "searchSpecificEvent/:id":"searchSpecificEvent",
     "searchCard/:name":"searchCard",
     "sellCard/:name":"sellCard",
     "specials":"specials",
@@ -3971,7 +4234,12 @@ var Router = Backbone.Router.extend({
     var startDate = new Date(dates[0])
     var endDate = new Date(dates[1])
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(React.createElement(SearchEventForm, {storeCollection: StoreCollection, startDate: startDate, endDate: endDate, router: this}),homeContainer)
+    ReactDOM.render(React.createElement(SearchEventForm, {storeCollection: StoreCollection, startDate: startDate, endDate: endDate, id: "", router: this}),homeContainer)
+  },
+  searchSpecificEvent:function(id){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    console.log("here",id)
+    ReactDOM.render(React.createElement(SearchEventForm, {storeCollection: StoreCollection, startDate: "", endDate: "", id: id, router: this}),homeContainer)
   },
   searchCard:function(id){
     var cardName = id;

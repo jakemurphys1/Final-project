@@ -172,12 +172,16 @@ var searchCard = React.createClass({
               <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Four:</h4><p>If you agreed to the prices, click agree. Otherwise, Click Decline to delete the order and try another offer or another store. </p></div>
               <div className="col-md-2 col-sm-4 col-xs-6 instructionContainer"><h4>Step Five:</h4><p>If you agree, you have two days to go to the store and purchase the cards. If you wait longer, the store reserves the right to withdraw the offer.</p></div>
           </div>
-          <div className="col-md-3 col-sm-12"><img src={this.state.curImage}  />
-            <p>Images and card information courtesy of <a href ="https://deckbrew.com/">deckbrew.com</a></p>
-          </div>
+            </div>
+          <div className="row">
+            <div className="col-md-3 col-sm-12 searchImage">
+              <img src={this.state.curImage}  />
+              <p>Images and card information courtesy of <a href ="https://deckbrew.com/">deckbrew.com</a></p>
+            </div>
 
-          <div className="col-md-9 col-sm-12">{allCards}</div>
-        </div>
+            <div className="col-md-9 col-sm-12">{allCards}</div>
+          </div>
+  
         {checkoutButton}
       </div>
       )

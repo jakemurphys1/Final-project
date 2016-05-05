@@ -24,7 +24,10 @@ var StoreSpecial= React.createClass({
       query.greaterThanOrEqualTo("Date", thisDate);
       query.find({
         success: function(results) {
-            self.setState({"CurStore":results,"loading":false})
+          var newResults = results.sort(function(a,b) {
+                return new Date(a.get("Date")).getTime() - new Date(b.get("Date")).getTime()
+          });
+            self.setState({"CurStore":newResults,"loading":false})
             self.forceUpdate();
         },
         error: function(error) {
@@ -47,13 +50,57 @@ var StoreSpecial= React.createClass({
           var day = date.getDate();
           var monthIndex = date.getMonth();
           var year = date.getFullYear();
-          var redate = monthNames[monthIndex] + " " + day + " " + year
+          var redate = monthNames[monthIndex] + " " + day + " " + year;
+
+          var start = item.get("startTime").split(":")
+          var starthr = start[0];
+          var startmin = start[1];
+          var startampm = "AM"
+          if(parseInt(starthr)>12){
+            starthr=parseInt(starthr)-12;
+            startampm="PM"
+          }
+          if(parseInt(starthr)==12){
+              startampm="PM"
+          }
+          if(parseInt(starthr)==0){
+            starthr=12;
+            startampm="AM"
+          }
+          if(startmin==undefined){
+            startampm=""
+            starthr="???"
+            startmin=""
+          }
+
+          var end = item.get("endTime").split(":")
+          var endhr = end[0];
+          var endmin = end[1];
+          var endampm = "AM"
+          if(parseInt(endhr)>12){
+            endhr=parseInt(endhr)-12;
+            endampm="PM"
+          }
+          if(parseInt(endhr)==12){
+              endampm="PM"
+          }
+          if(parseInt(endhr)==0){
+            endhr=12;
+            endampm="AM"
+          }
+          if(endmin==undefined){
+            endampm=""
+            endhr="???"
+            endmin=""
+          }
+
+          var time = <p>Time: {starthr + ":" + startmin + " " + startampm + " To " + endhr + ":" + endmin + " " + endampm}</p>
 
           return(<div key={item.id} className = "col-md-3 infoContainer">
                 <h3>{item.get("Name")}</h3>
                 <p>Format: {item.get("Format")}</p>
                 <p>Date: {redate}</p>
-                <p>From {item.get("startTime")} to {item.get("endTime")}</p>
+                <p>{time}</p>
                 <p>{item.get("Description")}</p>
           </div>)
 

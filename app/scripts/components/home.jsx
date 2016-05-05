@@ -9,16 +9,59 @@ var LoginForm=require("./login.jsx")
 
 
 var Home = React.createClass({
-  componentDidMount(){
-    var self=this;
-    console.log("collection",this.props.storeCollection)
-    ReactDOM.render(<LoginForm storeCollection={this.props.storeCollection} parent={self} />,document.getElementById("signFloat"))
-  },
   getInitialState:function(){
       return {
         "currentUser":Parse.User.current(),
+        "events":[],
+        "specials":[],
+        "stores":[],
       }
     },
+  componentDidMount(){
+    var self=this;
+    ReactDOM.render(<LoginForm storeCollection={this.props.storeCollection} parent={self} />,document.getElementById("signFloat"))
+
+    var Store = Parse.Object.extend("Stores");
+    var storeQuery = new Parse.Query(Store);
+      storeQuery.find({
+        success: function(theCards){
+          self.setState({"stores":theCards});
+        }
+      })
+
+    //find events info from parse
+    var currentUser = Parse.User.current();
+    var self=this;
+    var Event = Parse.Object.extend("Events");
+    var eventQuery = new Parse.Query(Event);
+      eventQuery.find({
+        success: function(results) {
+          var newResults = results.sort(function(a,b) {
+                return new Date(a.get("Date")).getTime() - new Date(b.get("Date")).getTime()
+          });
+            self.setState({"events":newResults})
+            self.forceUpdate();
+        },
+        error: function(error) {
+          console.log("Event Server not find")
+        }
+    })
+
+
+    //find specials info from parse
+    var Special = Parse.Object.extend("Specials");
+    var query = new Parse.Query(Special);
+      query.find({
+        success: function(results) {
+
+            self.setState({"specials":results})
+            self.forceUpdate();
+        },
+        error: function(error) {
+          console.log("Event Server not find")
+        }
+    })
+  },
   handleShowLogin:function(){
     $(".signFloat").removeClass("hidden")
     },
@@ -56,14 +99,20 @@ var Home = React.createClass({
     e.preventDefault();
     Backbone.history.navigate("tagSearch/" + $("#tagSearch").val(),{trigger:true})
   },
+  handleSpecificEvent:function(event){
+    Backbone.history.navigate("searchSpecificEvent/" + event.id,{trigger:true})
+
+  },
   render:function(){
       var currentUser = this.state.currentUser
       var storeSight = ""
+      var self=this;
+
       var logContents = [<li onClick={this.handleShowLogin} id="headerUser"><a>Log In</a></li>,
         <li><a href="#signUp">Sign Up</a></li>,
         <li><a href="#register">Register Store</a></li>
       ]
-      console.log(logContents)
+
 
       if(currentUser){
 
@@ -75,6 +124,77 @@ var Home = React.createClass({
               logContents.push(<li><a href="#owner">Manage Store</a></li>)
           }
       }
+//carousel event stuff
+var eventcount=0
+var events = this.state.events.map(function(thisevent){
+
+  var activeWord="";
+  if(eventcount==1){
+    activeWord="active"
+  }
+
+  //check is store is approved
+  var isApproved = false
+  var stores = self.state.stores;
+  for(var i =0;i<stores.length;i++){
+    if(stores[i].get("storeName")==thisevent.get("storeName")){
+      if(stores[i].get("Approved")){
+        isApproved=true
+      }
+    }
+  }
+
+  if(eventcount<6 && isApproved && thisevent.get("Date")>=Date.now()){
+      eventcount+=1;
+    return(
+      <div className={"item " + activeWord}>
+          <div key={"event" + eventcount}  onClick={self.handleSpecificEvent.bind(null,thisevent)} className="carousel-content">
+              <div>
+                <h4>{thisevent.get("storeName")}</h4>
+                  <p>{thisevent.get("Name")}</p>
+              </div>
+          </div>
+      </div>
+    )
+  }
+})
+var specials = this.state.specials.map(function(thisspecial){
+  var activeWord="";
+  if(eventcount==1){
+    activeWord="active"
+  }
+
+  //check is store is approved
+  var isApproved = false
+  var stores = self.state.stores;
+  for(var i =0;i<stores.length;i++){
+
+    if(stores[i].get("storeName")==thisspecial.get("storeName")){
+
+      if(stores[i].get("Approved")){
+        isApproved=true
+
+      }
+    }
+  }
+
+  if(eventcount<6){
+      eventcount+=1;
+    return(<div key = {thisspecial.get("specialName1") + eventcount} className={"item " + activeWord}>
+          <div  className="carousel-content">
+              <div>
+                <h4>{thisspecial.get("storeName")}</h4>
+                  <p>{thisspecial.get("specialName1")}</p>
+                    <p>{thisspecial.get("specialName2")}</p>
+                      <p>{thisspecial.get("specialName3")}</p>
+              </div>
+          </div>
+      </div>
+
+    )
+  }
+})
+
     return(
   <div className="Total">
     <div id="signFloat" className="hidden signFloat col-xs-6 col-md-3 col-md-offset-4"></div>
@@ -88,8 +208,9 @@ var Home = React.createClass({
         {logContents}
             {storeSight}
       </div>
+      </div>
     </div>
-    </div>
+
 <div className="row">
 
   <div className="infoContainer intro">
@@ -109,9 +230,30 @@ var Home = React.createClass({
   <div className="col-xs-2"><img src="images/White.gif" /></div>
   <div className="col-xs-2"><img src="images/Blue.gif" /></div>
 </div>
+
     <div className="row">
-      <div className="col-md-5 homeEvent home infoContainer">
+      <div className="col-md-5 homeEvent home hometop infoContainer">
         <div className="row"><h2>Events</h2></div>
+
+      <div id="text-carousel" className="carousel slide" data-ride="carousel">
+        <div className="row">
+            <div className="col-xs-offset-3 col-xs-6">
+                <div className="carousel-inner">
+                    {events}
+                </div>
+            </div>
+        </div>
+
+        <a className="left carousel-control" href="#text-carousel" data-slide="prev">
+            <span className="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a className="right carousel-control" href="#text-carousel" data-slide="next">
+            <span className="glyphicon glyphicon-chevron-right"></span>
+        </a>
+
+    </div>
+
+
           <p>Search by Date</p>
           <form id="eventDate" onSubmit={this.handleEvent} action="" className="form-events">
               <div className="col-xs-6">
@@ -126,8 +268,25 @@ var Home = React.createClass({
           </form>
       </div>
 
-      <div className="col-md-5 homeSpecials home infoContainer">
+      <div className="col-md-5 homeSpecials home hometop infoContainer">
         <div className="row"><h2>Specials</h2></div>
+          <div id="text-carousel" className="carousel slide" data-ride="carousel">
+            <div className="row">
+                <div className="col-xs-offset-3 col-xs-6">
+                    <div className="carousel-inner">
+                        {specials}
+                    </div>
+                </div>
+            </div>
+
+            <a className="left carousel-control" href="#text-carousel" data-slide="prev">
+                <span className="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a className="right carousel-control" href="#text-carousel" data-slide="next">
+                <span className="glyphicon glyphicon-chevron-right"></span>
+            </a>
+
+        </div>
           <p>Search by Tags</p>
           <form onSubmit={this.handleSpecial} id="cardSearch" action="" className="form-events">
                   <input id="tagSearch" type="text" name="cardName" placeholder="Keyword to search"/>
@@ -138,7 +297,7 @@ var Home = React.createClass({
     </div>
 
     <div className="row">
-      <div className="col-md-5 homeCards home infoContainer">
+      <div className="col-md-5 homeCards home homebottom infoContainer">
         <h2>Store Pricing</h2>
         <div className="row">
           <div className="col-sm-6 col-xs-12">
@@ -158,7 +317,7 @@ var Home = React.createClass({
 
       </div>
 
-      <div className="col-md-5 homeStores home infoContainer">
+      <div className="col-md-5 homeStores home homebottom infoContainer">
         <div className="row"><h2>Search for Stores near you!</h2></div>
           <p>Search by Name</p>
         <form onSubmit={this.handleStore} id="storeSearch" action="" className="form-events">

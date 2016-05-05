@@ -5892,9 +5892,12 @@ body {
     box-shadow: 2px 2px #111111; }
     #container .infoContainer h3 {
       margin-top: 20px; }
-  #container .home {
+  #container .homebottom {
     text-align: center;
     min-height: 230px; }
+  #container .hometop {
+    text-align: center;
+    min-height: 400px; }
   #container .homeEvent input {
     width: 130px; }
 
@@ -6175,5 +6178,25 @@ body {
   @media screen and (max-width: 550px) {
     .mana img {
       margin-left: 0px; } }
+
+#text-carousel {
+  height: 150px;
+  margin-top: 10px;
+  margin-bottom: 10px; }
+  #text-carousel div:hover {
+    cursor: pointer; }
+
+.imageContainer h3, .imageContainer p {
+  text-align: center; }
+.imageContainer img {
+  margin-left: 60px; }
+
+.searchImage {
+  margin-top: 30px; }
+  .searchImage img {
+    margin-left: 40px; }
+  .searchImage p {
+    margin-left: 50px;
+    text-align: center; }
 
 /*# sourceMappingURL=app.css.map */

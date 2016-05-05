@@ -19,8 +19,18 @@ var searchEvent = React.createClass({
   var self=this;
   var Event = Parse.Object.extend("Events");
   var eventQuery = new Parse.Query(Event);
+console.log("outside",this.props.endDate)
+  if(this.props.endDate !=""){
     eventQuery.greaterThanOrEqualTo("Date", this.props.startDate);
     eventQuery.lessThanOrEqualTo("Date", this.props.endDate);
+  }else{
+        console.log("id",this.props.id)
+    eventQuery.equalTo("objectId", this.props.id);
+
+
+  }
+
+
     eventQuery.find({
       success: function(results) {
         var newResults = results.sort(function(a,b) {
@@ -95,7 +105,49 @@ var FoundEvent = React.createClass({
     var redate = monthNames[monthIndex] + " " + day + " " + year
 
     if(this.props.item.get("startTime")){
-      var time = <p>Time: {this.props.item.get("startTime") + " Through " + this.props.item.get("endTime")}</p>
+      var start = this.props.item.get("startTime").split(":")
+      var starthr = start[0];
+      var startmin = start[1];
+      var startampm = "AM"
+      if(parseInt(starthr)>12){
+        starthr=parseInt(starthr)-12;
+        startampm="PM"
+      }
+      if(parseInt(starthr)==12){
+          startampm="PM"
+      }
+      if(parseInt(starthr)==0){
+        starthr=12;
+        startampm="AM"
+      }
+      if(startmin==undefined){
+        startampm=""
+        starthr="???"
+        startmin=""
+      }
+
+      var end = this.props.item.get("endTime").split(":")
+      var endhr = end[0];
+      var endmin = end[1];
+      var endampm = "AM"
+      if(parseInt(endhr)>12){
+        endhr=parseInt(endhr)-12;
+        endampm="PM"
+      }
+      if(parseInt(endhr)==12){
+          endampm="PM"
+      }
+      if(parseInt(endhr)==0){
+        endhr=12;
+        endampm="AM"
+      }
+      if(endmin==undefined){
+        endampm=""
+        endhr="???"
+        endmin=""
+      }
+
+      var time = <p>Time: {starthr + ":" + startmin + " " + startampm + " To " + endhr + ":" + endmin + " " + endampm}</p>
     }
 
     return(<div className="col-md-2 col-sm-4 col-sx-12 infoContainer">

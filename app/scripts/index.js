@@ -61,6 +61,7 @@ var Router = Backbone.Router.extend({
       "login":"login",
     "change":"change",
     "searchEvent/:dates":"searchEvent",
+    "searchSpecificEvent/:id":"searchSpecificEvent",
     "searchCard/:name":"searchCard",
     "sellCard/:name":"sellCard",
     "specials":"specials",
@@ -98,7 +99,12 @@ var Router = Backbone.Router.extend({
     var startDate = new Date(dates[0])
     var endDate = new Date(dates[1])
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<SearchEventForm storeCollection={StoreCollection} startDate={startDate} endDate={endDate} router={this}/>,homeContainer)
+    ReactDOM.render(<SearchEventForm storeCollection={StoreCollection} startDate={startDate} endDate={endDate} id={""} router={this}/>,homeContainer)
+  },
+  searchSpecificEvent:function(id){
+    ReactDOM.unmountComponentAtNode(homeContainer);
+    console.log("here",id)
+    ReactDOM.render(<SearchEventForm storeCollection={StoreCollection} startDate={""} endDate={""} id={id} router={this}/>,homeContainer)
   },
   searchCard:function(id){
     var cardName = id;
