@@ -1645,7 +1645,16 @@ var FoundEvent = React.createClass({displayName: "FoundEvent",
     var day = date.getUTCDate();
     var monthIndex = date.getMonth();
     var year = date.getFullYear();
-    var redate = monthNames[monthIndex] + " " + day + " " + year
+
+    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    Date.prototype.getDayName = function() {
+      return days[ this.getDay() ];
+    };
+    var now = new Date();
+
+    var dayname = date.getDayName();
+
+    var redate = dayname + ", " +  monthNames[monthIndex] + " " + day + " " + year
 
     if(this.props.item.get("startTime")){
       var start = this.props.item.get("startTime").split(":")
@@ -1693,7 +1702,7 @@ var FoundEvent = React.createClass({displayName: "FoundEvent",
       var time = React.createElement("p", null, "Time: ", starthr + ":" + startmin + " " + startampm + " To " + endhr + ":" + endmin + " " + endampm)
     }
 
-    return(React.createElement("div", {className: "col-md-2 col-sm-4 col-sx-12 infoContainer"}, 
+    return(React.createElement("div", {className: "col-md-3 col-sm-4 col-sx-12 infoContainer"}, 
       React.createElement("h3", null, this.props.item.get("Name")), 
       React.createElement("p", null, "Store:  ", this.props.item.get("storeName")), 
       React.createElement("p", null, "Format: ", this.props.item.get("Format")), 
@@ -2472,7 +2481,17 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
           var day = date.getDate();
           var monthIndex = date.getMonth();
           var year = date.getFullYear();
-          var redate = monthNames[monthIndex] + " " + day + " " + year;
+
+          //determine day of the week
+            var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            Date.prototype.getDayName = function() {
+              return days[ this.getDay() ];
+            };
+            var now = new Date();
+
+            var dayname = date.getDayName();
+
+          var redate = dayname + ", " + monthNames[monthIndex] + " " + day + " " + year;
 
           var start = item.get("startTime").split(":")
           var starthr = start[0];

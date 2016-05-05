@@ -102,7 +102,16 @@ var FoundEvent = React.createClass({
     var day = date.getUTCDate();
     var monthIndex = date.getMonth();
     var year = date.getFullYear();
-    var redate = monthNames[monthIndex] + " " + day + " " + year
+
+    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    Date.prototype.getDayName = function() {
+      return days[ this.getDay() ];
+    };
+    var now = new Date();
+
+    var dayname = date.getDayName();
+
+    var redate = dayname + ", " +  monthNames[monthIndex] + " " + day + " " + year
 
     if(this.props.item.get("startTime")){
       var start = this.props.item.get("startTime").split(":")
@@ -150,7 +159,7 @@ var FoundEvent = React.createClass({
       var time = <p>Time: {starthr + ":" + startmin + " " + startampm + " To " + endhr + ":" + endmin + " " + endampm}</p>
     }
 
-    return(<div className="col-md-2 col-sm-4 col-sx-12 infoContainer">
+    return(<div className="col-md-3 col-sm-4 col-sx-12 infoContainer">
       <h3>{this.props.item.get("Name")}</h3>
       <p>Store:  {this.props.item.get("storeName")}</p>
       <p>Format: {this.props.item.get("Format")}</p>

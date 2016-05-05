@@ -50,7 +50,17 @@ var StoreSpecial= React.createClass({
           var day = date.getDate();
           var monthIndex = date.getMonth();
           var year = date.getFullYear();
-          var redate = monthNames[monthIndex] + " " + day + " " + year;
+
+          //determine day of the week
+            var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            Date.prototype.getDayName = function() {
+              return days[ this.getDay() ];
+            };
+            var now = new Date();
+
+            var dayname = date.getDayName();
+
+          var redate = dayname + ", " + monthNames[monthIndex] + " " + day + " " + year;
 
           var start = item.get("startTime").split(":")
           var starthr = start[0];
