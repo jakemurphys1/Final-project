@@ -103,9 +103,9 @@ var FoundEvent = React.createClass({
     var monthIndex = date.getMonth();
     var year = date.getFullYear();
 
-    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
     Date.prototype.getDayName = function() {
-      return days[ this.getDay() -1 ];
+      return days[ this.getDay() ];
     };
     var now = new Date();
 
