@@ -52,7 +52,7 @@ var StoreSpecial= React.createClass({
           var year = date.getFullYear();
 
           //determine day of the week
-            var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
             Date.prototype.getDayName = function() {
               return days[ this.getDay() ];
             };
