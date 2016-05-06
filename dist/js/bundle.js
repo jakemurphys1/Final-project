@@ -292,6 +292,7 @@ var Home = React.createClass({displayName: "Home",
     var self=this;
     ReactDOM.render(React.createElement(LoginForm, {storeCollection: this.props.storeCollection, parent: self}),document.getElementById("signFloat"))
 
+
     var Store = Parse.Object.extend("Stores");
     var storeQuery = new Parse.Query(Store);
       storeQuery.find({
@@ -304,7 +305,11 @@ var Home = React.createClass({displayName: "Home",
     var currentUser = Parse.User.current();
     var self=this;
     var Event = Parse.Object.extend("Events");
+    //calculate one week from today
+    var oneMoreWeek = new Date();
+    oneMoreWeek.setDate(oneMoreWeek.getDate() + 7);
     var eventQuery = new Parse.Query(Event);
+        eventQuery.lessThanOrEqualTo("Date", oneMoreWeek);
       eventQuery.find({
         success: function(results) {
           var newResults = results.sort(function(a,b) {
@@ -396,39 +401,88 @@ var Home = React.createClass({displayName: "Home",
           }
       }
 //carousel event stuff
-var eventcount=0
-var events = this.state.events.map(function(thisevent){
+var eventcount=0;
+var sixEvents=[];
+var rannumbers = [];
+var firstone = true;
+var loopcount=0;
 
-  var activeWord="";
-  if(eventcount==1){
-    activeWord="active"
+while(sixEvents.length<6 && loopcount<50){
+  loopcount+=1;
+  for(var i =1;i<7;i++){
+    var newrand = Math.floor((Math.random() * this.state.events.length) + 1);
+    rannumbers.push(newrand)
   }
 
-  //check is store is approved
-  var isApproved = false
-  var stores = self.state.stores;
-  for(var i =0;i<stores.length;i++){
-    if(stores[i].get("storeName")==thisevent.get("storeName")){
-      if(stores[i].get("Approved")){
-        isApproved=true
+  var events = this.state.events.forEach(function(thisevent){
+    //check is store is approved
+    var isApproved = false
+    var stores = self.state.stores;
+    for(var i =0;i<stores.length;i++){
+      if(stores[i].get("storeName")==thisevent.get("storeName")){
+        if(stores[i].get("Approved")){
+          isApproved=true
+        }
       }
     }
-  }
 
-  if(eventcount<6 && isApproved && thisevent.get("Date")>=Date.now()){
-      eventcount+=1;
-    return(
-      React.createElement("div", {className: "item " + activeWord}, 
-          React.createElement("div", {key: "event" + eventcount, onClick: self.handleSpecificEvent.bind(null,thisevent), className: "carousel-content"}, 
-              React.createElement("div", null, 
-                React.createElement("h4", null, thisevent.get("storeName")), 
-                  React.createElement("p", null, thisevent.get("Name"))
-              )
-          )
+    //if this one was chosen
+    var chosen = false
+    for(var i =0;i<rannumbers.length;i++){
+
+      if(eventcount==rannumbers[i]){
+        chosen=true
+      }
+    }
+    eventcount+=1;
+
+    if(chosen && isApproved && thisevent.get("Date")>=Date.now()){
+
+      var activeWord="";
+      if(firstone){
+        activeWord="active"
+      }
+      firstone=false;
+
+      //reformat the date
+      var monthNames = [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"
+      ];
+      var date = thisevent.get("Date");
+      var day = date.getUTCDate();
+      var monthIndex = date.getMonth();
+      var year = date.getFullYear();
+
+      var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+      Date.prototype.getDayName = function() {
+        return days[ this.getDay() ];
+      };
+      var now = new Date();
+      var dayname = date.getDayName();
+      var redate = dayname + ", " +  monthNames[monthIndex] + " " + day + " " + year
+
+      sixEvents.push(
+        React.createElement("div", {key: "event" + eventcount, className: "item " + activeWord}, 
+            React.createElement("div", {key: "event" + eventcount, onClick: self.handleSpecificEvent.bind(null,thisevent), className: "carousel-content"}, 
+                React.createElement("div", null, 
+                  React.createElement("h4", null, thisevent.get("storeName")), 
+                    React.createElement("p", null, thisevent.get("Name")), 
+                    React.createElement("p", null, redate)
+                )
+            )
+        )
       )
-    )
-  }
-})
+    }
+  })
+}
+
+
+
+console.log("sixevents",sixEvents)
+
 var specials = this.state.specials.map(function(thisspecial){
   var activeWord="";
   if(eventcount==1){
@@ -504,13 +558,13 @@ React.createElement("div", {className: "row mana"},
 
     React.createElement("div", {className: "row"}, 
       React.createElement("div", {className: "col-md-5 homeEvent home hometop infoContainer"}, 
-        React.createElement("div", {className: "row"}, React.createElement("h2", null, "Events")), 
+        React.createElement("div", {className: "row"}, React.createElement("h2", null, "Upcoming Events")), 
 
       React.createElement("div", {id: "text-carousel", className: "carousel slide", "data-ride": "carousel"}, 
         React.createElement("div", {className: "row"}, 
             React.createElement("div", {className: "col-xs-offset-3 col-xs-6"}, 
                 React.createElement("div", {className: "carousel-inner"}, 
-                    events
+                    sixEvents
                 )
             )
         ), 
@@ -2478,7 +2532,7 @@ var StoreSpecial= React.createClass({displayName: "StoreSpecial",
             "November", "December"
           ];
           var date = item.get("Date");
-          var day = date.getDate();
+          var day = date.getUTCDate();
           var monthIndex = date.getMonth();
           var year = date.getFullYear();
 

@@ -47,7 +47,7 @@ var StoreSpecial= React.createClass({
             "November", "December"
           ];
           var date = item.get("Date");
-          var day = date.getDate();
+          var day = date.getUTCDate();
           var monthIndex = date.getMonth();
           var year = date.getFullYear();
 
