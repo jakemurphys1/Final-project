@@ -4247,7 +4247,6 @@ var StoreModel = new model.Model();
 var StoreCollection = new model.ModelCollection()
 
 
-
 var homeContainer= document.getElementById("container")
 Parse.initialize("GLID");
 Parse.serverURL = 'http://gaminglocal.herokuapp.com'
