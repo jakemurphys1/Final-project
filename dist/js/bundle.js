@@ -391,7 +391,6 @@ var Home = React.createClass({displayName: "Home",
 
 
       if(currentUser){
-
           logContents =[React.createElement("li", {onClick: this.handleLogOut, id: "headerUser"}, React.createElement("a", null, "Log Out")),
             React.createElement("li", null, React.createElement("a", {href: "#checkout"}, "CheckOut")),
             React.createElement("li", null, React.createElement("a", {href: "#orders"}, "Your Orders"))]
@@ -409,10 +408,12 @@ var loopcount=0;
 
 while(sixEvents.length<6 && loopcount<50){
   loopcount+=1;
-  for(var i =1;i<7;i++){
+  rannumbers=[];
+  for(var i =1;i<70;i++){
     var newrand = Math.floor((Math.random() * this.state.events.length) + 1);
     rannumbers.push(newrand)
   }
+  console.log("rannumbers",rannumbers)
 
   var events = this.state.events.forEach(function(thisevent){
     //check is store is approved
@@ -2358,6 +2359,10 @@ var PerStore = React.createClass({displayName: "PerStore",
   }
 },
   handleSupport:function(){
+    if(!Parse.User.current()){
+      alert("You have to sign up to support stores.")
+      return;
+    }
           var currentUser = Parse.User.current();
                 var self = this;
           var supported = {
@@ -2397,7 +2402,15 @@ var PerStore = React.createClass({displayName: "PerStore",
     },
   componentDidMount:function(){
     this.setState({"Id":this.props.item.get("storeName")})
-    var currentUser = Parse.User.current();
+    var currentUser;
+    var userName;
+    if(Parse.User.current()){
+       currentUser = Parse.User.current();
+       userName = currentUser.getUsername();
+    } else{
+      console.log("pass")
+    }
+
     var self=this;
 
     var Supports = Parse.Object.extend("Supported");
@@ -2410,13 +2423,15 @@ var PerStore = React.createClass({displayName: "PerStore",
             results.map(function(item){
                 if(item.get("store")==self.props.item.get("storeName")){
                   supportCount+=1;
+
                 }
 
-              if(item.get("store")==self.props.item.get("storeName") && item.get("userName")==currentUser.getUsername()){
+              if(item.get("store")==self.props.item.get("storeName") && item.get("userName")==userName){
                 console.log("success")
                 self.setState({"doesSupport":true})
               }
             })
+                    console.log("got here")
             self.setState({"supporters":supportCount})
         },
         error: function(error) {

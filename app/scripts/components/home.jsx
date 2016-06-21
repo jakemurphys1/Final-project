@@ -120,7 +120,6 @@ var Home = React.createClass({
 
 
       if(currentUser){
-
           logContents =[<li onClick={this.handleLogOut} id="headerUser"><a>Log Out</a></li>,
             <li><a href="#checkout">CheckOut</a></li>,
             <li><a href="#orders">Your Orders</a></li>]
@@ -138,10 +137,12 @@ var loopcount=0;
 
 while(sixEvents.length<6 && loopcount<50){
   loopcount+=1;
-  for(var i =1;i<7;i++){
+  rannumbers=[];
+  for(var i =1;i<70;i++){
     var newrand = Math.floor((Math.random() * this.state.events.length) + 1);
     rannumbers.push(newrand)
   }
+  console.log("rannumbers",rannumbers)
 
   var events = this.state.events.forEach(function(thisevent){
     //check is store is approved

@@ -61,6 +61,10 @@ var PerStore = React.createClass({
   }
 },
   handleSupport:function(){
+    if(!Parse.User.current()){
+      alert("You have to sign up to support stores.")
+      return;
+    }
           var currentUser = Parse.User.current();
                 var self = this;
           var supported = {
@@ -100,7 +104,15 @@ var PerStore = React.createClass({
     },
   componentDidMount:function(){
     this.setState({"Id":this.props.item.get("storeName")})
-    var currentUser = Parse.User.current();
+    var currentUser;
+    var userName;
+    if(Parse.User.current()){
+       currentUser = Parse.User.current();
+       userName = currentUser.getUsername();
+    } else{
+      console.log("pass")
+    }
+
     var self=this;
 
     var Supports = Parse.Object.extend("Supported");
@@ -113,13 +125,15 @@ var PerStore = React.createClass({
             results.map(function(item){
                 if(item.get("store")==self.props.item.get("storeName")){
                   supportCount+=1;
+
                 }
 
-              if(item.get("store")==self.props.item.get("storeName") && item.get("userName")==currentUser.getUsername()){
+              if(item.get("store")==self.props.item.get("storeName") && item.get("userName")==userName){
                 console.log("success")
                 self.setState({"doesSupport":true})
               }
             })
+                    console.log("got here")
             self.setState({"supporters":supportCount})
         },
         error: function(error) {
