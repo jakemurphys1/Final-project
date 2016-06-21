@@ -5892,6 +5892,22 @@ body {
     box-shadow: 2px 2px #111111; }
     #container .infoContainer h3 {
       margin-top: 20px; }
+    #container .infoContainer .support button {
+      float: right;
+      height: 30px;
+      margin-bottom: 20px;
+      border: 1px solid black;
+      margin-right: 20px; }
+    #container .infoContainer .supported button {
+      background-color: #457cb2;
+      float: right;
+      height: 30px;
+      margin-bottom: 20px;
+      margin-right: 20px; }
+    #container .infoContainer .Players {
+      float: right;
+      margin-right: 20px;
+      margin-top: -10px; }
   #container .homebottom {
     text-align: center;
     min-height: 230px; }

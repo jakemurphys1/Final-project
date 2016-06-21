@@ -102,7 +102,6 @@ var Router = Backbone.Router.extend({
   },
   searchSpecificEvent:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    console.log("here",id)
     ReactDOM.render(<SearchEventForm storeCollection={StoreCollection} startDate={""} endDate={""} id={id} router={this}/>,homeContainer)
   },
   searchCard:function(id){
