@@ -10,28 +10,55 @@ var AllStores = React.createClass({
   return {
     "Users":[],
     "Support":[],
+    "ZipCodes":"",
   }
 },
   componentDidMount:function(){
-  //find card info from parse
-  var currentUser = Parse.User.current();
-  var self=this;
-  var Users = Parse.Object.extend("Stores");
-  var query = new Parse.Query(Users);
-    query.find({
-      success: function(results) {
-          self.setState({"Users":results})
-      }
-    })
+      //find card info from parse
+      var currentUser = Parse.User.current();
+      var self=this;
+      var Users = Parse.Object.extend("Stores");
+      var query = new Parse.Query(Users);
+        query.find({
+          success: function(results) {
+              self.setState({"Users":results})
+          }
+        })
+
+        //zip codes
+        if(this.props.zip!="None"){
+
+          $.getJSON('http://api.geonames.org/findNearbyPostalCodesJSON?postalcode=' + self.props.zip + '&country=US&maxRows=30&radius=30&username=jakemurphys1', function (results) {
+              var zipcodes =[];
+              for(var i =0;i<results.postalCodes.length;i++){
+                zipcodes.push(results.postalCodes[i].postalCode)
+              }
+
+              self.setState({"ZipCodes":zipcodes})
+            }.bind(this));
+        }
   },
   render:function(){
     var storeName = this.props.storeName.toLowerCase();
     var self=this;
+    var zip = this.props.zip;
   var allStores=<div className="loadingContainer"><img src="images/Loading.gif" /></div>
   if(this.state.Users.length>0){
     var allStores= this.state.Users.map(function(item){
+    var inRange = false;
 
-      if(item.get("Approved") && (storeName=="" || storeName== item.get("storeName").toLowerCase())){
+    for(var i = 0; i<self.state.ZipCodes.length;i++){
+      if(self.state.ZipCodes[i]==item.get("zip")){
+        inRange=true;
+      }
+    }
+
+      if(zip == "None"){
+        inRange=true;
+      }
+
+
+      if(item.get("Approved") && inRange && (storeName=="" || storeName== item.get("storeName").toLowerCase())){
 
         return(<PerStore item={item} key = {item.get("storeName")} />)
       }
@@ -84,7 +111,6 @@ var PerStore = React.createClass({
           })
         },
   handleUnSupport:function(e){
-      console.log("deleted")
       var self = this;
             var currentUser = Parse.User.current();
       var curId= e.currentTarget.id;

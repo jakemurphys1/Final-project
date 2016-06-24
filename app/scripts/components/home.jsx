@@ -15,9 +15,12 @@ var Home = React.createClass({
         "events":[],
         "specials":[],
         "stores":[],
+        "zipCode":"",
+        "nearZips":[],
       }
     },
   componentDidMount(){
+
     var self=this;
     ReactDOM.render(<LoginForm storeCollection={this.props.storeCollection} parent={self} />,document.getElementById("signFloat"))
 
@@ -30,8 +33,33 @@ var Home = React.createClass({
         }
       })
 
+        //get zip
+            var currentUser = Parse.User.current();
+              var User = Parse.Object.extend("User");
+              var userQuery = new Parse.Query(User);
+              userQuery.equalTo("username", currentUser.getUsername());
+                userQuery.find({
+                  success: function(user){
+                    var zip = user[0].get("Zip")
+                    console.log("zip",zip)
+                    self.setState({"zipCode":zip});
+
+                    //get zip codes
+                    $.getJSON('http://api.geonames.org/findNearbyPostalCodesJSON?postalcode=' + zip + '&country=US&maxRows=30&radius=30&username=jakemurphys1', function (results) {
+                        var zipcodes =[];
+                        for(var i =0;i<results.postalCodes.length;i++){
+                          zipcodes.push(results.postalCodes[i].postalCode)
+                        }
+
+                        self.setState({"nearZips":zipcodes})
+                      }.bind(this));
+                  }
+                })
+
+
+
     //find events info from parse
-    var currentUser = Parse.User.current();
+
     var self=this;
     var Event = Parse.Object.extend("Events");
     //calculate one week from today
@@ -100,6 +128,13 @@ var Home = React.createClass({
     e.preventDefault();
         Backbone.history.navigate("store/" + $("#storeName").val(),{trigger:true})
   },
+  handleAllStore:function(){
+      var zip = $("#zip").val();
+      if(zip==""){
+        zip="None"
+      }
+        Backbone.history.navigate("allStores/" + zip,{trigger:true})
+  },
   handleSpecial:function(e){
     e.preventDefault();
     Backbone.history.navigate("tagSearch/" + $("#tagSearch").val(),{trigger:true})
@@ -112,6 +147,8 @@ var Home = React.createClass({
       var currentUser = this.state.currentUser
       var storeSight = ""
       var self=this;
+
+      $("#zip").val(this.state.zipCode);
 
       var logContents = [<li onClick={this.handleShowLogin} id="headerUser"><a>Log In</a></li>,
         <li><a href="#signUp">Sign Up</a></li>,
@@ -131,42 +168,42 @@ var Home = React.createClass({
 //carousel event stuff
 var eventcount=0;
 var sixEvents=[];
+var allEvents = [];
 var rannumbers = [];
 var firstone = true;
 var loopcount=0;
 
-while(sixEvents.length<6 && loopcount<50){
-  loopcount+=1;
-  rannumbers=[];
-  for(var i =1;i<70;i++){
-    var newrand = Math.floor((Math.random() * this.state.events.length) + 1);
-    rannumbers.push(newrand)
-  }
-  console.log("rannumbers",rannumbers)
+//while(sixEvents.length<6 && loopcount<50){
+//  loopcount+=1;
+///  rannumbers=[];
+
 
   var events = this.state.events.forEach(function(thisevent){
     //check is store is approved
     var isApproved = false
     var stores = self.state.stores;
+    var storeNum=0;
     for(var i =0;i<stores.length;i++){
       if(stores[i].get("storeName")==thisevent.get("storeName")){
         if(stores[i].get("Approved")){
           isApproved=true
+          storeNum=i;
         }
-      }
-    }
-
-    //if this one was chosen
-    var chosen = false
-    for(var i =0;i<rannumbers.length;i++){
-
-      if(eventcount==rannumbers[i]){
-        chosen=true
       }
     }
     eventcount+=1;
 
-    if(chosen && isApproved && thisevent.get("Date")>=Date.now()){
+    var inRange = false;
+    console.log("nearZips",self.state.nearZips)
+    console.log()
+
+    for(var i = 0; i<self.state.nearZips.length;i++){
+      if(self.state.nearZips[i]==stores[storeNum].get("zip")){
+        inRange=true;
+      }
+    }
+
+    if(isApproved && inRange && thisevent.get("Date")>=Date.now()){
 
       var activeWord="";
       if(firstone){
@@ -194,7 +231,7 @@ while(sixEvents.length<6 && loopcount<50){
       var dayname = date.getDayName();
       var redate = dayname + ", " +  monthNames[monthIndex] + " " + day + " " + year
 
-      sixEvents.push(
+      allEvents.push(
         <div  key = {"event" + eventcount} className={"item " + activeWord}>
             <div key={"event" + eventcount}  onClick={self.handleSpecificEvent.bind(null,thisevent)} className="carousel-content">
                 <div>
@@ -207,11 +244,21 @@ while(sixEvents.length<6 && loopcount<50){
       )
     }
   })
-}
+//}
 
-
-
-console.log("sixevents",sixEvents)
+// for(var i =0;i<6;i++){
+//   var newrand = Math.floor((Math.random() * allEvents.length) + 1);
+// var isNew = true;
+//     for(var j = 0;j<rannumbers.length;j++){
+//       if(rannumbers[j]==newrand){
+//         isNew=false;
+//       }
+//     }
+//   if(isNew==true){
+//       rannumbers.push(newrand)
+//   }
+//
+// }
 
 var specials = this.state.specials.map(function(thisspecial){
   var activeWord="";
@@ -294,7 +341,7 @@ var specials = this.state.specials.map(function(thisspecial){
         <div className="row">
             <div className="col-xs-offset-3 col-xs-6">
                 <div className="carousel-inner">
-                    {sixEvents}
+                    {allEvents}
                 </div>
             </div>
         </div>
@@ -379,7 +426,8 @@ var specials = this.state.specials.map(function(thisspecial){
                 <input id="storeName" type="text" name="storeName" placeholder="Name of Store"/>
                 <p><button className="btn btn-primary Search">Search</button></p>
         </form>
-        <div><a href="#allStores">View all Stores</a></div>
+          <p><input id="zip" type="text" name="storeName" placeholder="Zip Code"/></p>
+        <div onClick = {this.handleAllStore}>View all Stores around this Zip Code</div>
       </div>
     </div>
 

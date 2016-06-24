@@ -13,15 +13,20 @@ var StoreInfo= React.createClass({
 },
   componentDidMount(){
     //find card info from parse
+
     var currentUser = Parse.User.current();
     var self=this;
     var Info = Parse.Object.extend("Stores");
     var query = new Parse.Query(Info);
+console.log("props",this.props.storeName)
       query.equalTo("storeName", this.props.storeName);
       query.find({
         success: function(results) {
+console.log("success")
+console.log("results",results)
             self.setState({"CurUser":results})
             self.forceUpdate();
+
         },
         error: function(error) {
           console.log("Server not find")
@@ -29,9 +34,11 @@ var StoreInfo= React.createClass({
     })
   },
   render:function(){
-    var store = <p>Loading</p>;
 
+    var store = <p>Loading</p>;
+  console.log(this.state.CurUser)
     if(this.state.CurUser.length>0){
+        console.log("got here")
       var name = this.state.CurUser[0];
       store=(<div className="storeInfo">
         <h1>{name.get("storeName")}</h1>

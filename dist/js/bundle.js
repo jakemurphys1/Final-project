@@ -286,9 +286,12 @@ var Home = React.createClass({displayName: "Home",
         "events":[],
         "specials":[],
         "stores":[],
+        "zipCode":"",
+        "nearZips":[],
       }
     },
   componentDidMount(){
+
     var self=this;
     ReactDOM.render(React.createElement(LoginForm, {storeCollection: this.props.storeCollection, parent: self}),document.getElementById("signFloat"))
 
@@ -301,8 +304,33 @@ var Home = React.createClass({displayName: "Home",
         }
       })
 
+        //get zip
+            var currentUser = Parse.User.current();
+              var User = Parse.Object.extend("User");
+              var userQuery = new Parse.Query(User);
+              userQuery.equalTo("username", currentUser.getUsername());
+                userQuery.find({
+                  success: function(user){
+                    var zip = user[0].get("Zip")
+                    console.log("zip",zip)
+                    self.setState({"zipCode":zip});
+
+                    //get zip codes
+                    $.getJSON('http://api.geonames.org/findNearbyPostalCodesJSON?postalcode=' + zip + '&country=US&maxRows=30&radius=30&username=jakemurphys1', function (results) {
+                        var zipcodes =[];
+                        for(var i =0;i<results.postalCodes.length;i++){
+                          zipcodes.push(results.postalCodes[i].postalCode)
+                        }
+
+                        self.setState({"nearZips":zipcodes})
+                      }.bind(this));
+                  }
+                })
+
+
+
     //find events info from parse
-    var currentUser = Parse.User.current();
+
     var self=this;
     var Event = Parse.Object.extend("Events");
     //calculate one week from today
@@ -371,6 +399,13 @@ var Home = React.createClass({displayName: "Home",
     e.preventDefault();
         Backbone.history.navigate("store/" + $("#storeName").val(),{trigger:true})
   },
+  handleAllStore:function(){
+      var zip = $("#zip").val();
+      if(zip==""){
+        zip="None"
+      }
+        Backbone.history.navigate("allStores/" + zip,{trigger:true})
+  },
   handleSpecial:function(e){
     e.preventDefault();
     Backbone.history.navigate("tagSearch/" + $("#tagSearch").val(),{trigger:true})
@@ -383,6 +418,8 @@ var Home = React.createClass({displayName: "Home",
       var currentUser = this.state.currentUser
       var storeSight = ""
       var self=this;
+
+      $("#zip").val(this.state.zipCode);
 
       var logContents = [React.createElement("li", {onClick: this.handleShowLogin, id: "headerUser"}, React.createElement("a", null, "Log In")),
         React.createElement("li", null, React.createElement("a", {href: "#signUp"}, "Sign Up")),
@@ -402,42 +439,42 @@ var Home = React.createClass({displayName: "Home",
 //carousel event stuff
 var eventcount=0;
 var sixEvents=[];
+var allEvents = [];
 var rannumbers = [];
 var firstone = true;
 var loopcount=0;
 
-while(sixEvents.length<6 && loopcount<50){
-  loopcount+=1;
-  rannumbers=[];
-  for(var i =1;i<70;i++){
-    var newrand = Math.floor((Math.random() * this.state.events.length) + 1);
-    rannumbers.push(newrand)
-  }
-  console.log("rannumbers",rannumbers)
+//while(sixEvents.length<6 && loopcount<50){
+//  loopcount+=1;
+///  rannumbers=[];
+
 
   var events = this.state.events.forEach(function(thisevent){
     //check is store is approved
     var isApproved = false
     var stores = self.state.stores;
+    var storeNum=0;
     for(var i =0;i<stores.length;i++){
       if(stores[i].get("storeName")==thisevent.get("storeName")){
         if(stores[i].get("Approved")){
           isApproved=true
+          storeNum=i;
         }
-      }
-    }
-
-    //if this one was chosen
-    var chosen = false
-    for(var i =0;i<rannumbers.length;i++){
-
-      if(eventcount==rannumbers[i]){
-        chosen=true
       }
     }
     eventcount+=1;
 
-    if(chosen && isApproved && thisevent.get("Date")>=Date.now()){
+    var inRange = false;
+    console.log("nearZips",self.state.nearZips)
+    console.log()
+
+    for(var i = 0; i<self.state.nearZips.length;i++){
+      if(self.state.nearZips[i]==stores[storeNum].get("zip")){
+        inRange=true;
+      }
+    }
+
+    if(isApproved && inRange && thisevent.get("Date")>=Date.now()){
 
       var activeWord="";
       if(firstone){
@@ -465,7 +502,7 @@ while(sixEvents.length<6 && loopcount<50){
       var dayname = date.getDayName();
       var redate = dayname + ", " +  monthNames[monthIndex] + " " + day + " " + year
 
-      sixEvents.push(
+      allEvents.push(
         React.createElement("div", {key: "event" + eventcount, className: "item " + activeWord}, 
             React.createElement("div", {key: "event" + eventcount, onClick: self.handleSpecificEvent.bind(null,thisevent), className: "carousel-content"}, 
                 React.createElement("div", null, 
@@ -478,11 +515,21 @@ while(sixEvents.length<6 && loopcount<50){
       )
     }
   })
-}
+//}
 
-
-
-console.log("sixevents",sixEvents)
+// for(var i =0;i<6;i++){
+//   var newrand = Math.floor((Math.random() * allEvents.length) + 1);
+// var isNew = true;
+//     for(var j = 0;j<rannumbers.length;j++){
+//       if(rannumbers[j]==newrand){
+//         isNew=false;
+//       }
+//     }
+//   if(isNew==true){
+//       rannumbers.push(newrand)
+//   }
+//
+// }
 
 var specials = this.state.specials.map(function(thisspecial){
   var activeWord="";
@@ -565,7 +612,7 @@ React.createElement("div", {className: "row mana"},
         React.createElement("div", {className: "row"}, 
             React.createElement("div", {className: "col-xs-offset-3 col-xs-6"}, 
                 React.createElement("div", {className: "carousel-inner"}, 
-                    sixEvents
+                    allEvents
                 )
             )
         ), 
@@ -650,7 +697,8 @@ React.createElement("div", {className: "row mana"},
                 React.createElement("input", {id: "storeName", type: "text", name: "storeName", placeholder: "Name of Store"}), 
                 React.createElement("p", null, React.createElement("button", {className: "btn btn-primary Search"}, "Search"))
         ), 
-        React.createElement("div", null, React.createElement("a", {href: "#allStores"}, "View all Stores"))
+          React.createElement("p", null, React.createElement("input", {id: "zip", type: "text", name: "storeName", placeholder: "Zip Code"})), 
+        React.createElement("div", {onClick: this.handleAllStore}, "View all Stores around this Zip Code")
       )
     ), 
 
@@ -1206,7 +1254,7 @@ var SignUp = React.createClass({displayName: "SignUp",
 
           var $form = $(this);
           var userData={"username":$("#signupUsername").val(),"password":$("#signupPassword1").val(),"Fname":$("#signupFname").val(),
-                      "Lname":$("#signupLname").val(),"storeName":$("#signupStoreName").val(),"hasStore":true,"PersonalEmail":$("#signupEmail").val(),}
+                      "Lname":$("#signupLname").val(),"storeName":$("#signupStoreName").val(),"Zip":$("#addressZip").val(),"hasStore":true,"PersonalEmail":$("#signupEmail").val(),}
 
 
         user.set(userData);
@@ -2115,18 +2163,16 @@ var SignUp = React.createClass({displayName: "SignUp",
 
           var $form = $(this);
           var userData={"username":$("#signupUsername").val(),"password":$("#signupPassword1").val(),"Fname":$("#signupFname").val(),
-                      "Lname":$("#signupLname").val(),"PersonalEmail":$("#signupEmail").val(),"hasStore":false}
+                      "Lname":$("#signupLname").val(),"PersonalEmail":$("#signupEmail").val(),"Zip":$("#signupZip").val(),"hasStore":false}
 
 
         user.set(userData);
 
         user.signUp(null, {
           'success':function(results){
-            console.log("results: ",results)
             var currentUser = Parse.User.current();
             currentUser.set('username', $('#signupUsername').val());
             currentUser.save();
-            console.log("CurrentUser",currentUser.getUsername())
             //go back to home
             Backbone.history.navigate("#home",{trigger:true})
           }
@@ -2151,6 +2197,7 @@ var SignUp = React.createClass({displayName: "SignUp",
                             React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupLname", type: "text", name: "Lname", className: "input", placeholder: "Last Name"})), 
                             React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupUsername", type: "text", name: "Username", className: "input", placeholder: "Username"})), 
                             React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupEmail", type: "email", name: "signupEmail", className: "input", placeholder: "Email"})), 
+                            React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupZip", type: "text", name: "signupZip", className: "input", placeholder: "Zip Code"})), 
                             React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupPassword1", type: "password", name: "password1", className: "input", placeholder: "Password"})), 
                             React.createElement("div", {className: "row"}, React.createElement("input", {id: "signupPassword2", type: "password", name: "password2", className: "input", placeholder: "Confirm Password"})), 
                       React.createElement("button", {type: "submit", className: "btn btn-lg btn-block btn-primary signinbutton"}, "Sign Up")
@@ -2308,28 +2355,55 @@ var AllStores = React.createClass({displayName: "AllStores",
   return {
     "Users":[],
     "Support":[],
+    "ZipCodes":"",
   }
 },
   componentDidMount:function(){
-  //find card info from parse
-  var currentUser = Parse.User.current();
-  var self=this;
-  var Users = Parse.Object.extend("Stores");
-  var query = new Parse.Query(Users);
-    query.find({
-      success: function(results) {
-          self.setState({"Users":results})
-      }
-    })
+      //find card info from parse
+      var currentUser = Parse.User.current();
+      var self=this;
+      var Users = Parse.Object.extend("Stores");
+      var query = new Parse.Query(Users);
+        query.find({
+          success: function(results) {
+              self.setState({"Users":results})
+          }
+        })
+
+        //zip codes
+        if(this.props.zip!="None"){
+
+          $.getJSON('http://api.geonames.org/findNearbyPostalCodesJSON?postalcode=' + self.props.zip + '&country=US&maxRows=30&radius=30&username=jakemurphys1', function (results) {
+              var zipcodes =[];
+              for(var i =0;i<results.postalCodes.length;i++){
+                zipcodes.push(results.postalCodes[i].postalCode)
+              }
+
+              self.setState({"ZipCodes":zipcodes})
+            }.bind(this));
+        }
   },
   render:function(){
     var storeName = this.props.storeName.toLowerCase();
     var self=this;
+    var zip = this.props.zip;
   var allStores=React.createElement("div", {className: "loadingContainer"}, React.createElement("img", {src: "images/Loading.gif"}))
   if(this.state.Users.length>0){
     var allStores= this.state.Users.map(function(item){
+    var inRange = false;
 
-      if(item.get("Approved") && (storeName=="" || storeName== item.get("storeName").toLowerCase())){
+    for(var i = 0; i<self.state.ZipCodes.length;i++){
+      if(self.state.ZipCodes[i]==item.get("zip")){
+        inRange=true;
+      }
+    }
+
+      if(zip == "None"){
+        inRange=true;
+      }
+
+
+      if(item.get("Approved") && inRange && (storeName=="" || storeName== item.get("storeName").toLowerCase())){
 
         return(React.createElement(PerStore, {item: item, key: item.get("storeName")}))
       }
@@ -2382,7 +2456,6 @@ var PerStore = React.createClass({displayName: "PerStore",
           })
         },
   handleUnSupport:function(e){
-      console.log("deleted")
       var self = this;
             var currentUser = Parse.User.current();
       var curId= e.currentTarget.id;
@@ -2743,15 +2816,20 @@ var StoreInfo= React.createClass({displayName: "StoreInfo",
 },
   componentDidMount(){
     //find card info from parse
+
     var currentUser = Parse.User.current();
     var self=this;
     var Info = Parse.Object.extend("Stores");
     var query = new Parse.Query(Info);
+console.log("props",this.props.storeName)
       query.equalTo("storeName", this.props.storeName);
       query.find({
         success: function(results) {
+console.log("success")
+console.log("results",results)
             self.setState({"CurUser":results})
             self.forceUpdate();
+
         },
         error: function(error) {
           console.log("Server not find")
@@ -2759,9 +2837,11 @@ var StoreInfo= React.createClass({displayName: "StoreInfo",
     })
   },
   render:function(){
-    var store = React.createElement("p", null, "Loading");
 
+    var store = React.createElement("p", null, "Loading");
+  console.log(this.state.CurUser)
     if(this.state.CurUser.length>0){
+        console.log("got here")
       var name = this.state.CurUser[0];
       store=(React.createElement("div", {className: "storeInfo"}, 
         React.createElement("h1", null, name.get("storeName")), 
@@ -4383,7 +4463,7 @@ var Router = Backbone.Router.extend({
     "specials":"specials",
     "tagSearch/:id":"tagSearch",
     "specialDescription/:id":"specialDescription",
-    "allStores":"allStores",
+    "allStores/:zip":"allStores",
     "store/:name":"store",
     "storeSpecial/:name":"storeSpecial",
     "storeEvent/:name":"storeEvent",
@@ -4445,13 +4525,14 @@ var Router = Backbone.Router.extend({
     ReactDOM.unmountComponentAtNode(homeContainer);
     ReactDOM.render(React.createElement(SpecialDescriptionForm, {curId: curId, specialNum: specialNum, router: this}),homeContainer)
   },
-  allStores:function(){
+  allStores:function(zip){
+    console.log("here")
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(React.createElement(StoreForm, {storeCollection: StoreCollection, storeName: "", router: this}),homeContainer)
+    ReactDOM.render(React.createElement(StoreForm, {zip: zip, storeCollection: StoreCollection, storeName: "", router: this}),homeContainer)
   },
   store:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(React.createElement(StoreForm, {storeCollection: StoreCollection, storeName: id, router: this}),homeContainer)
+    ReactDOM.render(React.createElement(StoreForm, {zip: "", storeCollection: StoreCollection, storeName: id, router: this}),homeContainer)
   },
   storeSpecial:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);

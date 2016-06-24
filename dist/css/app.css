@@ -5889,7 +5889,8 @@ body {
     border-radius: 10px;
     background-color: #ebebeb;
     margin: 40px;
-    box-shadow: 2px 2px #111111; }
+    box-shadow: 2px 2px #111111;
+    word-wrap: break-word; }
     #container .infoContainer h3 {
       margin-top: 20px; }
     #container .infoContainer .support button {

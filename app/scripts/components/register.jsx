@@ -33,7 +33,7 @@ var SignUp = React.createClass({
 
           var $form = $(this);
           var userData={"username":$("#signupUsername").val(),"password":$("#signupPassword1").val(),"Fname":$("#signupFname").val(),
-                      "Lname":$("#signupLname").val(),"storeName":$("#signupStoreName").val(),"hasStore":true,"PersonalEmail":$("#signupEmail").val(),}
+                      "Lname":$("#signupLname").val(),"storeName":$("#signupStoreName").val(),"Zip":$("#addressZip").val(),"hasStore":true,"PersonalEmail":$("#signupEmail").val(),}
 
 
         user.set(userData);

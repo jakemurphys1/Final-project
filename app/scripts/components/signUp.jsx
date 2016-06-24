@@ -21,18 +21,16 @@ var SignUp = React.createClass({
 
           var $form = $(this);
           var userData={"username":$("#signupUsername").val(),"password":$("#signupPassword1").val(),"Fname":$("#signupFname").val(),
-                      "Lname":$("#signupLname").val(),"PersonalEmail":$("#signupEmail").val(),"hasStore":false}
+                      "Lname":$("#signupLname").val(),"PersonalEmail":$("#signupEmail").val(),"Zip":$("#signupZip").val(),"hasStore":false}
 
 
         user.set(userData);
 
         user.signUp(null, {
           'success':function(results){
-            console.log("results: ",results)
             var currentUser = Parse.User.current();
             currentUser.set('username', $('#signupUsername').val());
             currentUser.save();
-            console.log("CurrentUser",currentUser.getUsername())
             //go back to home
             Backbone.history.navigate("#home",{trigger:true})
           }
@@ -57,6 +55,7 @@ var SignUp = React.createClass({
                             <div className="row"><input id="signupLname" type="text" name="Lname" className="input" placeholder="Last Name"/></div>
                             <div className="row"><input id="signupUsername" type="text" name="Username" className="input" placeholder="Username"/></div>
                             <div className="row"><input id="signupEmail" type="email" name="signupEmail" className="input" placeholder="Email"/></div>
+                            <div className="row"><input id="signupZip" type="text" name="signupZip" className="input" placeholder="Zip Code"/></div>
                             <div className="row"><input id="signupPassword1" type="password" name="password1" className="input" placeholder="Password"/></div>
                             <div className="row"><input id="signupPassword2" type="password" name="password2" className="input" placeholder="Confirm Password"/></div>
                       <button type="submit" className="btn btn-lg btn-block btn-primary signinbutton">Sign Up</button>

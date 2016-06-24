@@ -66,7 +66,7 @@ var Router = Backbone.Router.extend({
     "specials":"specials",
     "tagSearch/:id":"tagSearch",
     "specialDescription/:id":"specialDescription",
-    "allStores":"allStores",
+    "allStores/:zip":"allStores",
     "store/:name":"store",
     "storeSpecial/:name":"storeSpecial",
     "storeEvent/:name":"storeEvent",
@@ -128,13 +128,14 @@ var Router = Backbone.Router.extend({
     ReactDOM.unmountComponentAtNode(homeContainer);
     ReactDOM.render(<SpecialDescriptionForm curId = {curId} specialNum={specialNum} router={this}/>,homeContainer)
   },
-  allStores:function(){
+  allStores:function(zip){
+    console.log("here")
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<StoreForm  storeCollection={StoreCollection} storeName="" router={this}/>,homeContainer)
+    ReactDOM.render(<StoreForm zip = {zip}  storeCollection={StoreCollection} storeName="" router={this}/>,homeContainer)
   },
   store:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);
-    ReactDOM.render(<StoreForm storeCollection={StoreCollection}  storeName={id} router={this}/>,homeContainer)
+    ReactDOM.render(<StoreForm zip = "" storeCollection={StoreCollection}  storeName={id} router={this}/>,homeContainer)
   },
   storeSpecial:function(id){
     ReactDOM.unmountComponentAtNode(homeContainer);
